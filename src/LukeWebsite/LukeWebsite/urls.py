@@ -17,6 +17,7 @@ from django.contrib import admin
 from django.urls import include, path
 
 urlpatterns = [
+    path('', include('homepagePortfolio.urls')),
     path('mergesort/', include('mergesort.urls')),
     path('admin/', admin.site.urls),
 ]
