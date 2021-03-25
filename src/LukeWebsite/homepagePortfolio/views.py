@@ -7,3 +7,6 @@ from django.template import loader
 def index(request):
     context = {}
     return render(request, 'homepagePortfolio/index.html', context)
+
+def about(request):
+    return render(request, 'homepagePortfolio/about.html', {})

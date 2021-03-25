@@ -200,3 +200,4 @@ build/
 env
 
 productionsettings.py
+privateSettings/
