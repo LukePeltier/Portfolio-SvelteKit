@@ -198,3 +198,5 @@ build/
 *.egg-info/
 
 env
+
+productionsettings.py
