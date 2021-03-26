@@ -1,23 +1,6 @@
-<!DOCTYPE html>
-<html>
+{% extends "tenMans/base.html" %}
 
-<head>
-  <meta charset="utf-8">
-  <title>Portfolio</title>
-  {# Load the tag library #}
-  {% load bootstrap4 %}
-
-  {# Load CSS and JavaScript #}
-  {% bootstrap_css %}
-  {% bootstrap_javascript jquery='full' %}
-</head>
-
-<body>
-  <h1>Ten Mans</h1>
-  <p>Hi, I'm still working on my ten mans, please come back again later!</p>
-  </br>
-  <p>Games recorded: {{ gameCount }}</p>
-  <p>Unique players recorded: {{ playerCount }}</p>
-</body>
-
-</html>
+{%block content%}
+<h1>Dashboard</h1>
+<p>Current game count: {{gameCount}}</p>
+{%endblock%}

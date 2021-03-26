@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Ten Man Statistics</title>
+  {# Load the tag library #}
+  {% load bootstrap4 %}
+
+  {# Load CSS and JavaScript #}
+  {% bootstrap_css %}
+  {% bootstrap_javascript jquery='full' %}
+
+
+  {% load static %}
+  <link rel="stylesheet" type="text/css" href="{% static 'tenMans/style.css' %}">
+</head>
+
+<body>
+  {% include "tenMans/sidebar.html" %}
+  <div class="main">
+    {% block content %}
+    {% endblock %}
+  </div>
+</body>
+
+</html>
