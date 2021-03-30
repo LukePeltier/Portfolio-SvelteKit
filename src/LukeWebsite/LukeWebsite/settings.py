@@ -86,7 +86,8 @@ WSGI_APPLICATION = 'LukeWebsite.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
-
+pymysql.version_info= (1,4,2,"final",0)
+pymysql.install_as_MySQLdb()
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
