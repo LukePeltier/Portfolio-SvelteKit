@@ -30,7 +30,7 @@ class Player(models.Model):
 
             return round((winningCount/totalGameCount)*100, 2)
         else:
-            #Overall winrate
+            #Lane winrate
             gamesPlayed = GameLaner.objects.filter(player__exact=self.id, lane__exact=lane.id)
             totalGameCount = gamesPlayed.count()
             if totalGameCount==0:
@@ -44,6 +44,14 @@ class Player(models.Model):
                     winningCount+=1
 
             return round((winningCount/totalGameCount)*100, 2)
+    def getLaneRate(self, lane):
+        if(lane is None):
+            topPlayer = Player.objects.all().annotate(num_games=models.Count('gamelaner')).order_by('num_games').first()
+            topNumber = topPlayer.num_games
+            playerNumber = GameLaner.objects.filter(player__exact=self.id).count()
+            laneRate = round(playerNumber/topNumber, 1)
+
+
 
 
 class Champion(models.Model):

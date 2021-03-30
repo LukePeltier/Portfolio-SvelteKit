@@ -32,6 +32,7 @@ def overallWinrateBarChart(request):
         botData.append(player.getWinrate(Lane.objects.get(laneName__exact="Bot")))
         suppData.append(player.getWinrate(Lane.objects.get(laneName__exact="Support")))
 
+
     return JsonResponse(data={
         'labels': labels,
         'overall': overallData,
