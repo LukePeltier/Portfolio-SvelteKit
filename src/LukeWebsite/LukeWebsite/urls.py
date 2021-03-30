@@ -19,6 +19,6 @@ from django.urls import include, path
 urlpatterns = [
     path('', include('homepagePortfolio.urls')),
     path('mergesort/', include('mergesort.urls')),
-    path('tenMans/', include('tenMans.urls')),
+    path('ten_mans/', include('tenMans.urls')),
     path('admin/', admin.site.urls),
 ]

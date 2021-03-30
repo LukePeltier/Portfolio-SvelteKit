@@ -1,6 +1,27 @@
 {% extends "tenMans/base.html" %}
-
+{% load static %}
 {%block content%}
-<h1>Dashboard</h1>
-<p>Current game count: {{gameCount}}</p>
+<div id="overallWinrate">
+  <div id="overallWinrateChartContainer">
+    <canvas id="overallWinrateChart" data-url="{% url 'overallWinrateChart' %}"></canvas>
+  </div>
+  <div id="overallWinrateTableContainter">
+    <table id="overallWinrateTable" class="display">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Top</th>
+          <th>Jungle</th>
+          <th>Middle</th>
+          <th>Bottom</th>
+          <th>Support</th>
+          <th>Overall</th>
+        </tr>
+      </thead>
+    </table>
+  </div>
+</div>
+
+<script src="{%static 'js/overallWinBar.js'%}"></script>
+
 {%endblock%}

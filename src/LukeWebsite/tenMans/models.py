@@ -15,6 +15,37 @@ class Game(models.Model):
 class Player(models.Model):
     playerName = models.TextField(unique=True)
 
+    def getWinrate(self, lane):
+        if(lane is None):
+            #Overall winrate
+            gamesPlayed = GameLaner.objects.filter(player__exact=self.id)
+            totalGameCount = gamesPlayed.count()
+            winningCount = 0
+            for gameLane in gamesPlayed.iterator():
+                gameLane: GameLaner
+                blueTeam = gameLane.blueTeam
+                blueWin = gameLane.game.gameBlueWins
+                if(blueTeam==blueWin):
+                    winningCount+=1
+
+            return (winningCount/totalGameCount)*100
+        else:
+            #Overall winrate
+            gamesPlayed = GameLaner.objects.filter(player__exact=self.id, lane__exact=lane.id)
+            totalGameCount = gamesPlayed.count()
+            if totalGameCount==0:
+                return 0
+            winningCount = 0
+            for gameLane in gamesPlayed.iterator():
+                gameLane: GameLaner
+                blueTeam = gameLane.blueTeam
+                blueWin = gameLane.game.gameBlueWins
+                if(blueTeam==blueWin):
+                    winningCount+=1
+
+            return (winningCount/totalGameCount)*100
+
+
 class Champion(models.Model):
     championName = models.TextField(unique=True)
 
