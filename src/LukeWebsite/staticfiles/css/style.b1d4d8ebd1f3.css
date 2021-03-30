@@ -39,12 +39,14 @@
 
 #overallWinrateChartContainer {
   width: 50%;
+  height: 480px;
   margin: 0 auto;
   float: left;
 }
 
 #overallWinrateTableContainer {
   width: 50%;
+  height: 480px;
   margin: 0 auto;
   float: right;
 }

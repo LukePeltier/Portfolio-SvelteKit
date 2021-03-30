@@ -27,26 +27,13 @@ $(function () {
                         backgroundColor: function (context) {
                             var index = context.dataIndex;
                             var value = context.dataset.data[index];
-                            if (value < 50) {
-                                var multiplier = ((50 - value) / 50);
-                                var redVal = 255;
-                                var greenVal = Math.floor((99 * multiplier) + (205 * (1 - multiplier)));
-                                var blueVal = Math.floor((132 * multiplier) + (86 * (1 - multiplier)));
-                                var colorString = 'rgb(' + [redVal, greenVal, blueVal].join(',') + ')';
-                                return colorString;
-
-                            } else {
-                                var tempValue = value - 50;
-                                var multiplier = ((50 - tempValue) / 50);
-                                var redVal = Math.floor((255 * multiplier) + (92 * (1 - multiplier)));
-                                var greenVal = Math.floor((205 * multiplier) + (184 * (1 - multiplier)));
-                                var blueVal = Math.floor((86 * multiplier) + (92 * (1 - multiplier)));
-                                var colorString = 'rgb(' + [redVal, greenVal, blueVal].join(',') + ')';
-                                return colorString;
+                            if(value==="N/A"){
+                                return "rgb(255, 255, 255)";
                             }
+                            return getRGBHeatmapColor(value, window.chartColors.red, window.chartColors.green, window.chartColors.yellow, true, 0, 50, 100)
                         },
                         borderWidth: 1,
-                        minBarLength: 2
+                        minBarLength: 5
                     }, {
                         label: 'Top',
                         data: data.top,
@@ -54,26 +41,10 @@ $(function () {
                         backgroundColor: function (context) {
                             var index = context.dataIndex;
                             var value = context.dataset.data[index];
-                            if (value < 50) {
-                                var multiplier = ((50 - value) / 50);
-                                var redVal = 255;
-                                var greenVal = Math.floor((99 * multiplier) + (205 * (1 - multiplier)));
-                                var blueVal = Math.floor((132 * multiplier) + (86 * (1 - multiplier)));
-                                var colorString = 'rgb(' + [redVal, greenVal, blueVal].join(',') + ')';
-                                return colorString;
-
-                            } else {
-                                var tempValue = value - 50;
-                                var multiplier = ((50 - tempValue) / 50);
-                                var redVal = Math.floor((255 * multiplier) + (92 * (1 - multiplier)));
-                                var greenVal = Math.floor((205 * multiplier) + (184 * (1 - multiplier)));
-                                var blueVal = Math.floor((86 * multiplier) + (92 * (1 - multiplier)));
-                                var colorString = 'rgb(' + [redVal, greenVal, blueVal].join(',') + ')';
-                                return colorString;
-                            }
+                            return getRGBHeatmapColor(value, window.chartColors.red, window.chartColors.green, window.chartColors.yellow, true, 0, 50, 100)
                         },
                         borderWidth: 1,
-                        minBarLength: 2
+                        minBarLength: 5
                     }, {
                         label: 'Jungle',
                         data: data.jungle,
@@ -81,26 +52,10 @@ $(function () {
                         backgroundColor: function (context) {
                             var index = context.dataIndex;
                             var value = context.dataset.data[index];
-                            if (value < 50) {
-                                var multiplier = ((50 - value) / 50);
-                                var redVal = 255;
-                                var greenVal = Math.floor((99 * multiplier) + (205 * (1 - multiplier)));
-                                var blueVal = Math.floor((132 * multiplier) + (86 * (1 - multiplier)));
-                                var colorString = 'rgb(' + [redVal, greenVal, blueVal].join(',') + ')';
-                                return colorString;
-
-                            } else {
-                                var tempValue = value - 50;
-                                var multiplier = ((50 - tempValue) / 50);
-                                var redVal = Math.floor((255 * multiplier) + (92 * (1 - multiplier)));
-                                var greenVal = Math.floor((205 * multiplier) + (184 * (1 - multiplier)));
-                                var blueVal = Math.floor((86 * multiplier) + (92 * (1 - multiplier)));
-                                var colorString = 'rgb(' + [redVal, greenVal, blueVal].join(',') + ')';
-                                return colorString;
-                            }
+                            return getRGBHeatmapColor(value, window.chartColors.red, window.chartColors.green, window.chartColors.yellow, true, 0, 50, 100)
                         },
                         borderWidth: 1,
-                        minBarLength: 2
+                        minBarLength: 5
                     }, {
                         label: 'Middle',
                         data: data.mid,
@@ -108,26 +63,10 @@ $(function () {
                         backgroundColor: function (context) {
                             var index = context.dataIndex;
                             var value = context.dataset.data[index];
-                            if (value < 50) {
-                                var multiplier = ((50 - value) / 50);
-                                var redVal = 255;
-                                var greenVal = Math.floor((99 * multiplier) + (205 * (1 - multiplier)));
-                                var blueVal = Math.floor((132 * multiplier) + (86 * (1 - multiplier)));
-                                var colorString = 'rgb(' + [redVal, greenVal, blueVal].join(',') + ')';
-                                return colorString;
-
-                            } else {
-                                var tempValue = value - 50;
-                                var multiplier = ((50 - tempValue) / 50);
-                                var redVal = Math.floor((255 * multiplier) + (92 * (1 - multiplier)));
-                                var greenVal = Math.floor((205 * multiplier) + (184 * (1 - multiplier)));
-                                var blueVal = Math.floor((86 * multiplier) + (92 * (1 - multiplier)));
-                                var colorString = 'rgb(' + [redVal, greenVal, blueVal].join(',') + ')';
-                                return colorString;
-                            }
+                            return getRGBHeatmapColor(value, window.chartColors.red, window.chartColors.green, window.chartColors.yellow, true, 0, 50, 100)
                         },
                         borderWidth: 1,
-                        minBarLength: 2
+                        minBarLength: 5
                     }, {
                         label: 'Bottom',
                         data: data.bot,
@@ -135,26 +74,10 @@ $(function () {
                         backgroundColor: function (context) {
                             var index = context.dataIndex;
                             var value = context.dataset.data[index];
-                            if (value < 50) {
-                                var multiplier = ((50 - value) / 50);
-                                var redVal = 255;
-                                var greenVal = Math.floor((99 * multiplier) + (205 * (1 - multiplier)));
-                                var blueVal = Math.floor((132 * multiplier) + (86 * (1 - multiplier)));
-                                var colorString = 'rgb(' + [redVal, greenVal, blueVal].join(',') + ')';
-                                return colorString;
-
-                            } else {
-                                var tempValue = value - 50;
-                                var multiplier = ((50 - tempValue) / 50);
-                                var redVal = Math.floor((255 * multiplier) + (92 * (1 - multiplier)));
-                                var greenVal = Math.floor((205 * multiplier) + (184 * (1 - multiplier)));
-                                var blueVal = Math.floor((86 * multiplier) + (92 * (1 - multiplier)));
-                                var colorString = 'rgb(' + [redVal, greenVal, blueVal].join(',') + ')';
-                                return colorString;
-                            }
+                            return getRGBHeatmapColor(value, window.chartColors.red, window.chartColors.green, window.chartColors.yellow, true, 0, 50, 100)
                         },
                         borderWidth: 1,
-                        minBarLength: 2
+                        minBarLength: 5
                     }, {
                         label: 'Support',
                         data: data.support,
@@ -162,26 +85,10 @@ $(function () {
                         backgroundColor: function (context) {
                             var index = context.dataIndex;
                             var value = context.dataset.data[index];
-                            if (value < 50) {
-                                var multiplier = ((50 - value) / 50);
-                                var redVal = 255;
-                                var greenVal = Math.floor((99 * multiplier) + (205 * (1 - multiplier)));
-                                var blueVal = Math.floor((132 * multiplier) + (86 * (1 - multiplier)));
-                                var colorString = 'rgb(' + [redVal, greenVal, blueVal].join(',') + ')';
-                                return colorString;
-
-                            } else {
-                                var tempValue = value - 50;
-                                var multiplier = ((50 - tempValue) / 50);
-                                var redVal = Math.floor((255 * multiplier) + (92 * (1 - multiplier)));
-                                var greenVal = Math.floor((205 * multiplier) + (184 * (1 - multiplier)));
-                                var blueVal = Math.floor((86 * multiplier) + (92 * (1 - multiplier)));
-                                var colorString = 'rgb(' + [redVal, greenVal, blueVal].join(',') + ')';
-                                return colorString;
-                            }
+                            return getRGBHeatmapColor(value, window.chartColors.red, window.chartColors.green, window.chartColors.yellow, true, 0, 50, 100)
                         },
                         borderWidth: 1,
-                        minBarLength: 2
+                        minBarLength: 5
                     }]
                 },
                 options: {

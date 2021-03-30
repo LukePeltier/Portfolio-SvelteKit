@@ -5,8 +5,8 @@
   <div id="overallWinrateChartContainer">
     <canvas id="overallWinrateChart" data-url="{% url 'overallWinrateChart' %}"></canvas>
   </div>
-  <div id="overallWinrateTableContainter">
-    <table id="overallWinrateTable" class="display">
+  <div id="overallWinrateTableContainer">
+    <table id="overallWinrateTable" class="table table-hover table-bordered table-sm" data-url="{% url 'overallWinrateTable' %}">
       <thead>
         <tr>
           <th>Name</th>
@@ -21,7 +21,9 @@
     </table>
   </div>
 </div>
-
+<script src="{%static 'js/customSort.js'%}"></script>
+<script src="{%static 'js/heatmapColor.js'%}"></script>
 <script src="{%static 'js/overallWinBar.js'%}"></script>
+<script src="{%static 'js/overallWinTable.js'%}"></script>
 
 {%endblock%}

@@ -28,13 +28,13 @@ class Player(models.Model):
                 if(blueTeam==blueWin):
                     winningCount+=1
 
-            return (winningCount/totalGameCount)*100
+            return round((winningCount/totalGameCount)*100, 2)
         else:
             #Overall winrate
             gamesPlayed = GameLaner.objects.filter(player__exact=self.id, lane__exact=lane.id)
             totalGameCount = gamesPlayed.count()
             if totalGameCount==0:
-                return 0
+                return "N/A"
             winningCount = 0
             for gameLane in gamesPlayed.iterator():
                 gameLane: GameLaner
@@ -43,7 +43,7 @@ class Player(models.Model):
                 if(blueTeam==blueWin):
                     winningCount+=1
 
-            return (winningCount/totalGameCount)*100
+            return round((winningCount/totalGameCount)*100, 2)
 
 
 class Champion(models.Model):

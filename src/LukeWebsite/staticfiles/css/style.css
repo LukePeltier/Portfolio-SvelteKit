@@ -37,8 +37,14 @@
   .sidenav a {font-size: 18px;}
 }
 
-.overallWinrateContainer {
+#overallWinrateChartContainer {
   width: 50%;
-  height: 480px;
   margin: 0 auto;
+  float: left;
+}
+
+#overallWinrateTableContainer {
+  width: 50%;
+  margin: 0 auto;
+  float: right;
 }

@@ -27,9 +27,6 @@ $(function () {
                         backgroundColor: function (context) {
                             var index = context.dataIndex;
                             var value = context.dataset.data[index];
-                            if(value==="N/A"){
-                                return "rgb(255, 255, 255)";
-                            }
                             return getRGBHeatmapColor(value, window.chartColors.red, window.chartColors.green, window.chartColors.yellow, true, 0, 50, 100)
                         },
                         borderWidth: 1,

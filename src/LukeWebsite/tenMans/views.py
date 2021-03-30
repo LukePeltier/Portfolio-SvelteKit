@@ -41,3 +41,22 @@ def overallWinrateBarChart(request):
         'bot': botData,
         'support': suppData
     })
+
+def overallWinrateTable(request):
+    data = []
+    queryset = Player.objects.order_by('playerName')
+
+    for player in queryset:
+        playerDict = {}
+        playerDict["name"] = player.playerName
+        playerDict["overall"] = player.getWinrate(None)
+        playerDict["top"] = player.getWinrate(Lane.objects.get(laneName__exact="Top"))
+        playerDict["jungle"] = player.getWinrate(Lane.objects.get(laneName__exact="Jungle"))
+        playerDict["mid"] = player.getWinrate(Lane.objects.get(laneName__exact="Mid"))
+        playerDict["bot"] = player.getWinrate(Lane.objects.get(laneName__exact="Bot"))
+        playerDict["supp"] = player.getWinrate(Lane.objects.get(laneName__exact="Support"))
+        data.append(playerDict)
+
+    return JsonResponse(data={
+        'data': data
+    })
