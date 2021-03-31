@@ -8,6 +8,10 @@ from tenMans.models import Game, Player, Lane
 
 class Dashboard(TemplateView):
     template_name = "tenMans/index.html"
+    def get_context_data(self,*args, **kwargs):
+        context = super(Dashboard, self).get_context_data(*args,**kwargs)
+        context['player_list'] = Player.objects.all()
+        return context
 
 def overallWinrateBarChart(request):
     labels, overallData, topData, jungData, midData, botData, suppData = ([] for i in range(7))
