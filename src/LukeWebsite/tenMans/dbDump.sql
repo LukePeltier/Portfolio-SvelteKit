@@ -1,279 +1,7 @@
--- --------------------------------------------------------
--- Host:                         127.0.0.1
--- Server version:               10.5.9-MariaDB - mariadb.org binary distribution
--- Server OS:                    Win64
--- HeidiSQL Version:             11.0.0.5919
--- --------------------------------------------------------
 
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET NAMES utf8 */;
-/*!50503 SET NAMES utf8mb4 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-
-
--- Dumping database structure for tenmansstatistics
-CREATE DATABASE IF NOT EXISTS `tenmansstatistics` /*!40100 DEFAULT CHARACTER SET latin1 COLLATE latin1_general_ci */;
-USE `tenmansstatistics`;
-
--- Dumping structure for table tenmansstatistics.auth_group
-CREATE TABLE IF NOT EXISTS `auth_group` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(150) COLLATE latin1_general_ci NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
-
--- Dumping data for table tenmansstatistics.auth_group: ~0 rows (approximately)
-/*!40000 ALTER TABLE `auth_group` DISABLE KEYS */;
-/*!40000 ALTER TABLE `auth_group` ENABLE KEYS */;
-
--- Dumping structure for table tenmansstatistics.auth_group_permissions
-CREATE TABLE IF NOT EXISTS `auth_group_permissions` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `group_id` int(11) NOT NULL,
-  `permission_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `auth_group_permissions_group_id_permission_id_0cd325b0_uniq` (`group_id`,`permission_id`),
-  KEY `auth_group_permissio_permission_id_84c5c92e_fk_auth_perm` (`permission_id`),
-  CONSTRAINT `auth_group_permissio_permission_id_84c5c92e_fk_auth_perm` FOREIGN KEY (`permission_id`) REFERENCES `auth_permission` (`id`),
-  CONSTRAINT `auth_group_permissions_group_id_b120cbf9_fk_auth_group_id` FOREIGN KEY (`group_id`) REFERENCES `auth_group` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
-
--- Dumping data for table tenmansstatistics.auth_group_permissions: ~0 rows (approximately)
-/*!40000 ALTER TABLE `auth_group_permissions` DISABLE KEYS */;
-/*!40000 ALTER TABLE `auth_group_permissions` ENABLE KEYS */;
-
--- Dumping structure for table tenmansstatistics.auth_permission
-CREATE TABLE IF NOT EXISTS `auth_permission` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) COLLATE latin1_general_ci NOT NULL,
-  `content_type_id` int(11) NOT NULL,
-  `codename` varchar(100) COLLATE latin1_general_ci NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `auth_permission_content_type_id_codename_01ab375a_uniq` (`content_type_id`,`codename`),
-  CONSTRAINT `auth_permission_content_type_id_2f476e4b_fk_django_co` FOREIGN KEY (`content_type_id`) REFERENCES `django_content_type` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
-
--- Dumping data for table tenmansstatistics.auth_permission: ~52 rows (approximately)
-/*!40000 ALTER TABLE `auth_permission` DISABLE KEYS */;
-INSERT IGNORE INTO `auth_permission` (`id`, `name`, `content_type_id`, `codename`) VALUES
-	(1, 'Can add log entry', 1, 'add_logentry'),
-	(2, 'Can change log entry', 1, 'change_logentry'),
-	(3, 'Can delete log entry', 1, 'delete_logentry'),
-	(4, 'Can view log entry', 1, 'view_logentry'),
-	(5, 'Can add permission', 2, 'add_permission'),
-	(6, 'Can change permission', 2, 'change_permission'),
-	(7, 'Can delete permission', 2, 'delete_permission'),
-	(8, 'Can view permission', 2, 'view_permission'),
-	(9, 'Can add group', 3, 'add_group'),
-	(10, 'Can change group', 3, 'change_group'),
-	(11, 'Can delete group', 3, 'delete_group'),
-	(12, 'Can view group', 3, 'view_group'),
-	(13, 'Can add user', 4, 'add_user'),
-	(14, 'Can change user', 4, 'change_user'),
-	(15, 'Can delete user', 4, 'delete_user'),
-	(16, 'Can view user', 4, 'view_user'),
-	(17, 'Can add content type', 5, 'add_contenttype'),
-	(18, 'Can change content type', 5, 'change_contenttype'),
-	(19, 'Can delete content type', 5, 'delete_contenttype'),
-	(20, 'Can view content type', 5, 'view_contenttype'),
-	(21, 'Can add session', 6, 'add_session'),
-	(22, 'Can change session', 6, 'change_session'),
-	(23, 'Can delete session', 6, 'delete_session'),
-	(24, 'Can view session', 6, 'view_session'),
-	(25, 'Can add champion', 7, 'add_champion'),
-	(26, 'Can change champion', 7, 'change_champion'),
-	(27, 'Can delete champion', 7, 'delete_champion'),
-	(28, 'Can view champion', 7, 'view_champion'),
-	(29, 'Can add game', 8, 'add_game'),
-	(30, 'Can change game', 8, 'change_game'),
-	(31, 'Can delete game', 8, 'delete_game'),
-	(32, 'Can view game', 8, 'view_game'),
-	(33, 'Can add lane', 9, 'add_lane'),
-	(34, 'Can change lane', 9, 'change_lane'),
-	(35, 'Can delete lane', 9, 'delete_lane'),
-	(36, 'Can view lane', 9, 'view_lane'),
-	(37, 'Can add player', 10, 'add_player'),
-	(38, 'Can change player', 10, 'change_player'),
-	(39, 'Can delete player', 10, 'delete_player'),
-	(40, 'Can view player', 10, 'view_player'),
-	(41, 'Can add game laner', 11, 'add_gamelaner'),
-	(42, 'Can change game laner', 11, 'change_gamelaner'),
-	(43, 'Can delete game laner', 11, 'delete_gamelaner'),
-	(44, 'Can view game laner', 11, 'view_gamelaner'),
-	(45, 'Can add game bans', 12, 'add_gamebans'),
-	(46, 'Can change game bans', 12, 'change_gamebans'),
-	(47, 'Can delete game bans', 12, 'delete_gamebans'),
-	(48, 'Can view game bans', 12, 'view_gamebans'),
-	(49, 'Can add game ban', 12, 'add_gameban'),
-	(50, 'Can change game ban', 12, 'change_gameban'),
-	(51, 'Can delete game ban', 12, 'delete_gameban'),
-	(52, 'Can view game ban', 12, 'view_gameban');
-/*!40000 ALTER TABLE `auth_permission` ENABLE KEYS */;
-
--- Dumping structure for table tenmansstatistics.auth_user
-CREATE TABLE IF NOT EXISTS `auth_user` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `password` varchar(128) COLLATE latin1_general_ci NOT NULL,
-  `last_login` datetime(6) DEFAULT NULL,
-  `is_superuser` tinyint(1) NOT NULL,
-  `username` varchar(150) COLLATE latin1_general_ci NOT NULL,
-  `first_name` varchar(150) COLLATE latin1_general_ci NOT NULL,
-  `last_name` varchar(150) COLLATE latin1_general_ci NOT NULL,
-  `email` varchar(254) COLLATE latin1_general_ci NOT NULL,
-  `is_staff` tinyint(1) NOT NULL,
-  `is_active` tinyint(1) NOT NULL,
-  `date_joined` datetime(6) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
-
--- Dumping data for table tenmansstatistics.auth_user: ~0 rows (approximately)
-/*!40000 ALTER TABLE `auth_user` DISABLE KEYS */;
-/*!40000 ALTER TABLE `auth_user` ENABLE KEYS */;
-
--- Dumping structure for table tenmansstatistics.auth_user_groups
-CREATE TABLE IF NOT EXISTS `auth_user_groups` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NOT NULL,
-  `group_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `auth_user_groups_user_id_group_id_94350c0c_uniq` (`user_id`,`group_id`),
-  KEY `auth_user_groups_group_id_97559544_fk_auth_group_id` (`group_id`),
-  CONSTRAINT `auth_user_groups_group_id_97559544_fk_auth_group_id` FOREIGN KEY (`group_id`) REFERENCES `auth_group` (`id`),
-  CONSTRAINT `auth_user_groups_user_id_6a12ed8b_fk_auth_user_id` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
-
--- Dumping data for table tenmansstatistics.auth_user_groups: ~0 rows (approximately)
-/*!40000 ALTER TABLE `auth_user_groups` DISABLE KEYS */;
-/*!40000 ALTER TABLE `auth_user_groups` ENABLE KEYS */;
-
--- Dumping structure for table tenmansstatistics.auth_user_user_permissions
-CREATE TABLE IF NOT EXISTS `auth_user_user_permissions` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NOT NULL,
-  `permission_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `auth_user_user_permissions_user_id_permission_id_14a6b632_uniq` (`user_id`,`permission_id`),
-  KEY `auth_user_user_permi_permission_id_1fbb5f2c_fk_auth_perm` (`permission_id`),
-  CONSTRAINT `auth_user_user_permi_permission_id_1fbb5f2c_fk_auth_perm` FOREIGN KEY (`permission_id`) REFERENCES `auth_permission` (`id`),
-  CONSTRAINT `auth_user_user_permissions_user_id_a95ead1b_fk_auth_user_id` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
-
--- Dumping data for table tenmansstatistics.auth_user_user_permissions: ~0 rows (approximately)
-/*!40000 ALTER TABLE `auth_user_user_permissions` DISABLE KEYS */;
-/*!40000 ALTER TABLE `auth_user_user_permissions` ENABLE KEYS */;
-
--- Dumping structure for table tenmansstatistics.django_admin_log
-CREATE TABLE IF NOT EXISTS `django_admin_log` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `action_time` datetime(6) NOT NULL,
-  `object_id` longtext COLLATE latin1_general_ci DEFAULT NULL,
-  `object_repr` varchar(200) COLLATE latin1_general_ci NOT NULL,
-  `action_flag` smallint(5) unsigned NOT NULL CHECK (`action_flag` >= 0),
-  `change_message` longtext COLLATE latin1_general_ci NOT NULL,
-  `content_type_id` int(11) DEFAULT NULL,
-  `user_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `django_admin_log_content_type_id_c4bce8eb_fk_django_co` (`content_type_id`),
-  KEY `django_admin_log_user_id_c564eba6_fk_auth_user_id` (`user_id`),
-  CONSTRAINT `django_admin_log_content_type_id_c4bce8eb_fk_django_co` FOREIGN KEY (`content_type_id`) REFERENCES `django_content_type` (`id`),
-  CONSTRAINT `django_admin_log_user_id_c564eba6_fk_auth_user_id` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
-
--- Dumping data for table tenmansstatistics.django_admin_log: ~0 rows (approximately)
-/*!40000 ALTER TABLE `django_admin_log` DISABLE KEYS */;
-/*!40000 ALTER TABLE `django_admin_log` ENABLE KEYS */;
-
--- Dumping structure for table tenmansstatistics.django_content_type
-CREATE TABLE IF NOT EXISTS `django_content_type` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `app_label` varchar(100) COLLATE latin1_general_ci NOT NULL,
-  `model` varchar(100) COLLATE latin1_general_ci NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `django_content_type_app_label_model_76bd3d3b_uniq` (`app_label`,`model`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
-
--- Dumping data for table tenmansstatistics.django_content_type: ~12 rows (approximately)
-/*!40000 ALTER TABLE `django_content_type` DISABLE KEYS */;
-INSERT IGNORE INTO `django_content_type` (`id`, `app_label`, `model`) VALUES
-	(1, 'admin', 'logentry'),
-	(3, 'auth', 'group'),
-	(2, 'auth', 'permission'),
-	(4, 'auth', 'user'),
-	(5, 'contenttypes', 'contenttype'),
-	(6, 'sessions', 'session'),
-	(7, 'tenMans', 'champion'),
-	(8, 'tenMans', 'game'),
-	(12, 'tenMans', 'gameban'),
-	(11, 'tenMans', 'gamelaner'),
-	(9, 'tenMans', 'lane'),
-	(10, 'tenMans', 'player');
-/*!40000 ALTER TABLE `django_content_type` ENABLE KEYS */;
-
--- Dumping structure for table tenmansstatistics.django_migrations
-CREATE TABLE IF NOT EXISTS `django_migrations` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `app` varchar(255) COLLATE latin1_general_ci NOT NULL,
-  `name` varchar(255) COLLATE latin1_general_ci NOT NULL,
-  `applied` datetime(6) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
-
--- Dumping data for table tenmansstatistics.django_migrations: ~24 rows (approximately)
-/*!40000 ALTER TABLE `django_migrations` DISABLE KEYS */;
-INSERT IGNORE INTO `django_migrations` (`id`, `app`, `name`, `applied`) VALUES
-	(1, 'contenttypes', '0001_initial', '2021-03-25 19:51:40.338451'),
-	(2, 'auth', '0001_initial', '2021-03-25 19:51:40.450554'),
-	(3, 'admin', '0001_initial', '2021-03-25 19:51:40.699779'),
-	(4, 'admin', '0002_logentry_remove_auto_add', '2021-03-25 19:51:40.758833'),
-	(5, 'admin', '0003_logentry_add_action_flag_choices', '2021-03-25 19:51:40.765841'),
-	(6, 'contenttypes', '0002_remove_content_type_name', '2021-03-25 19:51:40.806877'),
-	(7, 'auth', '0002_alter_permission_name_max_length', '2021-03-25 19:51:40.823892'),
-	(8, 'auth', '0003_alter_user_email_max_length', '2021-03-25 19:51:40.839907'),
-	(9, 'auth', '0004_alter_user_username_opts', '2021-03-25 19:51:40.846914'),
-	(10, 'auth', '0005_alter_user_last_login_null', '2021-03-25 19:51:40.873939'),
-	(11, 'auth', '0006_require_contenttypes_0002', '2021-03-25 19:51:40.875941'),
-	(12, 'auth', '0007_alter_validators_add_error_messages', '2021-03-25 19:51:40.882948'),
-	(13, 'auth', '0008_alter_user_username_max_length', '2021-03-25 19:51:40.898961'),
-	(14, 'auth', '0009_alter_user_last_name_max_length', '2021-03-25 19:51:40.913974'),
-	(15, 'auth', '0010_alter_group_name_max_length', '2021-03-25 19:51:40.931991'),
-	(16, 'auth', '0011_update_proxy_permissions', '2021-03-25 19:51:40.939999'),
-	(17, 'auth', '0012_alter_user_first_name_max_length', '2021-03-25 19:51:40.955012'),
-	(18, 'sessions', '0001_initial', '2021-03-25 19:51:40.971027'),
-	(19, 'tenMans', '0001_initial', '2021-03-25 20:14:35.928122'),
-	(20, 'tenMans', '0002_gamebans_gamelaner', '2021-03-25 20:25:19.405270'),
-	(21, 'tenMans', '0003_auto_20210325_1717', '2021-03-25 22:17:45.522294'),
-	(22, 'tenMans', '0004_auto_20210325_1750', '2021-03-25 22:50:57.355691'),
-	(23, 'tenMans', '0005_auto_20210325_1752', '2021-03-25 22:52:04.673634'),
-	(24, 'tenMans', '0006_auto_20210325_1802', '2021-03-25 23:02:12.384848');
-/*!40000 ALTER TABLE `django_migrations` ENABLE KEYS */;
-
--- Dumping structure for table tenmansstatistics.django_session
-CREATE TABLE IF NOT EXISTS `django_session` (
-  `session_key` varchar(40) COLLATE latin1_general_ci NOT NULL,
-  `session_data` longtext COLLATE latin1_general_ci NOT NULL,
-  `expire_date` datetime(6) NOT NULL,
-  PRIMARY KEY (`session_key`),
-  KEY `django_session_expire_date_a5c62663` (`expire_date`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
-
--- Dumping data for table tenmansstatistics.django_session: ~0 rows (approximately)
-/*!40000 ALTER TABLE `django_session` DISABLE KEYS */;
-/*!40000 ALTER TABLE `django_session` ENABLE KEYS */;
-
--- Dumping structure for table tenmansstatistics.tenmans_champion
-CREATE TABLE IF NOT EXISTS `tenmans_champion` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `championName` longtext COLLATE latin1_general_ci NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `championName` (`championName`) USING HASH
-) ENGINE=InnoDB AUTO_INCREMENT=157 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
-
--- Dumping data for table tenmansstatistics.tenmans_champion: ~156 rows (approximately)
-/*!40000 ALTER TABLE `tenmans_champion` DISABLE KEYS */;
-INSERT IGNORE INTO `tenmans_champion` (`id`, `championName`) VALUES
+-- Dumping data for table tenMansstatistics.tenMans_champion: ~156 rows (approximately)
+/*!40000 ALTER TABLE `tenMans_champion` DISABLE KEYS */;
+INSERT IGNORE INTO `tenMans_champion` (`id`, `championName`) VALUES
 	(1, 'Aatrox'),
 	(2, 'Ahri'),
 	(3, 'Akali'),
@@ -430,23 +158,11 @@ INSERT IGNORE INTO `tenmans_champion` (`id`, `championName`) VALUES
 	(154, 'Nunu & Willump'),
 	(155, 'No Smite'),
 	(156, 'Wrong Champ');
-/*!40000 ALTER TABLE `tenmans_champion` ENABLE KEYS */;
+/*!40000 ALTER TABLE `tenMans_champion` ENABLE KEYS */;
 
--- Dumping structure for table tenmansstatistics.tenmans_game
-CREATE TABLE IF NOT EXISTS `tenmans_game` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `gameNumber` int(10) unsigned NOT NULL CHECK (`gameNumber` >= 0),
-  `gameBlueWins` tinyint(1) NOT NULL,
-  `gameRandomTeams` tinyint(1) NOT NULL,
-  `gameMemeStatus` tinyint(1) NOT NULL,
-  `gameDate` datetime(6) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `gameNumber` (`gameNumber`)
-) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
-
--- Dumping data for table tenmansstatistics.tenmans_game: ~23 rows (approximately)
-/*!40000 ALTER TABLE `tenmans_game` DISABLE KEYS */;
-INSERT IGNORE INTO `tenmans_game` (`id`, `gameNumber`, `gameBlueWins`, `gameRandomTeams`, `gameMemeStatus`, `gameDate`) VALUES
+-- Dumping data for table tenMansstatistics.tenMans_game: ~23 rows (approximately)
+/*!40000 ALTER TABLE `tenMans_game` DISABLE KEYS */;
+INSERT IGNORE INTO `tenMans_game` (`id`, `gameNumber`, `gameBlueWins`, `gameRandomTeams`, `gameMemeStatus`, `gameDate`) VALUES
 	(1, 1, 1, 0, 0, '2020-06-01 00:00:00.000000'),
 	(2, 2, 1, 0, 0, '2020-06-01 01:00:00.000000'),
 	(3, 3, 1, 0, 0, '2020-06-07 21:04:00.000000'),
@@ -470,26 +186,11 @@ INSERT IGNORE INTO `tenmans_game` (`id`, `gameNumber`, `gameBlueWins`, `gameRand
 	(22, 21, 1, 0, 0, '2021-02-12 22:31:00.000000'),
 	(23, 22, 1, 0, 0, '2021-03-20 20:17:00.000000'),
 	(24, 23, 1, 0, 0, '2021-03-20 21:18:00.000000');
-/*!40000 ALTER TABLE `tenmans_game` ENABLE KEYS */;
+/*!40000 ALTER TABLE `tenMans_game` ENABLE KEYS */;
 
--- Dumping structure for table tenmansstatistics.tenmans_gameban
-CREATE TABLE IF NOT EXISTS `tenmans_gameban` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `champion_id` int(11) NOT NULL,
-  `game_id` int(11) NOT NULL,
-  `targetPlayer_id` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `tenMans_gamebans_champion_id_870fbac4_fk_tenMans_champion_id` (`champion_id`),
-  KEY `tenMans_gamebans_game_id_ce721b73_fk_tenMans_game_id` (`game_id`),
-  KEY `tenMans_gamebans_targetPlayer_id_37bb2b40_fk_tenMans_player_id` (`targetPlayer_id`),
-  CONSTRAINT `tenMans_gamebans_champion_id_870fbac4_fk_tenMans_champion_id` FOREIGN KEY (`champion_id`) REFERENCES `tenmans_champion` (`id`),
-  CONSTRAINT `tenMans_gamebans_game_id_ce721b73_fk_tenMans_game_id` FOREIGN KEY (`game_id`) REFERENCES `tenmans_game` (`id`),
-  CONSTRAINT `tenMans_gamebans_targetPlayer_id_37bb2b40_fk_tenMans_player_id` FOREIGN KEY (`targetPlayer_id`) REFERENCES `tenmans_player` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=187 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
-
--- Dumping data for table tenmansstatistics.tenmans_gameban: ~0 rows (approximately)
-/*!40000 ALTER TABLE `tenmans_gameban` DISABLE KEYS */;
-INSERT IGNORE INTO `tenmans_gameban` (`id`, `champion_id`, `game_id`, `targetPlayer_id`) VALUES
+-- Dumping data for table tenMansstatistics.tenMans_gameban: ~0 rows (approximately)
+/*!40000 ALTER TABLE `tenMans_gameban` DISABLE KEYS */;
+INSERT IGNORE INTO `tenMans_gameban` (`id`, `champion_id`, `game_id`, `targetPlayer_id`) VALUES
 	(1, 23, 3, 16),
 	(2, 121, 3, 5),
 	(3, 47, 3, 5),
@@ -676,32 +377,11 @@ INSERT IGNORE INTO `tenmans_gameban` (`id`, `champion_id`, `game_id`, `targetPla
 	(184, 121, 24, 5),
 	(185, 111, 24, 3),
 	(186, 135, 24, 19);
-/*!40000 ALTER TABLE `tenmans_gameban` ENABLE KEYS */;
+/*!40000 ALTER TABLE `tenMans_gameban` ENABLE KEYS */;
 
--- Dumping structure for table tenmansstatistics.tenmans_gamelaner
-CREATE TABLE IF NOT EXISTS `tenmans_gamelaner` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `blueTeam` tinyint(1) NOT NULL,
-  `draftOrder` int(10) unsigned DEFAULT NULL,
-  `championSelectOrder` int(10) unsigned DEFAULT NULL,
-  `champion_id` int(11) NOT NULL,
-  `game_id` int(11) NOT NULL,
-  `lane_id` int(11) NOT NULL,
-  `player_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `tenMans_gamelaner_game_id_lane_id_blueTeam_984bbc36_uniq` (`game_id`,`lane_id`,`blueTeam`),
-  KEY `tenMans_gamelaner_champion_id_93f0cb32_fk_tenMans_champion_id` (`champion_id`),
-  KEY `tenMans_gamelaner_lane_id_11402ea7_fk_tenMans_lane_id` (`lane_id`),
-  KEY `tenMans_gamelaner_player_id_42905831_fk_tenMans_player_id` (`player_id`),
-  CONSTRAINT `tenMans_gamelaner_champion_id_93f0cb32_fk_tenMans_champion_id` FOREIGN KEY (`champion_id`) REFERENCES `tenmans_champion` (`id`),
-  CONSTRAINT `tenMans_gamelaner_game_id_3a4073f7_fk_tenMans_game_id` FOREIGN KEY (`game_id`) REFERENCES `tenmans_game` (`id`),
-  CONSTRAINT `tenMans_gamelaner_lane_id_11402ea7_fk_tenMans_lane_id` FOREIGN KEY (`lane_id`) REFERENCES `tenmans_lane` (`id`),
-  CONSTRAINT `tenMans_gamelaner_player_id_42905831_fk_tenMans_player_id` FOREIGN KEY (`player_id`) REFERENCES `tenmans_player` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=444 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
-
--- Dumping data for table tenmansstatistics.tenmans_gamelaner: ~212 rows (approximately)
-/*!40000 ALTER TABLE `tenmans_gamelaner` DISABLE KEYS */;
-INSERT IGNORE INTO `tenmans_gamelaner` (`id`, `blueTeam`, `draftOrder`, `championSelectOrder`, `champion_id`, `game_id`, `lane_id`, `player_id`) VALUES
+-- Dumping data for table tenMansstatistics.tenMans_gamelaner: ~212 rows (approximately)
+/*!40000 ALTER TABLE `tenMans_gamelaner` DISABLE KEYS */;
+INSERT IGNORE INTO `tenMans_gamelaner` (`id`, `blueTeam`, `draftOrder`, `championSelectOrder`, `champion_id`, `game_id`, `lane_id`, `player_id`) VALUES
 	(20, 1, 5, NULL, 78, 1, 1, 16),
 	(21, 1, NULL, NULL, 93, 1, 2, 4),
 	(22, 1, 8, NULL, 6, 1, 3, 13),
@@ -914,37 +594,21 @@ INSERT IGNORE INTO `tenmans_gamelaner` (`id`, `blueTeam`, `draftOrder`, `champio
 	(229, 0, 2, 4, 32, 24, 3, 9),
 	(230, 0, 7, 2, 49, 24, 4, 16),
 	(231, 0, 1, 2, 102, 24, 5, 10);
-/*!40000 ALTER TABLE `tenmans_gamelaner` ENABLE KEYS */;
+/*!40000 ALTER TABLE `tenMans_gamelaner` ENABLE KEYS */;
 
--- Dumping structure for table tenmansstatistics.tenmans_lane
-CREATE TABLE IF NOT EXISTS `tenmans_lane` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `laneName` longtext COLLATE latin1_general_ci NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `laneName` (`laneName`) USING HASH
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
-
--- Dumping data for table tenmansstatistics.tenmans_lane: ~5 rows (approximately)
-/*!40000 ALTER TABLE `tenmans_lane` DISABLE KEYS */;
-INSERT IGNORE INTO `tenmans_lane` (`id`, `laneName`) VALUES
+-- Dumping data for table tenMansstatistics.tenMans_lane: ~5 rows (approximately)
+/*!40000 ALTER TABLE `tenMans_lane` DISABLE KEYS */;
+INSERT IGNORE INTO `tenMans_lane` (`id`, `laneName`) VALUES
 	(1, 'Top'),
 	(2, 'Jungle'),
 	(3, 'Mid'),
 	(4, 'Bot'),
 	(5, 'Support');
-/*!40000 ALTER TABLE `tenmans_lane` ENABLE KEYS */;
+/*!40000 ALTER TABLE `tenMans_lane` ENABLE KEYS */;
 
--- Dumping structure for table tenmansstatistics.tenmans_player
-CREATE TABLE IF NOT EXISTS `tenmans_player` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `playerName` longtext COLLATE latin1_general_ci NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `playerName` (`playerName`) USING HASH
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
-
--- Dumping data for table tenmansstatistics.tenmans_player: ~20 rows (approximately)
-/*!40000 ALTER TABLE `tenmans_player` DISABLE KEYS */;
-INSERT IGNORE INTO `tenmans_player` (`id`, `playerName`) VALUES
+-- Dumping data for table tenMansstatistics.tenMans_player: ~20 rows (approximately)
+/*!40000 ALTER TABLE `tenMans_player` DISABLE KEYS */;
+INSERT IGNORE INTO `tenMans_player` (`id`, `playerName`) VALUES
 	(1, 'JZ'),
 	(2, 'Arthur'),
 	(3, 'Ben'),
@@ -965,8 +629,4 @@ INSERT IGNORE INTO `tenmans_player` (`id`, `playerName`) VALUES
 	(18, 'Tiller'),
 	(19, 'Ty'),
 	(20, 'Zane');
-/*!40000 ALTER TABLE `tenmans_player` ENABLE KEYS */;
-
-/*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
-/*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40000 ALTER TABLE `tenMans_player` ENABLE KEYS */;
