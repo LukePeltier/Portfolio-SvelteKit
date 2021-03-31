@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models.query_utils import Q
 
 # Create your models here.
 class Game(models.Model):
@@ -7,6 +8,8 @@ class Game(models.Model):
     gameRandomTeams = models.BooleanField()
     gameMemeStatus = models.BooleanField(default=0)
     gameDate = models.DateTimeField(default='current_timestamp()')
+    def getTotalGames():
+        return Game.objects.all().count()
 
     class Meta:
         ordering = ["gameNumber"]
@@ -45,11 +48,20 @@ class Player(models.Model):
 
             return round((winningCount/totalGameCount)*100, 2)
     def getLaneRate(self, lane):
+            players = Player.objects.all()
+            topNumber = 0
+            for player in players:
+                count = player.getLaneCount(lane)
+                if(count>topNumber):
+                    topNumber = count
+            playerNumber = self.getLaneCount(lane)
+            return round(playerNumber/topNumber, 1)
+
+    def getLaneCount(self, lane):
         if(lane is None):
-            topPlayer = Player.objects.all().annotate(num_games=models.Count('gamelaner')).order_by('num_games').first()
-            topNumber = topPlayer.num_games
-            playerNumber = GameLaner.objects.filter(player__exact=self.id).count()
-            laneRate = round(playerNumber/topNumber, 1)
+            return GameLaner.objects.filter(player__exact=self.id).count()
+        else:
+            return GameLaner.objects.filter(player__exact=self.id, lane__exact=lane.id).count()
 
 
 

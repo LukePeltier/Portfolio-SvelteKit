@@ -37,13 +37,13 @@
   .sidenav a {font-size: 18px;}
 }
 
-#overallWinrateChartContainer {
+.dashboardChartLeft {
   width: 50%;
   margin: 0 auto;
   float: left;
 }
 
-#overallWinrateTableContainer {
+.dashboardChartRight {
   width: 50%;
   margin: 0 auto;
   float: right;

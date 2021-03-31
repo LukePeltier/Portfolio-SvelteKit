@@ -1,4 +1,6 @@
 function getRGBHeatmapColor(val, lowColor, highColor, midColor, transparency=1, useMidVal = true, minVal = 0, midVal = 50, maxVal = 100){
+
+    var trueTransparency = (transparency+0.2)/(1.2)
     var lowColorRGB = lowColor.replace(/[^\d,]/g, '').split(',');
     var highColorRGB = highColor.replace(/[^\d,]/g, '').split(',');
     var midColorRGB = midColor.replace(/[^\d,]/g, '').split(',');
@@ -16,7 +18,7 @@ function getRGBHeatmapColor(val, lowColor, highColor, midColor, transparency=1, 
             var redVal = Math.floor((lowColorRGB[0] * multiplier) + (midColorRGB[0] * (1 - multiplier)));
             var greenVal = Math.floor((lowColorRGB[1] * multiplier) + (midColorRGB[1] * (1 - multiplier)));
             var blueVal = Math.floor((lowColorRGB[2] * multiplier) + (midColorRGB[2] * (1 - multiplier)));
-            var colorString = 'rgba(' + [redVal, greenVal, blueVal, transparency].join(',') + ')';
+            var colorString = 'rgba(' + [redVal, greenVal, blueVal, trueTransparency].join(',') + ')';
             return colorString;
 
         } else {
@@ -24,7 +26,7 @@ function getRGBHeatmapColor(val, lowColor, highColor, midColor, transparency=1, 
             var redVal = Math.floor((midColorRGB[0] * multiplier) + (highColorRGB[0] * (1 - multiplier)));
             var greenVal = Math.floor((midColorRGB[1] * multiplier) + (highColorRGB[1] * (1 - multiplier)));
             var blueVal = Math.floor((midColorRGB[2] * multiplier) + (highColorRGB[2] * (1 - multiplier)));
-            var colorString = 'rgba(' + [redVal, greenVal, blueVal, transparency].join(',') + ')';
+            var colorString = 'rgba(' + [redVal, greenVal, blueVal, trueTransparency].join(',') + ')';
             return colorString;
         }
     }
@@ -33,7 +35,10 @@ function getRGBHeatmapColor(val, lowColor, highColor, midColor, transparency=1, 
         var redVal = Math.floor((lowColorRGB[0] * multiplier) + (highColorRGB[0] * (1 - multiplier)));
         var greenVal = Math.floor((lowColorRGB[1] * multiplier) + (highColorRGB[1] * (1 - multiplier)));
         var blueVal = Math.floor((lowColorRGB[2] * multiplier) + (highColorRGB[2] * (1 - multiplier)));
-        var colorString = 'rgba(' + [redVal, greenVal, blueVal, transparency].join(',') + ')';
+        var colorString = 'rgba(' + [redVal, greenVal, blueVal, trueTransparency].join(',') + ')';
+        if(redVal==0){
+            console.log(colorString);
+        }
         return colorString;
     }
 

@@ -41,10 +41,12 @@
   width: 50%;
   margin: 0 auto;
   float: left;
+  position: relative;
 }
 
 .dashboardChartRight {
   width: 50%;
   margin: 0 auto;
   float: right;
+  position: relative;
 }

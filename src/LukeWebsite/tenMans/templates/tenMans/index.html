@@ -1,12 +1,38 @@
 {% extends "tenMans/base.html" %}
 {% load static %}
 {%block content%}
-<div id="overallWinrate">
-  <div id="overallWinrateChartContainer">
+<div id="overallWinrate" class="row">
+  <div id="overallWinrateChartContainer" class="dashboardChartLeft">
     <canvas id="overallWinrateChart" data-url="{% url 'overallWinrateChart' %}"></canvas>
   </div>
-  <div id="overallWinrateTableContainer">
+  <div id="overallWinrateTableContainer" class="dashboardChartRight">
     <table id="overallWinrateTable" class="table table-hover table-bordered table-sm" data-url="{% url 'overallWinrateTable' %}">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Top</th>
+          <th>Jungle</th>
+          <th>Middle</th>
+          <th>Bottom</th>
+          <th>Support</th>
+          <th>Overall</th>
+          <th>TopAlpha</th>
+          <th>JungleAlpha</th>
+          <th>MiddleAlpha</th>
+          <th>BottomAlpha</th>
+          <th>SupportAlpha</th>
+          <th>OverallAlpha</th>
+        </tr>
+      </thead>
+    </table>
+  </div>
+</div>
+<div id="overallPlaytime" class="row">
+  <div id="overallPlaytimeChartContainer" class="dashboardChartLeft">
+    <canvas id="overallPlaytimeChart" data-url="{% url 'overallPlaytimeChart' %}"></canvas>
+  </div>
+  <div id="overallPlaytimeTableContainer" class="dashboardChartRight">
+    <table id="overallPlaytimeTable" class="table table-hover table-bordered table-sm" data-url="{% url 'overallPlaytimeTable' %}">
       <thead>
         <tr>
           <th>Name</th>
@@ -25,5 +51,7 @@
 <script src="{%static 'js/heatmapColor.js'%}"></script>
 <script src="{%static 'js/overallWinBar.js'%}"></script>
 <script src="{%static 'js/overallWinTable.js'%}"></script>
+<script src="{%static 'js/overallPlayBar.js'%}"></script>
+<script src="{%static 'js/overallPlayTable.js'%}"></script>
 
 {%endblock%}

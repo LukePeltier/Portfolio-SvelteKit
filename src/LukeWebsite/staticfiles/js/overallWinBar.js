@@ -28,9 +28,9 @@ $(function () {
                             var index = context.dataIndex;
                             var value = context.dataset.data[index];
                             if(value==="N/A"){
-                                return "rgb(255, 255, 255)";
+                                return "rgba(255, 255, 255, 0)";
                             }
-                            return getRGBHeatmapColor(value, window.chartColors.red, window.chartColors.green, window.chartColors.yellow, 1, true, 0, 50, 100)
+                            return getRGBHeatmapColor(value, window.chartColors.red, window.chartColors.green, window.chartColors.yellow, data.overallAlpha[index], true, 0, 50, 100)
                         },
                         borderWidth: 1,
                         minBarLength: 5
@@ -41,7 +41,7 @@ $(function () {
                         backgroundColor: function (context) {
                             var index = context.dataIndex;
                             var value = context.dataset.data[index];
-                            return getRGBHeatmapColor(value, window.chartColors.red, window.chartColors.green, window.chartColors.yellow, 1, true, 0, 50, 100)
+                            return getRGBHeatmapColor(value, window.chartColors.red, window.chartColors.green, window.chartColors.yellow, data.topAlpha[index], true, 0, 50, 100)
                         },
                         borderWidth: 1,
                         minBarLength: 5
@@ -52,7 +52,7 @@ $(function () {
                         backgroundColor: function (context) {
                             var index = context.dataIndex;
                             var value = context.dataset.data[index];
-                            return getRGBHeatmapColor(value, window.chartColors.red, window.chartColors.green, window.chartColors.yellow, 1, true, 0, 50, 100)
+                            return getRGBHeatmapColor(value, window.chartColors.red, window.chartColors.green, window.chartColors.yellow, data.jungleAlpha[index], true, 0, 50, 100)
                         },
                         borderWidth: 1,
                         minBarLength: 5
@@ -63,7 +63,7 @@ $(function () {
                         backgroundColor: function (context) {
                             var index = context.dataIndex;
                             var value = context.dataset.data[index];
-                            return getRGBHeatmapColor(value, window.chartColors.red, window.chartColors.green, window.chartColors.yellow, 1, true, 0, 50, 100)
+                            return getRGBHeatmapColor(value, window.chartColors.red, window.chartColors.green, window.chartColors.yellow, data.midAlpha[index], true, 0, 50, 100)
                         },
                         borderWidth: 1,
                         minBarLength: 5
@@ -74,7 +74,7 @@ $(function () {
                         backgroundColor: function (context) {
                             var index = context.dataIndex;
                             var value = context.dataset.data[index];
-                            return getRGBHeatmapColor(value, window.chartColors.red, window.chartColors.green, window.chartColors.yellow, 1, true, 0, 50, 100)
+                            return getRGBHeatmapColor(value, window.chartColors.red, window.chartColors.green, window.chartColors.yellow, data.botAlpha[index], true, 0, 50, 100)
                         },
                         borderWidth: 1,
                         minBarLength: 5
@@ -85,7 +85,7 @@ $(function () {
                         backgroundColor: function (context) {
                             var index = context.dataIndex;
                             var value = context.dataset.data[index];
-                            return getRGBHeatmapColor(value, window.chartColors.red, window.chartColors.green, window.chartColors.yellow, 1, true, 0, 50, 100)
+                            return getRGBHeatmapColor(value, window.chartColors.red, window.chartColors.green, window.chartColors.yellow, data.supportAlpha[index], true, 0, 50, 100)
                         },
                         borderWidth: 1,
                         minBarLength: 5

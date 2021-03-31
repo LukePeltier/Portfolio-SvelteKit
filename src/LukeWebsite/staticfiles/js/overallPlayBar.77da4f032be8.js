@@ -1,6 +1,6 @@
 $(function () {
 
-    var $overallWinrateChart = $("#overallWinrateChart");
+    var $overallPlaytimeChart = $("#overallPlaytimeChart");
     var color = Chart.helpers.color;
     window.chartColors = {
         red: 'rgb(255, 99, 132)',
@@ -9,13 +9,14 @@ $(function () {
         green: 'rgb(92, 184, 92)',
         blue: 'rgb(54, 162, 235)',
         purple: 'rgb(153, 102, 255)',
-        grey: 'rgb(201, 203, 207)'
+        grey: 'rgb(201, 203, 207)',
+        white: 'rgb(255, 255, 255)'
     };
     $.ajax({
-        url: $overallWinrateChart.data("url"),
+        url: $overallPlaytimeChart.data("url"),
         success: function (data) {
 
-            var ctx = $overallWinrateChart;
+            var ctx = $overallPlaytimeChart;
 
             var overallWinrate = new Chart(ctx, {
                 type: 'horizontalBar',
@@ -30,7 +31,7 @@ $(function () {
                             if(value==="N/A"){
                                 return "rgba(255, 255, 255, 0)";
                             }
-                            return getRGBHeatmapColor(value, window.chartColors.red, window.chartColors.green, window.chartColors.yellow, data.overallAlpha[index], true, 0, 50, 100)
+                            return getRGBHeatmapColor(value, window.chartColors.white, window.chartColors.green, window.chartColors.yellow, 1, false, 0, 50, data.max)
                         },
                         borderWidth: 1,
                         minBarLength: 5
@@ -41,7 +42,7 @@ $(function () {
                         backgroundColor: function (context) {
                             var index = context.dataIndex;
                             var value = context.dataset.data[index];
-                            return getRGBHeatmapColor(value, window.chartColors.red, window.chartColors.green, window.chartColors.yellow, data.topAlpha[index], true, 0, 50, 100)
+                            return getRGBHeatmapColor(value, window.chartColors.white, window.chartColors.green, window.chartColors.yellow, 1, false, 0, 50, data.max)
                         },
                         borderWidth: 1,
                         minBarLength: 5
@@ -52,7 +53,7 @@ $(function () {
                         backgroundColor: function (context) {
                             var index = context.dataIndex;
                             var value = context.dataset.data[index];
-                            return getRGBHeatmapColor(value, window.chartColors.red, window.chartColors.green, window.chartColors.yellow, data.jungleAlpha[index], true, 0, 50, 100)
+                            return getRGBHeatmapColor(value, window.chartColors.white, window.chartColors.green, window.chartColors.yellow, 1, false, 0, 50, data.max)
                         },
                         borderWidth: 1,
                         minBarLength: 5
@@ -63,7 +64,7 @@ $(function () {
                         backgroundColor: function (context) {
                             var index = context.dataIndex;
                             var value = context.dataset.data[index];
-                            return getRGBHeatmapColor(value, window.chartColors.red, window.chartColors.green, window.chartColors.yellow, data.midAlpha[index], true, 0, 50, 100)
+                            return getRGBHeatmapColor(value, window.chartColors.white, window.chartColors.green, window.chartColors.yellow, 1, false, 0, 50, data.max)
                         },
                         borderWidth: 1,
                         minBarLength: 5
@@ -74,7 +75,7 @@ $(function () {
                         backgroundColor: function (context) {
                             var index = context.dataIndex;
                             var value = context.dataset.data[index];
-                            return getRGBHeatmapColor(value, window.chartColors.red, window.chartColors.green, window.chartColors.yellow, data.botAlpha[index], true, 0, 50, 100)
+                            return getRGBHeatmapColor(value, window.chartColors.white, window.chartColors.green, window.chartColors.yellow, 1, false, 0, 50, data.max)
                         },
                         borderWidth: 1,
                         minBarLength: 5
@@ -85,7 +86,7 @@ $(function () {
                         backgroundColor: function (context) {
                             var index = context.dataIndex;
                             var value = context.dataset.data[index];
-                            return getRGBHeatmapColor(value, window.chartColors.red, window.chartColors.green, window.chartColors.yellow, data.supportAlpha[index], true, 0, 50, 100)
+                            return getRGBHeatmapColor(value, window.chartColors.white, window.chartColors.green, window.chartColors.yellow, 1, false, 0, 50, data.max)
                         },
                         borderWidth: 1,
                         minBarLength: 5
