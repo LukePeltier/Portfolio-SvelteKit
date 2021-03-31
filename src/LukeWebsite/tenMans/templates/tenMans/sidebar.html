@@ -1,11 +1,12 @@
 <div class="sidenav">
-    <a href="#">Dashboard</a>
+    <a href="{% url 'tenMansHome'%}%">Dashboard</a>
+    <a href="{% url 'newGameFormView'%}">New Game</a>
     <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Players</a>
     {% if player_list%}
     <ul class="collapse" id="pageSubmenu">
         {% for player in player_list %}
         <li>
-            <a href="#">{{ player.playerName}}</a>
+            <a href="{% url 'detailPlayer' player.pk%}" style="font-size: 16px;">{{ player.playerName}}</a>
         </li>
         {% endfor %}
     </ul>

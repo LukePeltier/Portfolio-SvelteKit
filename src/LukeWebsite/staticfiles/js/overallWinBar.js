@@ -93,6 +93,7 @@ $(function () {
                 },
                 options: {
                     responsive: true,
+                    maintainAspectRatio: false,
                     legend: {
                         position: 'right',
                         labels: {

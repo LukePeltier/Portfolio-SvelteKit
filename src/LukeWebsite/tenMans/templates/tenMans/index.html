@@ -2,7 +2,7 @@
 {% load static %}
 {%block content%}
 <div id="overallWinrate" class="row">
-  <div id="overallWinrateChartContainer" class="dashboardChartLeft">
+  <div id="overallWinrateChartContainer" class="dashboardChartLeft", style="height: 730px;">
     <canvas id="overallWinrateChart" data-url="{% url 'overallWinrateChart' %}"></canvas>
   </div>
   <div id="overallWinrateTableContainer" class="dashboardChartRight">
@@ -28,7 +28,7 @@
   </div>
 </div>
 <div id="overallPlaytime" class="row">
-  <div id="overallPlaytimeChartContainer" class="dashboardChartLeft">
+  <div id="overallPlaytimeChartContainer" class="dashboardChartLeft", style="height: 730px;">
     <canvas id="overallPlaytimeChart" data-url="{% url 'overallPlaytimeChart' %}"></canvas>
   </div>
   <div id="overallPlaytimeTableContainer" class="dashboardChartRight">

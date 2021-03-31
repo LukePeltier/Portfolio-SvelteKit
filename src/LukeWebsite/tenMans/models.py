@@ -63,14 +63,50 @@ class Player(models.Model):
         else:
             return GameLaner.objects.filter(player__exact=self.id, lane__exact=lane.id).count()
 
+    def getWinrateHistorical(self, maxGame, lane):
+        if(lane is None):
+            #Overall winrate
+            gamesPlayed = GameLaner.objects.filter(player__exact=self.id, game__gameNumber__lte=maxGame.gameNumber)
+            totalGameCount = gamesPlayed.count()
+            winningCount = 0
+            for gameLane in gamesPlayed.iterator():
+                gameLane: GameLaner
+                blueTeam = gameLane.blueTeam
+                blueWin = gameLane.game.gameBlueWins
+                if(blueTeam==blueWin):
+                    winningCount+=1
+            if(totalGameCount==0):
+                return None
+            return round((winningCount/totalGameCount)*100, 2)
+        else:
+            #Lane winrate
+            gamesPlayed = GameLaner.objects.filter(player__exact=self.id, lane__exact=lane.id, game__gameNumber__lte=maxGame.gameNumber)
+            totalGameCount = gamesPlayed.count()
+            if totalGameCount==0:
+                return None
+            winningCount = 0
+            for gameLane in gamesPlayed.iterator():
+                gameLane: GameLaner
+                blueTeam = gameLane.blueTeam
+                blueWin = gameLane.game.gameBlueWins
+                if(blueTeam==blueWin):
+                    winningCount+=1
+            return round((winningCount/totalGameCount)*100, 2)
+
 
 
 
 class Champion(models.Model):
     championName = models.TextField(unique=True)
 
+    def __str__(self):
+        return self.championName
+
+
 class Lane(models.Model):
     laneName = models.TextField(unique=True)
+    def __str__(self):
+        return self.laneName
 
 class GameLaner(models.Model):
     game = models.ForeignKey(Game, on_delete=models.CASCADE)

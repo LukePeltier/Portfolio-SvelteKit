@@ -39,12 +39,14 @@
 
 .dashboardChartLeft {
   width: 50%;
+  height: 100%;
   margin: 0 auto;
   float: left;
 }
 
 .dashboardChartRight {
   width: 50%;
+  height: 100%;
   margin: 0 auto;
   float: right;
 }

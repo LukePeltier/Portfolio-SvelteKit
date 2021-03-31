@@ -1,7 +1,6 @@
 $(function () {
 
     var $overallPlaytimeChart = $("#overallPlaytimeChart");
-    var color = Chart.helpers.color;
     window.chartColors = {
         red: 'rgb(255, 99, 132)',
         orange: 'rgb(255, 159, 64)',
@@ -91,6 +90,7 @@ $(function () {
                 },
                 options: {
                     responsive: true,
+                    maintainAspectRatio: false,
                     legend: {
                         position: 'right',
                         labels: {

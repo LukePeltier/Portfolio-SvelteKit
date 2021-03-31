@@ -1,0 +1,9 @@
+{% extends "tenMans/base.html" %}
+{% load static %}
+{%block content%}
+<h1>{{ object.playerName }}</h1>
+<div id="winrateOverTimeContainer" style="height: 500px;">
+    <canvas id="winrateOverTimeChart" data-url="{% url 'playerWinrateOverTime' object.pk %}"></canvas>
+</div>
+<script src="{%static 'js/playerWOTGraph.js'%}"></script>
+{%endblock%}
