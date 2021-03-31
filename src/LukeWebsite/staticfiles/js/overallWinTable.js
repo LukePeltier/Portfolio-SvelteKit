@@ -36,7 +36,7 @@ $(function () {
         winrateTable.on('draw', function () {
             winrateTable.cells().every(function () {
                 if (typeof(this.data())==="number") {
-                    $(this.node()).css('background-color', getRGBHeatmapColor(this.data(), window.chartColors.red, window.chartColors.green, window.chartColors.yellow, true, 0, 50, 100));
+                    $(this.node()).css('background-color', getRGBHeatmapColor(this.data(), window.chartColors.red, window.chartColors.green, window.chartColors.yellow, 1, true, 0, 50, 100));
                 } else if (this.data() === "N/A") {
                     $(this.node()).css('color', window.chartColors.grey);
                 }
