@@ -90,7 +90,6 @@ $(function () {
                 },
                 options: {
                     responsive: true,
-                    maintainAspectRatio: false,
                     legend: {
                         position: 'right',
                         labels: {
@@ -107,7 +106,7 @@ $(function () {
                     },
                     title: {
                         display: true,
-                        text: 'Winrate Bar Chart'
+                        text: 'Playtime Bar Chart'
                     },
                     tooltips: {
                         mode: 'index',

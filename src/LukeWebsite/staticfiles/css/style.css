@@ -27,8 +27,7 @@
 
 /* Style page content */
 .main {
-  margin-left: 160px; /* Same as the width of the sidebar */
-  padding: 0px 10px;
+  margin-left: 180px;
 }
 
 /* On smaller screens, where height is less than 450px, change the style of the sidebar (less padding and a smaller font size) */
@@ -37,16 +36,7 @@
   .sidenav a {font-size: 18px;}
 }
 
-.dashboardChartLeft {
-  width: 50%;
-  height: 100%;
-  margin: 0 auto;
-  float: left;
-}
-
-.dashboardChartRight {
-  width: 50%;
-  height: 100%;
-  margin: 0 auto;
-  float: right;
+.smallPlayerStat {
+  padding: 10px ;
+  border: 1px solid #dee2e6;
 }

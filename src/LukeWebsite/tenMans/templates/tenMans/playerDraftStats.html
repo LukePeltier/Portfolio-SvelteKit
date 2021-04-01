@@ -1,0 +1,33 @@
+{% extends "tenMans/base.html" %}
+{% load static %}
+{% block header %}
+{%endblock%}
+{%block content%}
+<div class="container-fluid">
+    <div id="draftOrderContainer" class="row">
+        <div id="averageDraftOrderTableContainer" class="col-sm">
+            <table id="averageDraftOrderTable" class="table table-hover table-bordered table-sm"
+                data-url="{% url 'averageDraftOrderTable' %}">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Average Draft Order</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+        <div id="expectedDraftOrderWinrateTableContainer" class="col-sm">
+            <table id="expectedDraftOrderWinrateTable" class="table table-hover table-bordered table-sm"
+                data-url="{% url 'expectedDraftOrderWinrateTable' %}">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Expected Draft Order</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
+<script src="{%static 'js/draftOrder.js'%}"></script>
+{%endblock%}

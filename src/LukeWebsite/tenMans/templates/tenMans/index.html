@@ -1,50 +1,54 @@
 {% extends "tenMans/base.html" %}
 {% load static %}
 {%block content%}
-<div id="overallWinrate" class="row">
-  <div id="overallWinrateChartContainer" class="dashboardChartLeft", style="height: 730px;">
-    <canvas id="overallWinrateChart" data-url="{% url 'overallWinrateChart' %}"></canvas>
+<div class="container-fluid">
+  <div id="overallWinrate" class="row">
+    <div id="overallWinrateChartContainer" class="col-6">
+      <canvas id="overallWinrateChart" data-url="{% url 'overallWinrateChart' %}"></canvas>
+    </div>
+    <div id="overallWinrateTableContainer" class="col-4">
+      <table id="overallWinrateTable" class="table table-hover table-bordered table-sm"
+        data-url="{% url 'overallWinrateTable' %}">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Top</th>
+            <th>Jungle</th>
+            <th>Middle</th>
+            <th>Bottom</th>
+            <th>Support</th>
+            <th>Overall</th>
+            <th>TopAlpha</th>
+            <th>JungleAlpha</th>
+            <th>MiddleAlpha</th>
+            <th>BottomAlpha</th>
+            <th>SupportAlpha</th>
+            <th>OverallAlpha</th>
+          </tr>
+        </thead>
+      </table>
+    </div>
   </div>
-  <div id="overallWinrateTableContainer" class="dashboardChartRight">
-    <table id="overallWinrateTable" class="table table-hover table-bordered table-sm" data-url="{% url 'overallWinrateTable' %}">
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Top</th>
-          <th>Jungle</th>
-          <th>Middle</th>
-          <th>Bottom</th>
-          <th>Support</th>
-          <th>Overall</th>
-          <th>TopAlpha</th>
-          <th>JungleAlpha</th>
-          <th>MiddleAlpha</th>
-          <th>BottomAlpha</th>
-          <th>SupportAlpha</th>
-          <th>OverallAlpha</th>
-        </tr>
-      </thead>
-    </table>
-  </div>
-</div>
-<div id="overallPlaytime" class="row">
-  <div id="overallPlaytimeChartContainer" class="dashboardChartLeft", style="height: 730px;">
-    <canvas id="overallPlaytimeChart" data-url="{% url 'overallPlaytimeChart' %}"></canvas>
-  </div>
-  <div id="overallPlaytimeTableContainer" class="dashboardChartRight">
-    <table id="overallPlaytimeTable" class="table table-hover table-bordered table-sm" data-url="{% url 'overallPlaytimeTable' %}">
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Top</th>
-          <th>Jungle</th>
-          <th>Middle</th>
-          <th>Bottom</th>
-          <th>Support</th>
-          <th>Overall</th>
-        </tr>
-      </thead>
-    </table>
+  <div id="overallPlaytime" class="row">
+    <div id="overallPlaytimeChartContainer" class="col-6">
+      <canvas id="overallPlaytimeChart" data-url="{% url 'overallPlaytimeChart' %}"></canvas>
+    </div>
+    <div id="overallPlaytimeTableContainer" class="col-4">
+      <table id="overallPlaytimeTable" class="table table-hover table-bordered table-sm"
+        data-url="{% url 'overallPlaytimeTable' %}">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Top</th>
+            <th>Jungle</th>
+            <th>Middle</th>
+            <th>Bottom</th>
+            <th>Support</th>
+            <th>Overall</th>
+          </tr>
+        </thead>
+      </table>
+    </div>
   </div>
 </div>
 <script src="{%static 'js/customSort.js'%}"></script>

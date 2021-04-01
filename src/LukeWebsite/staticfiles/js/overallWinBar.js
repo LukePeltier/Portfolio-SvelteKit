@@ -93,7 +93,6 @@ $(function () {
                 },
                 options: {
                     responsive: true,
-                    maintainAspectRatio: false,
                     legend: {
                         position: 'right',
                         labels: {
@@ -119,6 +118,14 @@ $(function () {
                     hover: {
                         mode: 'nearest',
                         intersect: true
+                    },
+                    scales: {
+                        xAxes: [{
+                            ticks: {
+                                min: 0,
+                                max: 100
+                            }
+                        }]
                     }
                 }
             });

@@ -133,9 +133,23 @@ def overallPlaytimeTable(request):
 
 class PlayerDetailView(DetailView, BaseTenMansContextMixin):
     model = Player
+    object: Player
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['mostPlayedLane'] = self.object.getMostPlayedLaneString()
+        context['mostPlayedChamp'] = self.object.getMostPlayedChampionString()
+        context['highestWinrateChamp'] = self.object.getHighestWinrateChampionString()
+        context['averageBansPulled'] = self.object.getAveragePulledBans()
+        context['mostBannedChamp'] = self.object.getMostBannedChampionString()
+        context['totalGamesPlayed'] = self.object.getLaneCount(None)
+        context['blueSideWinrate'] = self.object.getSideWinrate("Blue")
+        context['redSideWinrate'] = self.object.getSideWinrate("Red")
+        return context
 
 class PlayerWinrateOverTimeView(DetailView):
     model = Player
+    object: Player
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
         labels, overallData, topData, jungData, midData, botData, suppData = ([] for i in range(7))
@@ -158,7 +172,60 @@ class PlayerWinrateOverTimeView(DetailView):
         'support': suppData
     })
 
-class NewGameView(FormView):
+class PlayerLaneCountTable(DetailView):
+    model = Player
+    object: Player
+    def get(self, request, *args, **kwargs):
+        data = []
+        self.object = self.get_object()
+        queryset = Lane.objects.all()
+        for lane in queryset:
+            laneDict = {}
+            laneDict["lane"] = lane.laneName
+            laneDict["playCount"] = self.object.getLaneCount(lane)
+            data.append(laneDict)
+
+        return JsonResponse(data={
+            'data': data
+        })
+
+class PlayerDraftStats(TemplateView, BaseTenMansContextMixin):
+    template_name = 'tenMans/playerDraftStats.html'
+
+
+class AverageDraftOrderTable(View):
+
+    def get(self, request, *args, **kwargs):
+        data = []
+        queryset = Player.objects.all()
+
+        for player in queryset:
+            playerDict = {}
+            playerDict["name"] = player.playerName
+            playerDict["draftOrder"] = player.getAverageDraftOrder()
+            data.append(playerDict)
+
+        return JsonResponse(data={
+            'data': data
+        })
+
+class ExpectedDraftOrderWinrateTable(View):
+
+    def get(self, request, *args, **kwargs):
+        data = []
+        queryset = Player.objects.all()
+
+        for player in queryset:
+            playerDict = {}
+            playerDict["name"] = player.playerName
+            playerDict["draftOrder"] = player.getAverageDraftOrder()
+            data.append(playerDict)
+
+        return JsonResponse(data={
+            'data': data
+        })
+
+class NewGameView(FormView, BaseTenMansContextMixin):
     template_name = 'tenMans/new_game.html'
     form_class = NewGameForm
     success_url = '/game_submitted/'

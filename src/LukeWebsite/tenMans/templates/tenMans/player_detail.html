@@ -2,8 +2,62 @@
 {% load static %}
 {%block content%}
 <h1>{{ object.playerName }}</h1>
-<div id="winrateOverTimeContainer" style="height: 500px;">
-    <canvas id="winrateOverTimeChart" data-url="{% url 'playerWinrateOverTime' object.pk %}"></canvas>
-</div>
-<script src="{%static 'js/playerWOTGraph.js'%}"></script>
-{%endblock%}
+<div class="container-fluid">
+    <div class="row">
+        <div id="winrateOverTimeContainer" class="col">
+            <canvas id="winrateOverTimeChart" data-url="{% url 'playerWinrateOverTime' object.pk %}"></canvas>
+        </div>
+    </div>
+    <div class="row">
+        <div id="smallStatsBox" class="col">
+            <div class="row">
+                <div class="col smallPlayerStat">
+                    Most Played Lane: <b>{{ mostPlayedLane }}</b>
+                </div>
+                <div class="col smallPlayerStat">
+                    Total Games Played: <b>{{ totalGamesPlayed }}</b>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col smallPlayerStat">
+                    Most Played Champion: <b>{{ mostPlayedChamp }}</b>
+                </div>
+                <div class="col smallPlayerStat">
+                    Highest Winrate Champion: <b>{{ highestWinrateChamp }}</b>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col smallPlayerStat">
+                    Average Pulled Bans Per Game: <b> {{averageBansPulled}} </b>
+                </div>
+                <div class="col smallPlayerStat">
+                    Most Banned Champion: <b> {{mostBannedChamp}} </b>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col smallPlayerStat">
+                    Blue Win Rate: <b> {{blueSideWinrate}}%</b>
+                </div>
+                <div class="col smallPlayerStat">
+                    Red Win Rate:<b> {{redSideWinrate}}%</b>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div id="playerLaneCountTableContainer">
+                <table id="playerLaneCountTable" class="table table-hover table-bordered table-sm"
+                    data-url="{% url 'playerLaneCountTable' object.pk %}">
+                    <thead>
+                        <tr>
+                            <th>Lane</th>
+                            <th>Play Count</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+
+    </div>
+    <script src="{%static 'js/playerWOTGraph.js'%}"></script>
+    <script src="{%static 'js/playerDetails.js'%}"></script>
+    {%endblock%}
