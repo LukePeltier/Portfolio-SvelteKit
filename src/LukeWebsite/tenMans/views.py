@@ -21,6 +21,8 @@ class Dashboard(TemplateView, BaseTenMansContextMixin):
     template_name = "tenMans/index.html"
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['gameTotal'] = Game.objects.all().count()
+        context['memeTotal'] = Game.objects.all().filter(gameMemeStatus=True).count()
         return context
 
 

@@ -236,11 +236,6 @@ class Player(models.Model):
 
         return round((winningCount/totalGameCount)*100, 2)
 
-
-
-
-
-
 class Champion(models.Model):
     championName = models.TextField(unique=True)
 
