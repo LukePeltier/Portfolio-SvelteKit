@@ -224,6 +224,8 @@ class Player(models.Model):
         blueTeamDetermine = side=="Blue"
         gamesPlayed = GameLaner.objects.filter(player__exact=self.id, blueTeam__exact=blueTeamDetermine)
         totalGameCount = gamesPlayed.count()
+        if(totalGameCount==0):
+            return "N/A"
         winningCount = 0
         for gameLane in gamesPlayed.iterator():
             gameLane: GameLaner
