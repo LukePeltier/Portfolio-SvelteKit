@@ -4,13 +4,14 @@ from django import forms
 from tenMans.models import Champion
 from bootstrap_datepicker_plus import DateTimePickerInput
 from crispy_forms.helper import FormHelper
+from django.contrib.auth import authenticate
 
 class NewGameForm(forms.Form):
     password = forms.CharField(widget = forms.PasswordInput())
 
-    didBlueWin = forms.BooleanField(label="Did Blue Win?")
-    randomTeams = forms.BooleanField(label="Random Teams")
-    memeGame = forms.BooleanField(label="Meme Game")
+    didBlueWin = forms.BooleanField(label="Did Blue Win?", required=False)
+    randomTeams = forms.BooleanField(label="Random Teams", required=False)
+    memeGame = forms.BooleanField(label="Meme Game", required=False)
     gameDate = forms.DateTimeField(label="Date of Game", widget=DateTimePickerInput())
 
     blueTopLaner = forms.CharField(label="Blue Top Laner")
@@ -253,6 +254,9 @@ class NewGameForm(forms.Form):
             )
         )
 
+    def submit_game(self):
+        return False
 
-    def submit_game(self, form):
-        pass
+    def getCleanField(self, fieldName):
+        data = self.cleaned_data.get(fieldName)
+        return data

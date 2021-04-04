@@ -1,3 +1,4 @@
+from django.contrib.auth import authenticate
 from django.http import HttpResponse
 from django.http.response import JsonResponse
 from django.shortcuts import render
@@ -230,10 +231,21 @@ class ExpectedDraftOrderWinrateTable(View):
 class NewGameView(FormView, BaseTenMansContextMixin):
     template_name = 'tenMans/new_game.html'
     form_class = NewGameForm
-    success_url = '/game_submitted/'
+    success_url = '/ten_mans/'
 
-    def form_valid(self, form):
+    def form_valid(self, form: NewGameForm):
         # This method is called when valid form data has been POSTed.
         # It should return an HttpResponse.
-        form.submit_game()
-        return super().form_valid(form)
+        password = form.getCleanField("password")
+        user = authenticate(username='gameSubmitter', password=password)
+
+        if user is None:
+            return super().form_invalid(form)
+
+
+        result = form.submit_game()
+
+        if result:
+            return super().form_valid(form)
+        else:
+            return super().form_invalid(form)
