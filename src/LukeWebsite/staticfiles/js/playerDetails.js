@@ -7,6 +7,9 @@ $(function () {
                 },
                 {
                     "data": "playCount"
+                },
+                {
+                    "data": "averageKDA"
                 }
             ],
             paging: false,

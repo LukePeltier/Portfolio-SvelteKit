@@ -132,14 +132,7 @@ class Player(models.Model):
         return "/".join(laneNames) + " ({} games)".format(currentMax)
 
     def getMostPlayedChampionString(self):
-        gamesPlayed = GameLaner.objects.filter(player__exact=self.id)
-        champCounts = {}
-        for gameLane in gamesPlayed:
-            championName = gameLane.champion.championName
-            if(championName in champCounts):
-                champCounts[championName]+=1
-            else:
-                champCounts[championName]=1
+        champCounts = self.championsPlayed()
         champNames = []
         currentMax = 0
         for champ,count in champCounts.items():
@@ -242,6 +235,39 @@ class Player(models.Model):
 
         return round((winningCount/totalGameCount)*100, 2)
 
+    def getAverageKDALaneString(self, lane):
+        if lane is None:
+            gamesPlayed = GameLaner.objects.filter(player__exact=self.id)
+        else:
+            gamesPlayed = GameLaner.objects.filter(player__exact=self.id, lane__exact=lane.id)
+        stats = GameLanerStats.objects.filter(gameLaner__in=gamesPlayed)
+        gameCount = gamesPlayed.count()
+        if(gameCount==0):
+            return None
+        kills = 0
+        deaths = 0
+        assists = 0
+        for stat in stats:
+            stat: GameLanerStats
+            kills+=stat.kills
+            deaths+=stat.deaths
+            assists+=stat.assists
+        return "{}/{}/{}".format(round(kills/gameCount, 2), round(deaths/gameCount, 2), round(assists/gameCount, 2))
+
+    def championsPlayed(self):
+        gamesPlayed = GameLaner.objects.filter(player__exact=self.id, game__gameMemeStatus__exact=0)
+        champCounts = {}
+        for gameLane in gamesPlayed:
+            championName = gameLane.champion.championName
+            if(championName in champCounts):
+                champCounts[championName]+=1
+            else:
+                champCounts[championName]=1
+        return champCounts
+
+    def getUniqueChampionCount(self):
+        champCounts = self.championsPlayed()
+        return len(champCounts)
 class Champion(models.Model):
     championName = models.TextField(unique=True)
 

@@ -150,6 +150,8 @@ class PlayerDetailView(DetailView, BaseTenMansContextMixin):
         context['totalGamesPlayed'] = self.object.getLaneCount(None)
         context['blueSideWinrate'] = self.object.getSideWinrate("Blue")
         context['redSideWinrate'] = self.object.getSideWinrate("Red")
+        context['overallAverageKDA'] = self.object.getAverageKDALaneString(None)
+        context['uniqueChampionsPlayed'] = self.object.getUniqueChampionCount()
         return context
 
 class PlayerWinrateOverTimeView(DetailView):
@@ -188,6 +190,7 @@ class PlayerLaneCountTable(DetailView):
             laneDict = {}
             laneDict["lane"] = lane.laneName
             laneDict["playCount"] = self.object.getLaneCount(lane)
+            laneDict["averageKDA"] = self.object.getAverageKDALaneString(lane)
             data.append(laneDict)
 
         return JsonResponse(data={
@@ -257,9 +260,8 @@ class UpdateGameView(FormView, BaseTenMansContextMixin):
         # This method is called when valid form data has been POSTed.
         # It should return an HttpResponse.
         try:
-            pass
+            form.updateGame()
         except Error:
             return super().form_invalid(form)
-
 
         return super().form_valid(form)

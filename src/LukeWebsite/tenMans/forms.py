@@ -1,3 +1,5 @@
+import os
+import requests
 from bootstrap_datepicker_plus import DateTimePickerInput
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import (HTML, ButtonHolder, Column, Div, Fieldset,
@@ -7,8 +9,10 @@ from django.contrib.auth import authenticate
 from django.core.exceptions import ValidationError
 from django.db.models import Max
 from django.db.utils import Error, IntegrityError
+from configparser import ConfigParser
+from riotwatcher import LolWatcher, ApiError
 
-from tenMans.models import Champion, Game, GameBan, GameLaner, Lane, Player
+from tenMans.models import Champion, Game, GameBan, GameLaner, GameLanerStats, Lane, Player
 
 
 class NewGameForm(forms.Form):
@@ -43,17 +47,17 @@ class NewGameForm(forms.Form):
     redPlayerPickBot = forms.CharField(label="Red Bot Player Pick Order", max_length=1, required=False)
     redPlayerPickSupp = forms.CharField(label="Red Support Player Pick Order", max_length=1, required=False)
 
-    blueTopChamp = forms.ModelChoiceField(label="Blue Top Champion", queryset=Champion.objects.all())
-    blueJungChamp = forms.ModelChoiceField(label="Blue Jungle Champion", queryset=Champion.objects.all())
-    blueMidChamp = forms.ModelChoiceField(label="Blue Middle Champion", queryset=Champion.objects.all())
-    blueBotChamp = forms.ModelChoiceField(label="Blue Bottom Champion", queryset=Champion.objects.all())
-    blueSuppChamp = forms.ModelChoiceField(label="Blue Support Champion", queryset=Champion.objects.all())
+    blueTopChamp = forms.ModelChoiceField(label="Blue Top Champion", queryset=Champion.objects.all().order_by('championName'))
+    blueJungChamp = forms.ModelChoiceField(label="Blue Jungle Champion", queryset=Champion.objects.all().order_by('championName'))
+    blueMidChamp = forms.ModelChoiceField(label="Blue Middle Champion", queryset=Champion.objects.all().order_by('championName'))
+    blueBotChamp = forms.ModelChoiceField(label="Blue Bottom Champion", queryset=Champion.objects.all().order_by('championName'))
+    blueSuppChamp = forms.ModelChoiceField(label="Blue Support Champion", queryset=Champion.objects.all().order_by('championName'))
 
-    redTopChamp = forms.ModelChoiceField(label="Red Top Champion", queryset=Champion.objects.all())
-    redJungChamp = forms.ModelChoiceField(label="Red Jungle Champion", queryset=Champion.objects.all())
-    redMidChamp = forms.ModelChoiceField(label="Red Middle Champion", queryset=Champion.objects.all())
-    redBotChamp = forms.ModelChoiceField(label="Red Bottom Champion", queryset=Champion.objects.all())
-    redSuppChamp = forms.ModelChoiceField(label="Red Support Champion", queryset=Champion.objects.all())
+    redTopChamp = forms.ModelChoiceField(label="Red Top Champion", queryset=Champion.objects.all().order_by('championName'))
+    redJungChamp = forms.ModelChoiceField(label="Red Jungle Champion", queryset=Champion.objects.all().order_by('championName'))
+    redMidChamp = forms.ModelChoiceField(label="Red Middle Champion", queryset=Champion.objects.all().order_by('championName'))
+    redBotChamp = forms.ModelChoiceField(label="Red Bottom Champion", queryset=Champion.objects.all().order_by('championName'))
+    redSuppChamp = forms.ModelChoiceField(label="Red Support Champion", queryset=Champion.objects.all().order_by('championName'))
 
     blueChampPickTop = forms.CharField(label="Blue Top Champ Pick Order", max_length=1)
     blueChampPickJung = forms.CharField(label="Blue Jungle Champ Pick Order", max_length=1)
@@ -67,17 +71,17 @@ class NewGameForm(forms.Form):
     redChampPickBot = forms.CharField(label="Red Bot Champ Pick Order", max_length=1)
     redChampPickSupp = forms.CharField(label="Red Support Champ Pick Order", max_length=1)
 
-    blueBan1 = forms.ModelChoiceField(label="Blue Ban 1", queryset=Champion.objects.all())
-    blueBan2 = forms.ModelChoiceField(label="Blue Ban 2", queryset=Champion.objects.all())
-    blueBan3 = forms.ModelChoiceField(label="Blue Ban 3", queryset=Champion.objects.all())
-    blueBan4 = forms.ModelChoiceField(label="Blue Ban 4", queryset=Champion.objects.all())
-    blueBan5 = forms.ModelChoiceField(label="Blue Ban 5", queryset=Champion.objects.all())
+    blueBan1 = forms.ModelChoiceField(label="Blue Ban 1", queryset=Champion.objects.all().order_by('championName'))
+    blueBan2 = forms.ModelChoiceField(label="Blue Ban 2", queryset=Champion.objects.all().order_by('championName'))
+    blueBan3 = forms.ModelChoiceField(label="Blue Ban 3", queryset=Champion.objects.all().order_by('championName'))
+    blueBan4 = forms.ModelChoiceField(label="Blue Ban 4", queryset=Champion.objects.all().order_by('championName'))
+    blueBan5 = forms.ModelChoiceField(label="Blue Ban 5", queryset=Champion.objects.all().order_by('championName'))
 
-    redBan1 = forms.ModelChoiceField(label="Red Ban 1", queryset=Champion.objects.all())
-    redBan2 = forms.ModelChoiceField(label="Red Ban 2", queryset=Champion.objects.all())
-    redBan3 = forms.ModelChoiceField(label="Red Ban 3", queryset=Champion.objects.all())
-    redBan4 = forms.ModelChoiceField(label="Red Ban 4", queryset=Champion.objects.all())
-    redBan5 = forms.ModelChoiceField(label="Red Ban 5", queryset=Champion.objects.all())
+    redBan1 = forms.ModelChoiceField(label="Red Ban 1", queryset=Champion.objects.all().order_by('championName'))
+    redBan2 = forms.ModelChoiceField(label="Red Ban 2", queryset=Champion.objects.all().order_by('championName'))
+    redBan3 = forms.ModelChoiceField(label="Red Ban 3", queryset=Champion.objects.all().order_by('championName'))
+    redBan4 = forms.ModelChoiceField(label="Red Ban 4", queryset=Champion.objects.all().order_by('championName'))
+    redBan5 = forms.ModelChoiceField(label="Red Ban 5", queryset=Champion.objects.all().order_by('championName'))
 
     blueTargetBan1 = forms.CharField(label="Blue Ban 1 Target Player", required=False)
     blueTargetBan2 = forms.CharField(label="Blue Ban 2 Target Player", required=False)
@@ -388,7 +392,7 @@ class NewGameForm(forms.Form):
 
 
     def clean(self):
-        cleaned_data = self.cleaned_data
+        cleaned_data = super().clean()
 
         #region Player Name Duplicates
         playerNameList = []
@@ -506,7 +510,7 @@ class NewGameForm(forms.Form):
 class UpdateGameForm(forms.Form):
     password = forms.CharField(widget = forms.PasswordInput())
     localGame = forms.ModelChoiceField(label = "Game to Update", queryset=Game.objects.all())
-    jsonStats = forms.JSONField(widget=forms.HiddenInput())
+    remoteGameID = forms.IntegerField(label = "Riot Game ID", widget=forms.TextInput)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -526,6 +530,99 @@ class UpdateGameForm(forms.Form):
                 'Game',
                 Row(
                     Column('localGame', css_class='col-2')
-                )
+                ),
+                Row(
+                    Column('remoteGameID', css_class='col-2')
+                ),
+            ),
+            ButtonHolder(
+                Submit('submit', 'Submit')
             )
         )
+
+    def updateGame(self):
+        remoteGameID = self.cleaned_data['remoteGameID']
+        localGame = self.cleaned_data['localGame']
+
+        config_object = ConfigParser()
+        config_object.read(os.path.join(os.path.dirname(__file__), 'conf', 'api.ini'))
+        apiKey = config_object['general']['RIOT_API_KEY']
+
+        lolWatcher = LolWatcher(apiKey)
+        region = 'na1'
+        naChampVersion = lolWatcher.data_dragon.versions_for_region(region)['n']['champion']
+        championList = lolWatcher.data_dragon.champions(naChampVersion, True)
+        try:
+            match = lolWatcher.match.by_id(region, remoteGameID)
+        except ApiError as err:
+            if err.response.status_code == 404:
+                raise ValidationError("Match not found")
+            else:
+                raise
+
+        for participant in match['participants']:
+            #find a matching game laner
+            blueTeam = participant['teamId']==100
+            #find champ
+
+            championDataName = championList['keys'][str(participant['championId'])]
+            championTrueName = championList['data'][championDataName]['name']
+            championObject = Champion.objects.filter(championName__exact=championTrueName).get()
+            gameLaner = GameLaner.objects.filter(champion__exact=championObject, game__exact=localGame).get()
+
+            statsObject = GameLanerStats(gameLaner=gameLaner,
+                                        kills=participant['stats']['kills'],
+                                        deaths=participant['stats']['deaths'],
+                                        assists=participant['stats']['assists'],
+                                        largestKillingSpree=participant['stats']['largestKillingSpree'],
+                                        largestMultiKill=participant['stats']['largestMultiKill'],
+                                        doubleKills=participant['stats']['doubleKills'],
+                                        tripleKills=participant['stats']['tripleKills'],
+                                        quadraKills=participant['stats']['quadraKills'],
+                                        pentaKills=participant['stats']['pentaKills'],
+                                        totalDamageDealtToChampions=participant['stats']['totalDamageDealtToChampions'],
+                                        visionScore=participant['stats']['visionScore'],
+                                        crowdControlScore=participant['stats']['timeCCingOthers'],
+                                        totalDamageTaken=participant['stats']['totalDamageTaken'],
+                                        goldEarned=participant['stats']['goldEarned'],
+                                        turretKills=participant['stats']['turretKills'],
+                                        inhibitorKills=participant['stats']['inhibitorKills'],
+                                        laneMinionsKilled=participant['stats']['totalMinionsKilled'],
+                                        neutralMinionsKilled=participant['stats']['neutralMinionsKilled'],
+                                        teamJungleMinionsKilled=participant['stats']['neutralMinionsKilledTeamJungle'],
+                                        enemyJungleMinionsKilled=participant['stats']['neutralMinionsKilledEnemyJungle'],
+                                        controlWardsPurchased=participant['stats']['visionWardsBoughtInGame'],
+                                        firstBlood=participant['stats']['firstBloodKill'],
+                                        firstTower=participant['stats']['firstTowerKill'],
+                                        csRateFirstTen=participant['timeline']['creepsPerMinDeltas']['0-10'],
+                                        csRateSecondTen=participant['timeline']['creepsPerMinDeltas']['10-20'])
+
+            statsObject.save()
+
+
+    def clean_remoteGameID(self):
+        data = self.cleaned_data['remoteGameID']
+
+        config_object = ConfigParser()
+        config_object.read(os.path.join(os.path.dirname(__file__), 'conf', 'api.ini'))
+        apiKey = config_object['general']['RIOT_API_KEY']
+
+        lolWatcher = LolWatcher(apiKey)
+        region = 'na1'
+        try:
+            match = lolWatcher.match.by_id(region, data)
+        except ApiError as err:
+            if err.response.status_code == 404:
+                raise ValidationError("Match not found")
+            else:
+                raise
+        if(match['queueId']!=0):
+            raise ValidationError("Match not a custom game")
+        return data
+
+    def clean_password(self):
+        data = self.cleaned_data['password']
+        user = authenticate(username='gameSubmitter', password=data)
+        if user is None:
+            raise ValidationError("Incorrect Password")
+        return data

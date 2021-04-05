@@ -19,11 +19,19 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col smallPlayerStat">
+                <div class="col-6 smallPlayerStat">
                     Most Played Champion: <b>{{ mostPlayedChamp }}</b>
                 </div>
-                <div class="col smallPlayerStat">
+                <div class="col-6 smallPlayerStat">
                     Highest Winrate Champion: <b>{{ highestWinrateChamp }}</b>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col smallPlayerStat">
+                    Different Champions Played:<b> {{uniqueChampionsPlayed}}</b>
+                </div>
+                <div class="col smallPlayerStat">
+                    Average Overall KDA:<b> {{overallAverageKDA}}</b>
                 </div>
             </div>
             <div class="row">
@@ -51,12 +59,14 @@
                         <tr>
                             <th>Lane</th>
                             <th>Play Count</th>
+                            <th>Average KDA</th>
                         </tr>
                     </thead>
                 </table>
             </div>
         </div>
-
+    </div>
+    <div class="row">
     </div>
     <script src="{%static 'js/playerWOTGraph.js'%}"></script>
     <script src="{%static 'js/playerDetails.js'%}"></script>
