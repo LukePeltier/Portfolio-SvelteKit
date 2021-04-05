@@ -36,9 +36,6 @@ function getRGBHeatmapColor(val, lowColor, highColor, midColor, transparency=1, 
         var greenVal = Math.floor((lowColorRGB[1] * multiplier) + (highColorRGB[1] * (1 - multiplier)));
         var blueVal = Math.floor((lowColorRGB[2] * multiplier) + (highColorRGB[2] * (1 - multiplier)));
         var colorString = 'rgba(' + [redVal, greenVal, blueVal, trueTransparency].join(',') + ')';
-        if(redVal==0){
-            console.log(colorString);
-        }
         return colorString;
     }
 

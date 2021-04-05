@@ -36,9 +36,7 @@ $(function () {
 
         playtimeTable.on('draw', function () {
             var values = playtimeTable.column(6).data().toArray();
-            console.log(values);
             var maxNum = Math.max(...values);
-            console.log(maxNum);
             playtimeTable.cells().every(function () {
                 if (typeof (this.data()) === "number") {
                     $(this.node()).css('background-color', getRGBHeatmapColor(this.data(), window.chartColors.white, window.chartColors.green, window.chartColors.yellow, 1, false, 0, 50, maxNum));
