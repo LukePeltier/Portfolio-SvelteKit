@@ -1,4 +1,6 @@
 from django.contrib.auth import authenticate
+from django.db import transaction
+from django.db.utils import Error, IntegrityError
 from django.http import HttpResponse
 from django.http.response import JsonResponse
 from django.shortcuts import render
@@ -233,19 +235,14 @@ class NewGameView(FormView, BaseTenMansContextMixin):
     form_class = NewGameForm
     success_url = '/ten_mans/'
 
+    @transaction.atomic
     def form_valid(self, form: NewGameForm):
         # This method is called when valid form data has been POSTed.
         # It should return an HttpResponse.
-        password = form.getCleanField("password")
-        user = authenticate(username='gameSubmitter', password=password)
-
-        if user is None:
+        try:
+            form.submit_game()
+        except Error:
             return super().form_invalid(form)
 
 
-        result = form.submit_game()
-
-        if result:
-            return super().form_valid(form)
-        else:
-            return super().form_invalid(form)
+        return super().form_valid(form)

@@ -1,10 +1,15 @@
-from crispy_forms.layout import ButtonHolder, Column, Div, Fieldset, HTML, Layout, MultiField, Row, Submit
-from django import forms
-
-from tenMans.models import Champion
 from bootstrap_datepicker_plus import DateTimePickerInput
 from crispy_forms.helper import FormHelper
+from crispy_forms.layout import (HTML, ButtonHolder, Column, Div, Fieldset,
+                                 Layout, MultiField, Row, Submit)
+from django import forms
 from django.contrib.auth import authenticate
+from django.core.exceptions import ValidationError
+from django.db.models import Max
+from django.db.utils import Error, IntegrityError
+
+from tenMans.models import Champion, Game, GameBan, GameLaner, Lane, Player
+
 
 class NewGameForm(forms.Form):
     password = forms.CharField(widget = forms.PasswordInput())
@@ -255,8 +260,245 @@ class NewGameForm(forms.Form):
         )
 
     def submit_game(self):
-        return False
+        gameNumber = Game.objects.aggregate(Max('gameNumber'))['gameNumber__max']+1
+        gameBlueWins = self.cleaned_data.get('didBlueWin')
+        gameRandomTeams = self.cleaned_data.get('randomTeams')
+        gameMemeStatus = self.cleaned_data.get('memeGame')
+        gameDate = self.cleaned_data.get('gameDate')
+        game = Game(gameNumber=gameNumber, gameBlueWins=gameBlueWins,gameRandomTeams=gameRandomTeams,gameMemeStatus=gameMemeStatus,gameDate=gameDate)
+        game.save()
 
-    def getCleanField(self, fieldName):
-        data = self.cleaned_data.get(fieldName)
+        playerNameLaneDict = {}
+        playerNameLaneDict['BlueTop'] = self.cleaned_data.get('blueTopLaner')
+        playerNameLaneDict['BlueJungle'] = self.cleaned_data.get('blueJungLaner')
+        playerNameLaneDict['BlueMid'] = self.cleaned_data.get('blueMidLaner')
+        playerNameLaneDict['BlueBot'] = self.cleaned_data.get('blueBotLaner')
+        playerNameLaneDict['BlueSupport'] = self.cleaned_data.get('blueSuppLaner')
+        playerNameLaneDict['RedTop'] = self.cleaned_data.get('redTopLaner')
+        playerNameLaneDict['RedJungle'] = self.cleaned_data.get('redJungLaner')
+        playerNameLaneDict['RedMid'] = self.cleaned_data.get('redMidLaner')
+        playerNameLaneDict['RedBot'] = self.cleaned_data.get('redBotLaner')
+        playerNameLaneDict['RedSupport'] = self.cleaned_data.get('redSuppLaner')
+
+        champLaneDict = {}
+        champLaneDict['BlueTop'] = self.cleaned_data.get('blueTopChamp')
+        champLaneDict['BlueJungle'] = self.cleaned_data.get('blueJungChamp')
+        champLaneDict['BlueMid'] = self.cleaned_data.get('blueMidChamp')
+        champLaneDict['BlueBot'] = self.cleaned_data.get('blueBotChamp')
+        champLaneDict['BlueSupport'] = self.cleaned_data.get('blueSuppChamp')
+        champLaneDict['RedTop'] = self.cleaned_data.get('redTopChamp')
+        champLaneDict['RedJungle'] = self.cleaned_data.get('redJungChamp')
+        champLaneDict['RedMid'] = self.cleaned_data.get('redMidChamp')
+        champLaneDict['RedBot'] = self.cleaned_data.get('redBotChamp')
+        champLaneDict['RedSupport'] = self.cleaned_data.get('redSuppChamp')
+
+        playerPickLaneDict = {}
+        playerPickLaneDict['BlueTop'] = self.cleaned_data.get('bluePlayerPickTop')
+        playerPickLaneDict['BlueJungle'] = self.cleaned_data.get('bluePlayerPickJung')
+        playerPickLaneDict['BlueMid'] = self.cleaned_data.get('bluePlayerPickMid')
+        playerPickLaneDict['BlueBot'] = self.cleaned_data.get('bluePlayerPickBot')
+        playerPickLaneDict['BlueSupport'] = self.cleaned_data.get('bluePlayerPickSupp')
+        playerPickLaneDict['RedTop'] = self.cleaned_data.get('redPlayerPickTop')
+        playerPickLaneDict['RedJungle'] = self.cleaned_data.get('redPlayerPickJung')
+        playerPickLaneDict['RedMid'] = self.cleaned_data.get('redPlayerPickMid')
+        playerPickLaneDict['RedBot'] = self.cleaned_data.get('redPlayerPickBot')
+        playerPickLaneDict['RedSupport'] = self.cleaned_data.get('redPlayerPickSupp')
+
+        champPickLaneDict = {}
+        champPickLaneDict['BlueTop'] = self.cleaned_data.get('blueChampPickTop')
+        champPickLaneDict['BlueJungle'] = self.cleaned_data.get('blueChampPickJung')
+        champPickLaneDict['BlueMid'] = self.cleaned_data.get('blueChampPickMid')
+        champPickLaneDict['BlueBot'] = self.cleaned_data.get('blueChampPickBot')
+        champPickLaneDict['BlueSupport'] = self.cleaned_data.get('blueChampPickSupp')
+        champPickLaneDict['RedTop'] = self.cleaned_data.get('redChampPickTop')
+        champPickLaneDict['RedJungle'] = self.cleaned_data.get('redChampPickJung')
+        champPickLaneDict['RedMid'] = self.cleaned_data.get('redChampPickMid')
+        champPickLaneDict['RedBot'] = self.cleaned_data.get('redChampPickBot')
+        champPickLaneDict['RedSupport'] = self.cleaned_data.get('redChampPickSupp')
+
+
+        playersInGame = []
+
+        for laneName, playerName in playerNameLaneDict.items():
+            cleanName = playerName.strip()
+            cleanName = cleanName.replace('.', '')
+            foundPlayer = Player.objects.filter(playerName__exact=cleanName).exists()
+            player = None
+            if not foundPlayer:
+                #Make new player
+                player = Player(playerName=cleanName)
+                player.save()
+            else:
+                player = Player.objects.filter(playerName__exact=cleanName).get()
+
+            playersInGame.append(player)
+
+            gameLanerBlueTeam = laneName.startswith('Blue')
+            gameLanerLane = Lane.objects.filter(laneName__exact=laneName.replace('Blue', '').replace('Red', '')).get()
+            gameLanerChamp = champLaneDict[laneName]
+            gameLanerDraftOrder = playerPickLaneDict[laneName]
+            if not gameLanerDraftOrder.isdigit():
+                gameLanerDraftOrder = None
+            else:
+                gameLanerDraftOrder = int(gameLanerDraftOrder)
+            gameLanerChampionSelectOrder = champPickLaneDict[laneName]
+
+            gameLane = GameLaner(game=game, lane=gameLanerLane, blueTeam=gameLanerBlueTeam, player=player, champion=gameLanerChamp, draftOrder=gameLanerDraftOrder, championSelectOrder=gameLanerChampionSelectOrder)
+            gameLane.save()
+
+        champBansNumDict = {}
+        champBansNumDict['Blue1'] = self.cleaned_data.get('blueBan1')
+        champBansNumDict['Blue2'] = self.cleaned_data.get('blueBan2')
+        champBansNumDict['Blue3'] = self.cleaned_data.get('blueBan3')
+        champBansNumDict['Blue4'] = self.cleaned_data.get('blueBan4')
+        champBansNumDict['Blue5'] = self.cleaned_data.get('blueBan5')
+
+        champBansNumDict['Red1'] = self.cleaned_data.get('redBan1')
+        champBansNumDict['Red2'] = self.cleaned_data.get('redBan2')
+        champBansNumDict['Red3'] = self.cleaned_data.get('redBan3')
+        champBansNumDict['Red4'] = self.cleaned_data.get('redBan4')
+        champBansNumDict['Red5'] = self.cleaned_data.get('redBan5')
+
+        banTargetNumDict = {}
+        banTargetNumDict['Blue1'] = self.cleaned_data.get('blueTargetBan1')
+        banTargetNumDict['Blue2'] = self.cleaned_data.get('blueTargetBan2')
+        banTargetNumDict['Blue3'] = self.cleaned_data.get('blueTargetBan3')
+        banTargetNumDict['Blue4'] = self.cleaned_data.get('blueTargetBan4')
+        banTargetNumDict['Blue5'] = self.cleaned_data.get('blueTargetBan5')
+
+        banTargetNumDict['Red1'] = self.cleaned_data.get('redTargetBan1')
+        banTargetNumDict['Red2'] = self.cleaned_data.get('redTargetBan2')
+        banTargetNumDict['Red3'] = self.cleaned_data.get('redTargetBan3')
+        banTargetNumDict['Red4'] = self.cleaned_data.get('redTargetBan4')
+        banTargetNumDict['Red5'] = self.cleaned_data.get('redTargetBan5')
+
+        for i in range(1, 6):
+            gameBanChampBlue = champBansNumDict['Blue{}'.format(i)]
+            gameBanChampPlayerBlue = Player.objects.filter(playerName__exact=banTargetNumDict['Blue{}'.format(i)]).get()
+
+            gameBanBlue = GameBan(game=game, champion=gameBanChampBlue,targetPlayer=gameBanChampPlayerBlue)
+            gameBanBlue.save()
+
+
+            gameBanChampRed = champBansNumDict['Red{}'.format(i)]
+            gameBanChampPlayerRed = Player.objects.filter(playerName__exact=banTargetNumDict['Red{}'.format(i)]).get()
+
+            gameBanRed = GameBan(game=game, champion=gameBanChampRed,targetPlayer=gameBanChampPlayerRed)
+            gameBanRed.save()
+
+
+    def clean(self):
+        cleaned_data = self.cleaned_data
+
+        #region Player Name Duplicates
+        playerNameList = []
+        playerNameList.append(cleaned_data.get('blueTopLaner'))
+        playerNameList.append(cleaned_data.get('blueJungLaner'))
+        playerNameList.append(cleaned_data.get('blueMidLaner'))
+        playerNameList.append(cleaned_data.get('blueBotLaner'))
+        playerNameList.append(cleaned_data.get('blueSuppLaner'))
+        playerNameList.append(cleaned_data.get('redTopLaner'))
+        playerNameList.append(cleaned_data.get('redJungLaner'))
+        playerNameList.append(cleaned_data.get('redMidLaner'))
+        playerNameList.append(cleaned_data.get('redBotLaner'))
+        playerNameList.append(cleaned_data.get('redSuppLaner'))
+        if len(playerNameList) != len(set(playerNameList)):
+            raise ValidationError("Duplicate player name", code="Duplicate player")
+        #endregion
+
+        #region PlayerPickOrder duplicates
+
+        playerPickOrder = []
+        playerPickOrder.append(cleaned_data.get('bluePlayerPickTop'))
+        playerPickOrder.append(cleaned_data.get('bluePlayerPickJung'))
+        playerPickOrder.append(cleaned_data.get('bluePlayerPickMid'))
+        playerPickOrder.append(cleaned_data.get('bluePlayerPickBot'))
+        playerPickOrder.append(cleaned_data.get('bluePlayerPickSupp'))
+        playerPickOrder.append(cleaned_data.get('redPlayerPickTop'))
+        playerPickOrder.append(cleaned_data.get('redPlayerPickJung'))
+        playerPickOrder.append(cleaned_data.get('redPlayerPickMid'))
+        playerPickOrder.append(cleaned_data.get('redPlayerPickBot'))
+        playerPickOrder.append(cleaned_data.get('redPlayerPickSupp'))
+        cleanedPlayerPickOrder = [ x for x in playerPickOrder if x.isdigit()]
+        if len(cleanedPlayerPickOrder) != len(set(cleanedPlayerPickOrder)):
+            raise ValidationError("Duplicate player pick order", code="Duplicate Player Pick")
+        #endregion
+
+        #region Champion Duplicates
+        championNames=[]
+        championNames.append(cleaned_data.get('blueTopChamp').championName)
+        championNames.append(cleaned_data.get('blueJungChamp').championName)
+        championNames.append(cleaned_data.get('blueMidChamp').championName)
+        championNames.append(cleaned_data.get('blueBotChamp').championName)
+        championNames.append(cleaned_data.get('blueSuppChamp').championName)
+        championNames.append(cleaned_data.get('redTopChamp').championName)
+        championNames.append(cleaned_data.get('redJungChamp').championName)
+        championNames.append(cleaned_data.get('redMidChamp').championName)
+        championNames.append(cleaned_data.get('redBotChamp').championName)
+        championNames.append(cleaned_data.get('redSuppChamp').championName)
+        championNames.append(cleaned_data.get('blueBan1').championName)
+        championNames.append(cleaned_data.get('blueBan2').championName)
+        championNames.append(cleaned_data.get('blueBan3').championName)
+        championNames.append(cleaned_data.get('blueBan4').championName)
+        championNames.append(cleaned_data.get('blueBan5').championName)
+        championNames.append(cleaned_data.get('redBan1').championName)
+        championNames.append(cleaned_data.get('redBan2').championName)
+        championNames.append(cleaned_data.get('redBan3').championName)
+        championNames.append(cleaned_data.get('redBan4').championName)
+        championNames.append(cleaned_data.get('redBan5').championName)
+        if len(championNames) != len(set(championNames)):
+            raise ValidationError("Duplicate champion in picks and/or bans", code="Duplicate champ")
+        #endregion
+
+        #region Check Target Bans
+        bluePlayers = []
+        bluePlayers.append(cleaned_data.get('blueTopLaner'))
+        bluePlayers.append(cleaned_data.get('blueJungLaner'))
+        bluePlayers.append(cleaned_data.get('blueMidLaner'))
+        bluePlayers.append(cleaned_data.get('blueBotLaner'))
+        bluePlayers.append(cleaned_data.get('blueSuppLaner'))
+
+        redPlayers = []
+        redPlayers.append(cleaned_data.get('redTopLaner'))
+        redPlayers.append(cleaned_data.get('redJungLaner'))
+        redPlayers.append(cleaned_data.get('redMidLaner'))
+        redPlayers.append(cleaned_data.get('redBotLaner'))
+        redPlayers.append(cleaned_data.get('redSuppLaner'))
+
+        blueTargetsToRed = []
+        blueTargetsToRed.append(cleaned_data.get('blueTargetBan1'))
+        blueTargetsToRed.append(cleaned_data.get('blueTargetBan2'))
+        blueTargetsToRed.append(cleaned_data.get('blueTargetBan3'))
+        blueTargetsToRed.append(cleaned_data.get('blueTargetBan4'))
+        blueTargetsToRed.append(cleaned_data.get('blueTargetBan5'))
+
+        redTargetsToBlue = []
+        redTargetsToBlue.append(cleaned_data.get('redTargetBan1'))
+        redTargetsToBlue.append(cleaned_data.get('redTargetBan2'))
+        redTargetsToBlue.append(cleaned_data.get('redTargetBan3'))
+        redTargetsToBlue.append(cleaned_data.get('redTargetBan4'))
+        redTargetsToBlue.append(cleaned_data.get('redTargetBan5'))
+
+        for possibleRedPlayer in blueTargetsToRed:
+            if possibleRedPlayer not in redPlayers:
+                raise ValidationError("Target Ban Target %(value)s not valid, not on other team", params={'value', possibleRedPlayer})
+        for possibleBluePlayer in redTargetsToBlue:
+            if possibleBluePlayer not in bluePlayers:
+                raise ValidationError("Target Ban Target %(value)s not valid, not on other team", params={'value', possibleBluePlayer})
+        #endregion
+
+        #region Random Draft verify blanks
+        if not cleaned_data.get('randomTeams'):
+            for pick in playerPickOrder:
+                if pick=='' or pick is None:
+                    raise ValidationError("Cannot leave blank player pick orders if teams not random")
+        #endregion
+
+        return cleaned_data
+
+    def clean_password(self):
+        data = self.cleaned_data['password']
+        user = authenticate(username='gameSubmitter', password=data)
+        if user is None:
+            raise ValidationError("Incorrect Password")
         return data

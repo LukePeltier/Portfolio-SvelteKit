@@ -48,6 +48,7 @@ class Player(models.Model):
                     winningCount+=1
 
             return round((winningCount/totalGameCount)*100, 2)
+
     def getLaneRate(self, lane):
             players = Player.objects.all()
             topNumber = 0
@@ -220,6 +221,7 @@ class Player(models.Model):
                 champNames.clear()
                 champNames.append(champ)
         return "/".join(sorted(champNames)) + " ({} bans)".format(currentMax)
+
     def getSideWinrate(self, side):
         blueTeamDetermine = side=="Blue"
         gamesPlayed = GameLaner.objects.filter(player__exact=self.id, blueTeam__exact=blueTeamDetermine)
