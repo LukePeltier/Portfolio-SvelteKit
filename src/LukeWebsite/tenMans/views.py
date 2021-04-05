@@ -11,7 +11,7 @@ from django.views.generic.base import (ContextMixin, TemplateResponseMixin,
 from django.views.generic.detail import DetailView, SingleObjectMixin
 from django.views.generic.edit import FormView
 
-from tenMans.forms import NewGameForm
+from tenMans.forms import NewGameForm, UpdateGameForm
 from tenMans.models import Game, Lane, Player
 
 
@@ -241,6 +241,23 @@ class NewGameView(FormView, BaseTenMansContextMixin):
         # It should return an HttpResponse.
         try:
             form.submit_game()
+        except Error:
+            return super().form_invalid(form)
+
+
+        return super().form_valid(form)
+
+class UpdateGameView(FormView, BaseTenMansContextMixin):
+    template_name = 'tenMans/updateGame.html'
+    form_class = UpdateGameForm
+    success_url = '/ten_mans/'
+
+    @transaction.atomic
+    def form_valid(self, form: UpdateGameForm):
+        # This method is called when valid form data has been POSTed.
+        # It should return an HttpResponse.
+        try:
+            pass
         except Error:
             return super().form_invalid(form)
 

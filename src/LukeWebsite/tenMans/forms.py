@@ -502,3 +502,30 @@ class NewGameForm(forms.Form):
         if user is None:
             raise ValidationError("Incorrect Password")
         return data
+
+class UpdateGameForm(forms.Form):
+    password = forms.CharField(widget = forms.PasswordInput())
+    localGame = forms.ModelChoiceField(label = "Game to Update", queryset=Game.objects.all())
+    jsonStats = forms.JSONField(widget=forms.HiddenInput())
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_id = 'id-newGameForm'
+        self.helper.form_method = 'post'
+        self.helper.form_action = ''
+
+        self.helper.layout = Layout(
+            Fieldset(
+                'Password',
+                Row(
+                    Column('password', css_class='col-2')
+                )
+            ),
+            Fieldset(
+                'Game',
+                Row(
+                    Column('localGame', css_class='col-2')
+                )
+            )
+        )

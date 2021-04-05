@@ -200,3 +200,5 @@ build/
 env
 
 privateSettings/
+
+config.js

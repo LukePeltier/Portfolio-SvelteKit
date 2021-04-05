@@ -1,3 +1,4 @@
+from enum import unique
 from django.db import models
 from django.db.models.query_utils import Q
 import operator
@@ -11,6 +12,9 @@ class Game(models.Model):
     gameDate = models.DateTimeField(default='current_timestamp()')
     def getTotalGames():
         return Game.objects.all().count()
+
+    def __str__(self):
+        return str(self.gameNumber)
 
     class Meta:
         ordering = ["gameNumber"]
@@ -261,6 +265,46 @@ class GameLaner(models.Model):
 
     class Meta:
         unique_together = (('game', 'lane', 'blueTeam'))
+
+class GameLanerStats(models.Model):
+    gameLaner = models.ForeignKey(GameLaner, on_delete=models.CASCADE)
+
+    kills = models.PositiveIntegerField()
+    deaths = models.PositiveIntegerField()
+    assists = models.PositiveIntegerField()
+
+    largestKillingSpree = models.PositiveIntegerField()
+    largestMultiKill = models.PositiveIntegerField()
+    doubleKills = models.PositiveIntegerField()
+    tripleKills = models.PositiveIntegerField()
+    quadraKills = models.PositiveIntegerField()
+    pentaKills = models.PositiveIntegerField()
+
+    totalDamageDealtToChampions = models.PositiveBigIntegerField()
+    visionScore = models.PositiveIntegerField()
+    crowdControlScore = models.PositiveIntegerField()
+    totalDamageTaken = models.PositiveBigIntegerField()
+    goldEarned = models.PositiveBigIntegerField()
+
+    turretKills = models.PositiveIntegerField()
+    inhibitorKills = models.PositiveIntegerField()
+
+    laneMinionsKilled = models.PositiveIntegerField()
+    neutralMinionsKilled = models.PositiveIntegerField()
+
+    teamJungleMinionsKilled = models.PositiveIntegerField()
+    enemyJungleMinionsKilled = models.PositiveIntegerField()
+
+    controlWardsPurchased = models.PositiveIntegerField()
+
+    firstBlood = models.BooleanField()
+    firstTower = models.BooleanField()
+
+    csRateFirstTen = models.FloatField()
+    csRateSecondTen = models.FloatField()
+
+
+
 
 class GameBan(models.Model):
     game = models.ForeignKey(Game, on_delete=models.CASCADE)

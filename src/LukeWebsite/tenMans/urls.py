@@ -11,6 +11,7 @@ urlpatterns = [
     path('player/<int:pk>/', views.PlayerDetailView.as_view(), name='detailPlayer'),
     path('player/<int:pk>/winrateOTData/', views.PlayerWinrateOverTimeView.as_view(), name='playerWinrateOverTime'),
     path('newgame/', views.NewGameView.as_view(), name='newGameFormView'),
+    path('updategame/', views.UpdateGameView.as_view(), name='updateGameFormView'),
     path('playerDraftStats/', views.PlayerDraftStats.as_view(), name='playerDraftStatsView'),
     path('averagePlayerDraftOrderTable/', views.AverageDraftOrderTable.as_view(), name='averageDraftOrderTable'),
     path('expectedPlayerDraftOrderWinrateTable/', views.ExpectedDraftOrderWinrateTable.as_view(), name='expectedDraftOrderWinrateTable'),
