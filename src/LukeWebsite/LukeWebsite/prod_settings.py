@@ -47,7 +47,9 @@ INSTALLED_APPS = [
     'mergesort',
     'homepagePortfolio',
     'tenMans',
-    'bootstrap4'
+    'bootstrap4',
+    'bootstrap_datepicker_plus',
+    'crispy_forms'
 ]
 
 MIDDLEWARE = [
