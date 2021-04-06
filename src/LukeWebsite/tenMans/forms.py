@@ -22,6 +22,7 @@ class NewGameForm(forms.Form):
     randomTeams = forms.BooleanField(label="Random Teams", required=False)
     memeGame = forms.BooleanField(label="Meme Game", required=False)
     gameDate = forms.DateTimeField(label="Date of Game", widget=DateTimePickerInput())
+    remoteGameID = forms.IntegerField(label = "Riot Game ID", widget=forms.TextInput, required=False)
 
     blueTopLaner = forms.CharField(label="Blue Top Laner")
     blueJungLaner = forms.CharField(label="Blue Jungler")
@@ -118,6 +119,9 @@ class NewGameForm(forms.Form):
                 ),
                 Row(
                     Column('gameDate', css_class='col-2')
+                ),
+                Row(
+                    Column('remoteGameID', css_class='col-2')
                 ),
             ),
             Fieldset(
@@ -390,6 +394,63 @@ class NewGameForm(forms.Form):
             gameBanRed = GameBan(game=game, champion=gameBanChampRed,targetPlayer=gameBanChampPlayerRed)
             gameBanRed.save()
 
+        remoteGameID = self.cleaned_data['remoteGameID']
+        if remoteGameID is not None:
+            config_object = ConfigParser()
+            config_object.read(os.path.join(os.path.dirname(__file__), 'conf', 'api.ini'))
+            apiKey = config_object['general']['RIOT_API_KEY']
+
+            lolWatcher = LolWatcher(apiKey)
+            region = 'na1'
+            naChampVersion = lolWatcher.data_dragon.versions_for_region(region)['n']['champion']
+            championList = lolWatcher.data_dragon.champions(naChampVersion, True)
+            try:
+                match = lolWatcher.match.by_id(region, remoteGameID)
+            except ApiError as err:
+                if err.response.status_code == 404:
+                    raise ValidationError("Match not found")
+                else:
+                    raise
+
+            for participant in match['participants']:
+                #find a matching game laner
+                blueTeam = participant['teamId']==100
+                #find champ
+
+                championDataName = championList['keys'][str(participant['championId'])]
+                championTrueName = championList['data'][championDataName]['name']
+                championObject = Champion.objects.filter(championName__exact=championTrueName).get()
+                gameLaner = GameLaner.objects.filter(champion__exact=championObject, game__exact=game).get()
+
+                statsObject = GameLanerStats(gameLaner=gameLaner,
+                                            kills=participant['stats']['kills'],
+                                            deaths=participant['stats']['deaths'],
+                                            assists=participant['stats']['assists'],
+                                            largestKillingSpree=participant['stats']['largestKillingSpree'],
+                                            largestMultiKill=participant['stats']['largestMultiKill'],
+                                            doubleKills=participant['stats']['doubleKills'],
+                                            tripleKills=participant['stats']['tripleKills'],
+                                            quadraKills=participant['stats']['quadraKills'],
+                                            pentaKills=participant['stats']['pentaKills'],
+                                            totalDamageDealtToChampions=participant['stats']['totalDamageDealtToChampions'],
+                                            visionScore=participant['stats']['visionScore'],
+                                            crowdControlScore=participant['stats']['timeCCingOthers'],
+                                            totalDamageTaken=participant['stats']['totalDamageTaken'],
+                                            goldEarned=participant['stats']['goldEarned'],
+                                            turretKills=participant['stats']['turretKills'],
+                                            inhibitorKills=participant['stats']['inhibitorKills'],
+                                            laneMinionsKilled=participant['stats']['totalMinionsKilled'],
+                                            neutralMinionsKilled=participant['stats']['neutralMinionsKilled'],
+                                            teamJungleMinionsKilled=participant['stats']['neutralMinionsKilledTeamJungle'],
+                                            enemyJungleMinionsKilled=participant['stats']['neutralMinionsKilledEnemyJungle'],
+                                            controlWardsPurchased=participant['stats']['visionWardsBoughtInGame'],
+                                            firstBlood=participant['stats']['firstBloodKill'],
+                                            firstTower=participant['stats']['firstTowerKill'],
+                                            csRateFirstTen=participant['timeline']['creepsPerMinDeltas']['0-10'],
+                                            csRateSecondTen=participant['timeline']['creepsPerMinDeltas']['10-20'])
+
+                statsObject.save()
+
 
     def clean(self):
         cleaned_data = super().clean()
@@ -505,6 +566,26 @@ class NewGameForm(forms.Form):
         user = authenticate(username='gameSubmitter', password=data)
         if user is None:
             raise ValidationError("Incorrect Password")
+        return data
+
+    def clean_remoteGameID(self):
+        data = self.cleaned_data['remoteGameID']
+
+        config_object = ConfigParser()
+        config_object.read(os.path.join(os.path.dirname(__file__), 'conf', 'api.ini'))
+        apiKey = config_object['general']['RIOT_API_KEY']
+
+        lolWatcher = LolWatcher(apiKey)
+        region = 'na1'
+        try:
+            match = lolWatcher.match.by_id(region, data)
+        except ApiError as err:
+            if err.response.status_code == 404:
+                raise ValidationError("Match not found")
+            else:
+                raise
+        if(match['queueId']!=0):
+            raise ValidationError("Match not a custom game")
         return data
 
 class UpdateGameForm(forms.Form):

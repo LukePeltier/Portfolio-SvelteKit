@@ -12,7 +12,7 @@ from django.views.generic.detail import DetailView, SingleObjectMixin
 from django.views.generic.edit import FormView
 
 from tenMans.forms import NewGameForm, UpdateGameForm
-from tenMans.models import Game, Lane, Player
+from tenMans.models import Game, GameLaner, GameLanerStats, Lane, Player
 
 
 class BaseTenMansContextMixin(ContextMixin):
@@ -197,6 +197,67 @@ class PlayerLaneCountTable(DetailView):
             'data': data
         })
 
+class PlayerGamesTable(DetailView):
+    model = Player
+
+    def get(self, request, *args, **kwargs):
+        data = []
+        self.object = self.get_object()
+        self.object: Player
+        gamesPlayed = GameLaner.objects.filter(player__exact=self.object.id)
+        stats = GameLanerStats.objects.filter(gameLaner__in=gamesPlayed)
+        for stat in stats:
+            stat: GameLanerStats
+            statDict = {}
+            statDict['gameNum'] = stat.gameLaner.game.gameNumber
+            if stat.gameLaner.blueTeam:
+                teamString = "Blue"
+                if stat.gameLaner.game.gameBlueWins:
+                    win = "W"
+                else:
+                    win = "L"
+            else:
+                teamString = "Red"
+                if not stat.gameLaner.game.gameBlueWins:
+                    win = "W"
+                else:
+                    win = "L"
+            statDict['team'] = teamString
+            statDict['lane'] = stat.gameLaner.lane.laneName
+            statDict['winLoss'] = win
+            statDict['kills'] = stat.kills
+            statDict['deaths'] = stat.deaths
+            statDict['assists'] = stat.assists
+            statDict['largestKillingSpree'] = stat.largestKillingSpree
+            statDict['largestMultiKill'] = stat.largestMultiKill
+            statDict['doubleKills'] = stat.doubleKills
+            statDict['tripleKills'] = stat.tripleKills
+            statDict['quadraKills'] = stat.quadraKills
+            statDict['pentaKills'] = stat.pentaKills
+            statDict['totalDamageDealtToChampions'] = stat.totalDamageDealtToChampions
+            statDict['visionScore'] = stat.visionScore
+            statDict['crowdControlScore'] = stat.crowdControlScore
+            statDict['totalDamageTaken'] = stat.totalDamageTaken
+            statDict['goldEarned'] = stat.goldEarned
+            statDict['turretKills'] = stat.turretKills
+            statDict['inhibitorKills'] = stat.inhibitorKills
+            statDict['cs'] = stat.laneMinionsKilled + stat.neutralMinionsKilled
+            statDict['teamJungleMinionsKilled'] = stat.teamJungleMinionsKilled
+            statDict['enemyJungleMinionsKilled'] = stat.enemyJungleMinionsKilled
+            statDict['controlWardsPurchased'] = stat.controlWardsPurchased
+            statDict['firstBlood'] = stat.firstBlood
+            statDict['firstTower'] = stat.firstTower
+            statDict['csRateFirstTen'] = stat.csRateFirstTen
+            statDict['csRateSecondTen'] = (stat.csRateSecondTen + stat.csRateFirstTen)/2
+            statDict['champion'] = stat.gameLaner.champion.championName
+
+            data.append(statDict)
+
+        return JsonResponse(
+            data={
+                'data':data
+            }
+        )
 class PlayerDraftStats(TemplateView, BaseTenMansContextMixin):
     template_name = 'tenMans/playerDraftStats.html'
 
