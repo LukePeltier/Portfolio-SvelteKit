@@ -255,6 +255,7 @@ class PlayerGamesTable(DetailView):
             statDict['firstTower'] = stat.firstTower
             statDict['csRateFirstTen'] = stat.csRateFirstTen
             statDict['csRateSecondTen'] = (stat.csRateSecondTen + stat.csRateFirstTen)/2
+            statDict['gameID'] = stat.gameLaner.game.id
 
             data.append(statDict)
 

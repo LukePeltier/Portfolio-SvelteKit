@@ -25,7 +25,7 @@ $(function () {
             "columns": [{
                     "data": "gameNum",
                     "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
-                        $(nTd).html("<a href='/ten_mans/game/"+sData+"'>"+sData+"</a>");
+                        $(nTd).html("<a href='/ten_mans/game/"+oData.gameID+"'>"+sData+"</a>");
                     }
                 },
                 {
@@ -144,6 +144,15 @@ $(function () {
                 {
                     "data": "csRateSecondTen",
                     "render": $.fn.dataTable.render.number(',', '.', 1)
+                },
+                {
+                    "data": "gameID"
+                }
+            ],
+            columnDefs: [
+                {
+                    targets: [30],
+                    visible: false
                 }
             ],
             paging: false,
