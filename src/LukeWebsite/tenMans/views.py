@@ -301,6 +301,8 @@ class AverageDraftOrderTable(View):
             playerDict = {}
             playerDict["name"] = player.playerName
             playerDict["draftOrder"] = player.getAverageDraftOrder()
+            if playerDict["draftOrder"] is None:
+                continue
             playerDict["playerID"] = player.id
             data.append(playerDict)
 
@@ -317,7 +319,31 @@ class ExpectedDraftOrderWinrateTable(View):
         for player in queryset:
             playerDict = {}
             playerDict["name"] = player.playerName
-            playerDict["draftOrder"] = player.getAverageDraftOrder()
+            playerDict["minWinrate"] = player.getMinConfidenceWinrate(None)
+            if playerDict["minWinrate"] is None:
+                continue
+            playerDict["playerID"] = player.id
+            data.append(playerDict)
+
+        return JsonResponse(data={
+            'data': data
+        })
+class ExpectedDraftOrderWinrateLaneTable(View):
+
+    def get(self, request, *args, **kwargs):
+        data = []
+        queryset = Player.objects.all()
+        laneName = kwargs['lane']
+
+        lane = Lane.objects.filter(laneName__exact=laneName).get()
+
+        for player in queryset:
+            playerDict = {}
+            playerDict["name"] = player.playerName
+            playerDict["minWinrate"] = player.getMinConfidenceWinrate(lane)
+            if playerDict["minWinrate"] is None:
+                continue
+            playerDict["playerID"] = player.id
             data.append(playerDict)
 
         return JsonResponse(data={

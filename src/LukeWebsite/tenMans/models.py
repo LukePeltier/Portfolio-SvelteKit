@@ -1,8 +1,7 @@
 from enum import unique
 from django.db import models
-from django.db.models.query_utils import Q
-import operator
-from datetime import timedelta
+from scipy import stats
+import numpy as np
 
 # Create your models here.
 class Game(models.Model):
@@ -107,6 +106,8 @@ class Player(models.Model):
         totalDraftSum = 0
         gamesPlayed = GameLaner.objects.filter(player__exact=self.id)
         totalDraftDivisor = gamesPlayed.count()
+        if totalDraftDivisor<3:
+            return None
         for gameLane in gamesPlayed:
             if(gameLane.draftOrder is None):
                 totalDraftDivisor-=1
@@ -114,8 +115,11 @@ class Player(models.Model):
             totalDraftSum+=gameLane.draftOrder
         return round(totalDraftSum/totalDraftDivisor, 2)
 
-    def getBestDraftOrder(self):
-        bestDraftOrder=None
+    def getMinConfidenceWinrate(self, lane):
+        if self.getWinrate(lane)=='N/A' or self.getLaneCount(lane)<3:
+            return None
+        conf_int = stats.norm.interval(0.5, self.getWinrate(lane)/100, (0.5/np.sqrt(self.getLaneCount(lane))))
+        return round(max(conf_int[0], 0)*100, 2)
 
     def getMostPlayedLaneString(self):
         gamesPlayed = GameLaner.objects.filter(player__exact=self.id)
