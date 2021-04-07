@@ -10,9 +10,11 @@ from django.views.generic.base import (ContextMixin, TemplateResponseMixin,
                                        TemplateView)
 from django.views.generic.detail import DetailView, SingleObjectMixin
 from django.views.generic.edit import FormView
+from django.views.generic.list import ListView
 
-from tenMans.forms import NewGameForm, UpdateGameForm
+from tenMans.forms import NewGameForm, UpdateAllGamesForm, UpdateGameForm
 from tenMans.models import Game, GameLaner, GameLanerStats, Lane, Player
+import datetime
 
 
 class BaseTenMansContextMixin(ContextMixin):
@@ -111,6 +113,7 @@ def overallWinrateTable(request):
         playerDict["midAlpha"] = player.getLaneRate(Lane.objects.get(laneName__exact="Mid"))
         playerDict["botAlpha"] = player.getLaneRate(Lane.objects.get(laneName__exact="Bot"))
         playerDict["suppAlpha"] = player.getLaneRate(Lane.objects.get(laneName__exact="Support"))
+        playerDict["playerID"] = player.id
         data.append(playerDict)
 
     return JsonResponse(data={
@@ -130,6 +133,7 @@ def overallPlaytimeTable(request):
         playerDict["mid"] = player.getLaneCount(Lane.objects.get(laneName__exact="Mid"))
         playerDict["bot"] = player.getLaneCount(Lane.objects.get(laneName__exact="Bot"))
         playerDict["supp"] = player.getLaneCount(Lane.objects.get(laneName__exact="Support"))
+        playerDict["playerID"] = player.id
         data.append(playerDict)
 
     return JsonResponse(data={
@@ -223,8 +227,10 @@ class PlayerGamesTable(DetailView):
                 else:
                     win = "L"
             statDict['team'] = teamString
+            statDict['champion'] = stat.gameLaner.champion.championName
             statDict['lane'] = stat.gameLaner.lane.laneName
             statDict['winLoss'] = win
+            statDict['duration'] = stat.gameLaner.game.gameDuration
             statDict['kills'] = stat.kills
             statDict['deaths'] = stat.deaths
             statDict['assists'] = stat.assists
@@ -249,7 +255,6 @@ class PlayerGamesTable(DetailView):
             statDict['firstTower'] = stat.firstTower
             statDict['csRateFirstTen'] = stat.csRateFirstTen
             statDict['csRateSecondTen'] = (stat.csRateSecondTen + stat.csRateFirstTen)/2
-            statDict['champion'] = stat.gameLaner.champion.championName
 
             data.append(statDict)
 
@@ -272,6 +277,7 @@ class AverageDraftOrderTable(View):
             playerDict = {}
             playerDict["name"] = player.playerName
             playerDict["draftOrder"] = player.getAverageDraftOrder()
+            playerDict["playerID"] = player.id
             data.append(playerDict)
 
         return JsonResponse(data={
@@ -326,3 +332,140 @@ class UpdateGameView(FormView, BaseTenMansContextMixin):
             return super().form_invalid(form)
 
         return super().form_valid(form)
+
+
+
+class UpdateAllGamesView(FormView, BaseTenMansContextMixin):
+    template_name = 'tenMans/updateAllGames.html'
+    form_class = UpdateAllGamesForm
+    success_url = '/ten_mans/'
+
+    @transaction.atomic
+    def form_valid(self, form: UpdateAllGamesForm):
+        # This method is called when valid form data has been POSTed.
+        # It should return an HttpResponse.
+        try:
+            form.updateGame()
+        except Error:
+            return super().form_invalid(form)
+
+        return super().form_valid(form)
+
+
+class GameListView(ListView, BaseTenMansContextMixin):
+    model = Game
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
+
+class GameDetailView(DetailView, BaseTenMansContextMixin):
+    model = Game
+    object: Game
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['timeString'] = str(datetime.timedelta(seconds=self.get_object().gameDuration))
+        if(self.get_object().gameMemeStatus):
+            #get list of players involved
+            players = GameLaner.objects.filter(game__exact=self.object.id)
+            playerNames = []
+            reasons = []
+            for player in players:
+                playerNames.append(player.player.playerName)
+                reasons.append(player.champion.championName)
+            context['players'] = ','.join(playerNames)
+            context['reasons'] = ','.join(reasons)
+        return context
+
+class BlueTeamTable(DetailView):
+    model= Game
+    def get(self, request, *args, **kwargs):
+        data = []
+        self.object = self.get_object()
+        self.object: Game
+        gameLaners = GameLaner.objects.filter(game__exact=self.object.id, blueTeam__exact=True)
+        stats = GameLanerStats.objects.filter(gameLaner__in=gameLaners)
+
+        for statLine in stats:
+            playerDict = {}
+            playerDict["playerName"] = statLine.gameLaner.player.playerName
+            playerDict['champion'] = statLine.gameLaner.champion.championName
+            playerDict['lane'] = statLine.gameLaner.lane.laneName
+            playerDict['kills'] = statLine.kills
+            playerDict['deaths'] = statLine.deaths
+            playerDict['assists'] = statLine.assists
+            playerDict['largestKillingSpree'] = statLine.largestKillingSpree
+            playerDict['largestMultiKill'] = statLine.largestMultiKill
+            playerDict['doubleKills'] = statLine.doubleKills
+            playerDict['tripleKills'] = statLine.tripleKills
+            playerDict['quadraKills'] = statLine.quadraKills
+            playerDict['pentaKills'] = statLine.pentaKills
+            playerDict['totalDamageDealtToChampions'] = statLine.totalDamageDealtToChampions
+            playerDict['visionScore'] = statLine.visionScore
+            playerDict['crowdControlScore'] = statLine.crowdControlScore
+            playerDict['totalDamageTaken'] = statLine.totalDamageTaken
+            playerDict['goldEarned'] = statLine.goldEarned
+            playerDict['turretKills'] = statLine.turretKills
+            playerDict['inhibitorKills'] = statLine.inhibitorKills
+            playerDict['cs'] = statLine.laneMinionsKilled + statLine.neutralMinionsKilled
+            playerDict['teamJungleMinionsKilled'] = statLine.teamJungleMinionsKilled
+            playerDict['enemyJungleMinionsKilled'] = statLine.enemyJungleMinionsKilled
+            playerDict['controlWardsPurchased'] = statLine.controlWardsPurchased
+            playerDict['firstBlood'] = statLine.firstBlood
+            playerDict['firstTower'] = statLine.firstTower
+            playerDict['csRateFirstTen'] = statLine.csRateFirstTen
+            playerDict['csRateSecondTen'] = (statLine.csRateSecondTen + statLine.csRateFirstTen)/2
+            playerDict["draftOrder"] = statLine.gameLaner.getDraftString()
+            playerDict['playerID'] = statLine.gameLaner.player.id
+            data.append(playerDict)
+
+        return JsonResponse(data={
+            'data': data
+        })
+
+class RedTeamTable(DetailView):
+    model= Game
+    def get(self, request, *args, **kwargs):
+        data = []
+        self.object = self.get_object()
+        self.object: Game
+        gameLaners = GameLaner.objects.filter(game__exact=self.object.id, blueTeam__exact=False)
+        stats = GameLanerStats.objects.filter(gameLaner__in=gameLaners)
+
+        for statLine in stats:
+            playerDict = {}
+            playerDict["playerName"] = statLine.gameLaner.player.playerName
+            playerDict['champion'] = statLine.gameLaner.champion.championName
+            playerDict['lane'] = statLine.gameLaner.lane.laneName
+            playerDict['kills'] = statLine.kills
+            playerDict['deaths'] = statLine.deaths
+            playerDict['assists'] = statLine.assists
+            playerDict['largestKillingSpree'] = statLine.largestKillingSpree
+            playerDict['largestMultiKill'] = statLine.largestMultiKill
+            playerDict['doubleKills'] = statLine.doubleKills
+            playerDict['tripleKills'] = statLine.tripleKills
+            playerDict['quadraKills'] = statLine.quadraKills
+            playerDict['pentaKills'] = statLine.pentaKills
+            playerDict['totalDamageDealtToChampions'] = statLine.totalDamageDealtToChampions
+            playerDict['visionScore'] = statLine.visionScore
+            playerDict['crowdControlScore'] = statLine.crowdControlScore
+            playerDict['totalDamageTaken'] = statLine.totalDamageTaken
+            playerDict['goldEarned'] = statLine.goldEarned
+            playerDict['turretKills'] = statLine.turretKills
+            playerDict['inhibitorKills'] = statLine.inhibitorKills
+            playerDict['cs'] = statLine.laneMinionsKilled + statLine.neutralMinionsKilled
+            playerDict['teamJungleMinionsKilled'] = statLine.teamJungleMinionsKilled
+            playerDict['enemyJungleMinionsKilled'] = statLine.enemyJungleMinionsKilled
+            playerDict['controlWardsPurchased'] = statLine.controlWardsPurchased
+            playerDict['firstBlood'] = statLine.firstBlood
+            playerDict['firstTower'] = statLine.firstTower
+            playerDict['csRateFirstTen'] = statLine.csRateFirstTen
+            playerDict['csRateSecondTen'] = (statLine.csRateSecondTen + statLine.csRateFirstTen)/2
+            playerDict["draftOrder"] = statLine.gameLaner.getDraftString()
+            playerDict['playerID'] = statLine.gameLaner.player.id
+            data.append(playerDict)
+
+        return JsonResponse(data={
+            'data': data
+        })

@@ -3,7 +3,10 @@ $(function () {
         var winrateTable = $('#overallWinrateTable').DataTable({
             "ajax": $('#overallWinrateTable').data('url'),
             "columns": [{
-                    "data": "name"
+                    "data": "name",
+                    "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
+                        $(nTd).html("<a href='/ten_mans/player/" + oData.playerID + "'>" + sData + "</a>");
+                    }
                 },
                 {
                     "data": "top"
@@ -40,6 +43,9 @@ $(function () {
                 },
                 {
                     "data": "overallAlpha"
+                },
+                {
+                    "data": "playerID"
                 }
             ],
             columnDefs: [{
@@ -50,7 +56,7 @@ $(function () {
                     }
                 },
                 {
-                    targets: [7,8,9,10,11,12],
+                    targets: [7,8,9,10,11,12,13],
                     visible: false
                 }
             ],

@@ -591,7 +591,7 @@ class NewGameForm(forms.Form):
 class UpdateGameForm(forms.Form):
     password = forms.CharField(widget = forms.PasswordInput())
     localGame = forms.ModelChoiceField(label = "Game to Update", queryset=Game.objects.all())
-    remoteGameID = forms.IntegerField(label = "Riot Game ID", widget=forms.TextInput)
+    remoteGameID = forms.IntegerField(label = "Riot Game ID", widget=forms.TextInput, required=False)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -625,6 +625,8 @@ class UpdateGameForm(forms.Form):
         remoteGameID = self.cleaned_data['remoteGameID']
         localGame = self.cleaned_data['localGame']
 
+        localGame: Game
+
         config_object = ConfigParser()
         config_object.read(os.path.join(os.path.dirname(__file__), 'conf', 'api.ini'))
         apiKey = config_object['general']['RIOT_API_KEY']
@@ -641,6 +643,10 @@ class UpdateGameForm(forms.Form):
             else:
                 raise
 
+        gameDuration = match['gameDuration']
+        localGame.gameDuration = gameDuration
+        localGame.save()
+
         for participant in match['participants']:
             #find a matching game laner
             blueTeam = participant['teamId']==100
@@ -651,7 +657,39 @@ class UpdateGameForm(forms.Form):
             championObject = Champion.objects.filter(championName__exact=championTrueName).get()
             gameLaner = GameLaner.objects.filter(champion__exact=championObject, game__exact=localGame).get()
 
-            statsObject = GameLanerStats(gameLaner=gameLaner,
+            #check for existing statsObject
+            statsObject = GameLanerStats.objects.get(gameLaner__exact=gameLaner)
+            if statsObject is not None:
+                statsObject: GameLanerStats
+                statsObject.gameLaner=gameLaner
+                statsObject.kills=participant['stats']['kills']
+                statsObject.deaths=participant['stats']['deaths']
+                statsObject.assists=participant['stats']['assists']
+                statsObject.largestKillingSpree=participant['stats']['largestKillingSpree']
+                statsObject.largestMultiKill=participant['stats']['largestMultiKill']
+                statsObject.doubleKills=participant['stats']['doubleKills']
+                statsObject.tripleKills=participant['stats']['tripleKills']
+                statsObject.quadraKills=participant['stats']['quadraKills']
+                statsObject.pentaKills=participant['stats']['pentaKills']
+                statsObject.totalDamageDealtToChampions=participant['stats']['totalDamageDealtToChampions']
+                statsObject.visionScore=participant['stats']['visionScore']
+                statsObject.crowdControlScore=participant['stats']['timeCCingOthers']
+                statsObject.totalDamageTaken=participant['stats']['totalDamageTaken']
+                statsObject.goldEarned=participant['stats']['goldEarned']
+                statsObject.turretKills=participant['stats']['turretKills']
+                statsObject.inhibitorKills=participant['stats']['inhibitorKills']
+                statsObject.laneMinionsKilled=participant['stats']['totalMinionsKilled']
+                statsObject.neutralMinionsKilled=participant['stats']['neutralMinionsKilled']
+                statsObject.teamJungleMinionsKilled=participant['stats']['neutralMinionsKilledTeamJungle']
+                statsObject.enemyJungleMinionsKilled=participant['stats']['neutralMinionsKilledEnemyJungle']
+                statsObject.controlWardsPurchased=participant['stats']['visionWardsBoughtInGame']
+                statsObject.firstBlood=participant['stats']['firstBloodKill']
+                statsObject.firstTower=participant['stats']['firstTowerKill']
+                statsObject.csRateFirstTen=participant['timeline']['creepsPerMinDeltas']['0-10']
+                statsObject.csRateSecondTen=participant['timeline']['creepsPerMinDeltas']['10-20']
+            else:
+                statsObject = GameLanerStats(
+                                        gameLaner=gameLaner,
                                         kills=participant['stats']['kills'],
                                         deaths=participant['stats']['deaths'],
                                         assists=participant['stats']['assists'],
@@ -683,6 +721,13 @@ class UpdateGameForm(forms.Form):
 
     def clean_remoteGameID(self):
         data = self.cleaned_data['remoteGameID']
+        if data is None:
+            #Check if game already has remoteID
+            existingGame = self.cleaned_data['localGame']
+            if existingGame.gameRiotID is None:
+                raise ValidationError('Riot ID not supplied, and no existing riot id found')
+            else:
+                data = existingGame.gameRiotID
 
         config_object = ConfigParser()
         config_object.read(os.path.join(os.path.dirname(__file__), 'conf', 'api.ini'))
@@ -700,6 +745,134 @@ class UpdateGameForm(forms.Form):
         if(match['queueId']!=0):
             raise ValidationError("Match not a custom game")
         return data
+
+    def clean_password(self):
+        data = self.cleaned_data['password']
+        user = authenticate(username='gameSubmitter', password=data)
+        if user is None:
+            raise ValidationError("Incorrect Password")
+        return data
+
+class UpdateAllGamesForm(forms.Form):
+    password = forms.CharField(widget = forms.PasswordInput())
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_id = 'id-newGameForm'
+        self.helper.form_method = 'post'
+        self.helper.form_action = ''
+
+        self.helper.layout = Layout(
+            Fieldset(
+                'Password',
+                Row(
+                    Column('password', css_class='col-2')
+                )
+            ),
+            ButtonHolder(
+                Submit('submit', 'Update All Games with Riot IDs')
+            )
+        )
+
+    def updateGame(self):
+        games = Game.objects.exclude(gameRiotID__isnull=True)
+        for localGame in games:
+            localGame: Game
+
+            remoteGameID = localGame.gameRiotID
+
+            config_object = ConfigParser()
+            config_object.read(os.path.join(os.path.dirname(__file__), 'conf', 'api.ini'))
+            apiKey = config_object['general']['RIOT_API_KEY']
+
+            lolWatcher = LolWatcher(apiKey)
+            region = 'na1'
+            naChampVersion = lolWatcher.data_dragon.versions_for_region(region)['n']['champion']
+            championList = lolWatcher.data_dragon.champions(naChampVersion, True)
+            try:
+                match = lolWatcher.match.by_id(region, remoteGameID)
+            except ApiError as err:
+                if err.response.status_code == 404:
+                    raise ValidationError("Match not found")
+                else:
+                    raise
+
+            gameDuration = match['gameDuration']
+            localGame.gameDuration = gameDuration
+            localGame.save()
+
+            for participant in match['participants']:
+                #find a matching game laner
+                blueTeam = participant['teamId']==100
+                #find champ
+
+                championDataName = championList['keys'][str(participant['championId'])]
+                championTrueName = championList['data'][championDataName]['name']
+                championObject = Champion.objects.filter(championName__exact=championTrueName).get()
+                gameLaner = GameLaner.objects.filter(champion__exact=championObject, game__exact=localGame).get()
+
+                #check for existing statsObject
+                statsObject = GameLanerStats.objects.get(gameLaner__exact=gameLaner)
+                if statsObject is not None:
+                    statsObject: GameLanerStats
+                    statsObject.gameLaner=gameLaner
+                    statsObject.kills=participant['stats']['kills']
+                    statsObject.deaths=participant['stats']['deaths']
+                    statsObject.assists=participant['stats']['assists']
+                    statsObject.largestKillingSpree=participant['stats']['largestKillingSpree']
+                    statsObject.largestMultiKill=participant['stats']['largestMultiKill']
+                    statsObject.doubleKills=participant['stats']['doubleKills']
+                    statsObject.tripleKills=participant['stats']['tripleKills']
+                    statsObject.quadraKills=participant['stats']['quadraKills']
+                    statsObject.pentaKills=participant['stats']['pentaKills']
+                    statsObject.totalDamageDealtToChampions=participant['stats']['totalDamageDealtToChampions']
+                    statsObject.visionScore=participant['stats']['visionScore']
+                    statsObject.crowdControlScore=participant['stats']['timeCCingOthers']
+                    statsObject.totalDamageTaken=participant['stats']['totalDamageTaken']
+                    statsObject.goldEarned=participant['stats']['goldEarned']
+                    statsObject.turretKills=participant['stats']['turretKills']
+                    statsObject.inhibitorKills=participant['stats']['inhibitorKills']
+                    statsObject.laneMinionsKilled=participant['stats']['totalMinionsKilled']
+                    statsObject.neutralMinionsKilled=participant['stats']['neutralMinionsKilled']
+                    statsObject.teamJungleMinionsKilled=participant['stats']['neutralMinionsKilledTeamJungle']
+                    statsObject.enemyJungleMinionsKilled=participant['stats']['neutralMinionsKilledEnemyJungle']
+                    statsObject.controlWardsPurchased=participant['stats']['visionWardsBoughtInGame']
+                    statsObject.firstBlood=participant['stats']['firstBloodKill']
+                    statsObject.firstTower=participant['stats']['firstTowerKill']
+                    statsObject.csRateFirstTen=participant['timeline']['creepsPerMinDeltas']['0-10']
+                    statsObject.csRateSecondTen=participant['timeline']['creepsPerMinDeltas']['10-20']
+                else:
+                    statsObject = GameLanerStats(
+                                            gameLaner=gameLaner,
+                                            kills=participant['stats']['kills'],
+                                            deaths=participant['stats']['deaths'],
+                                            assists=participant['stats']['assists'],
+                                            largestKillingSpree=participant['stats']['largestKillingSpree'],
+                                            largestMultiKill=participant['stats']['largestMultiKill'],
+                                            doubleKills=participant['stats']['doubleKills'],
+                                            tripleKills=participant['stats']['tripleKills'],
+                                            quadraKills=participant['stats']['quadraKills'],
+                                            pentaKills=participant['stats']['pentaKills'],
+                                            totalDamageDealtToChampions=participant['stats']['totalDamageDealtToChampions'],
+                                            visionScore=participant['stats']['visionScore'],
+                                            crowdControlScore=participant['stats']['timeCCingOthers'],
+                                            totalDamageTaken=participant['stats']['totalDamageTaken'],
+                                            goldEarned=participant['stats']['goldEarned'],
+                                            turretKills=participant['stats']['turretKills'],
+                                            inhibitorKills=participant['stats']['inhibitorKills'],
+                                            laneMinionsKilled=participant['stats']['totalMinionsKilled'],
+                                            neutralMinionsKilled=participant['stats']['neutralMinionsKilled'],
+                                            teamJungleMinionsKilled=participant['stats']['neutralMinionsKilledTeamJungle'],
+                                            enemyJungleMinionsKilled=participant['stats']['neutralMinionsKilledEnemyJungle'],
+                                            controlWardsPurchased=participant['stats']['visionWardsBoughtInGame'],
+                                            firstBlood=participant['stats']['firstBloodKill'],
+                                            firstTower=participant['stats']['firstTowerKill'],
+                                            csRateFirstTen=participant['timeline']['creepsPerMinDeltas']['0-10'],
+                                            csRateSecondTen=participant['timeline']['creepsPerMinDeltas']['10-20'])
+
+                statsObject.save()
+
 
     def clean_password(self):
         data = self.cleaned_data['password']

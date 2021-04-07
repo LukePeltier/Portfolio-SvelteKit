@@ -3,7 +3,10 @@ $(function () {
         var playtimeTable = $('#overallPlaytimeTable').DataTable({
             "ajax": $('#overallPlaytimeTable').data('url'),
             "columns": [{
-                    "data": "name"
+                    "data": "name",
+                    "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
+                        $(nTd).html("<a href='/ten_mans/player/" + oData.playerID + "'>" + sData + "</a>");
+                    }
                 },
                 {
                     "data": "top"
@@ -22,11 +25,18 @@ $(function () {
                 },
                 {
                     "data": "overall"
+                },
+                {
+                    "data": "playerID"
                 }
             ],
             columnDefs: [{
                     type: "natural",
                     targets: [1, 2, 3, 4, 5, 6]
+                },
+                {
+                    targets: [7],
+                    visible: false
                 }
             ],
             paging: false,

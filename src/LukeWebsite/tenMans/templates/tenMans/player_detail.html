@@ -3,109 +3,110 @@
 {%block content%}
 <h1>{{ object.playerName }}</h1>
 <div class="container-fluid">
-<div class="row">
-    <div id="winrateOverTimeContainer" class="col col-md-6">
-        <canvas id="winrateOverTimeChart" data-url="{% url 'playerWinrateOverTime' object.pk %}"></canvas>
+    <div class="row">
+        <div id="winrateOverTimeContainer" class="col col-md-6">
+            <canvas id="winrateOverTimeChart" data-url="{% url 'playerWinrateOverTime' object.pk %}"></canvas>
+        </div>
+        <div class="col col-sm-4">
+            <div id="playerLaneCountTableContainer">
+                <table id="playerLaneCountTable" class="table table-hover table-bordered table-sm"
+                    data-url="{% url 'playerLaneCountTable' object.pk %}">
+                    <thead>
+                        <tr>
+                            <th>Lane</th>
+                            <th>Play Count</th>
+                            <th>Average KDA</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
     </div>
-    <div class="col col-sm-4">
-        <div id="playerLaneCountTableContainer">
-            <table id="playerLaneCountTable" class="table table-hover table-bordered table-sm"
-                data-url="{% url 'playerLaneCountTable' object.pk %}">
+    <div class="row">
+        <div id="smallStatsBox" class="col-4">
+            <div class="row">
+                <div class="col smallPlayerStat">
+                    Most Played Lane: <b>{{ mostPlayedLane }}</b>
+                </div>
+                <div class="col smallPlayerStat">
+                    Total Games Played: <b>{{ totalGamesPlayed }}</b>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6 smallPlayerStat">
+                    Most Played Champion: <b>{{ mostPlayedChamp }}</b>
+                </div>
+                <div class="col-6 smallPlayerStat">
+                    Highest Winrate Champion: <b>{{ highestWinrateChamp }}</b>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col smallPlayerStat">
+                    Different Champions Played:<b> {{uniqueChampionsPlayed}}</b>
+                </div>
+                <div class="col smallPlayerStat">
+                    Average Overall KDA:<b> {{overallAverageKDA}}</b>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col smallPlayerStat">
+                    Average Pulled Bans Per Game: <b> {{averageBansPulled}} </b>
+                </div>
+                <div class="col smallPlayerStat">
+                    Most Banned Champion: <b> {{mostBannedChamp}} </b>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col smallPlayerStat">
+                    Blue Win Rate: <b> {{blueSideWinrate}}%</b>
+                </div>
+                <div class="col smallPlayerStat">
+                    Red Win Rate:<b> {{redSideWinrate}}%</b>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div id="playerGamesTableContainer" class="col-12" style="padding: 0px;">
+            <table id="playerGamesTable" class="table table-sm table-striped table-responsive table-bordered"
+                data-url="{% url 'playerGamesTable' object.pk %}">
                 <thead>
                     <tr>
+                        <th>Game</th>
+                        <th>Champion</th>
                         <th>Lane</th>
-                        <th>Play Count</th>
-                        <th>Average KDA</th>
+                        <th>W/L?</th>
+                        <th>Duration</th>
+                        <th>Team</th>
+                        <th>K</th>
+                        <th>D</th>
+                        <th>A</th>
+                        <th>Largest Killing Spree</th>
+                        <th>Largest MultiKill</th>
+                        <th>Double Kills</th>
+                        <th>Triple Kills</th>
+                        <th>Quadra Kills</th>
+                        <th>Penta Kills</th>
+                        <th>Champ Damage</th>
+                        <th>Vision Score</th>
+                        <th>CC Score</th>
+                        <th>Damage Taken</th>
+                        <th>Gold</th>
+                        <th>Turrets</th>
+                        <th>Inhibs</th>
+                        <th>CS</th>
+                        <th>Jungle Camp Kills</th>
+                        <th>Jungle Camp Invade Kills</th>
+                        <th>CW Purchased</th>
+                        <th>First Blood</th>
+                        <th>First Tower</th>
+                        <th>10 min av. CS</th>
+                        <th>20 min av. CS</th>
                     </tr>
                 </thead>
             </table>
         </div>
     </div>
-</div>
-<div class="row">
-    <div id="smallStatsBox" class="col-4">
-        <div class="row">
-            <div class="col smallPlayerStat">
-                Most Played Lane: <b>{{ mostPlayedLane }}</b>
-            </div>
-            <div class="col smallPlayerStat">
-                Total Games Played: <b>{{ totalGamesPlayed }}</b>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-6 smallPlayerStat">
-                Most Played Champion: <b>{{ mostPlayedChamp }}</b>
-            </div>
-            <div class="col-6 smallPlayerStat">
-                Highest Winrate Champion: <b>{{ highestWinrateChamp }}</b>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col smallPlayerStat">
-                Different Champions Played:<b> {{uniqueChampionsPlayed}}</b>
-            </div>
-            <div class="col smallPlayerStat">
-                Average Overall KDA:<b> {{overallAverageKDA}}</b>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col smallPlayerStat">
-                Average Pulled Bans Per Game: <b> {{averageBansPulled}} </b>
-            </div>
-            <div class="col smallPlayerStat">
-                Most Banned Champion: <b> {{mostBannedChamp}} </b>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col smallPlayerStat">
-                Blue Win Rate: <b> {{blueSideWinrate}}%</b>
-            </div>
-            <div class="col smallPlayerStat">
-                Red Win Rate:<b> {{redSideWinrate}}%</b>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="row">
-    <div id="playerGamesTableContainer" class="col-12" style="padding: 0px;">
-        <table id="playerGamesTable" class="table table-sm table-striped table-responsive table-bordered"
-            data-url="{% url 'playerGamesTable' object.pk %}">
-            <thead>
-                <tr>
-                    <th>Game</th>
-                    <th>Champion</th>
-                    <th>Lane</th>
-                    <th>W/L?</th>
-                    <th>Team</th>
-                    <th>K</th>
-                    <th>D</th>
-                    <th>A</th>
-                    <th>Largest Killing Spree</th>
-                    <th>Largest MultiKill</th>
-                    <th>Double Kills</th>
-                    <th>Triple Kills</th>
-                    <th>Quadra Kills</th>
-                    <th>Penta Kills</th>
-                    <th>Champ Damage</th>
-                    <th>Vision Score</th>
-                    <th>CC Score</th>
-                    <th>Damage Taken</th>
-                    <th>Gold</th>
-                    <th>Turrets</th>
-                    <th>Inhibs</th>
-                    <th>CS</th>
-                    <th>Jungle Camp Kills</th>
-                    <th>Jungle Camp Invade Kills</th>
-                    <th>CW Purchased</th>
-                    <th>First Blood</th>
-                    <th>First Tower</th>
-                    <th>10 min av. CS</th>
-                    <th>20 min av. CS</th>
-                </tr>
-            </thead>
-        </table>
-    </div>
-</div>
 </div>
 <script src="{%static 'js/playerWOTGraph.js'%}"></script>
 <script src="{%static 'js/playerDetails.js'%}"></script>

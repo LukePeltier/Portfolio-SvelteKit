@@ -23,7 +23,10 @@ $(function () {
         var playerGameTable = $('#playerGamesTable').DataTable({
             "ajax": $('#playerGamesTable').data('url'),
             "columns": [{
-                    "data": "gameNum"
+                    "data": "gameNum",
+                    "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
+                        $(nTd).html("<a href='/ten_mans/game/"+sData+"'>"+sData+"</a>");
+                    }
                 },
                 {
                     "data": "champion",
@@ -36,6 +39,29 @@ $(function () {
                 {
                     "data": "winLoss",
                     "render": $.fn.dataTable.render.text()
+                },
+                {
+                    "data": "duration",
+                    "render": function(data, type){
+                        if(type==='display'){
+                            var sec_num = parseInt(data); // don't forget the second param
+                            var hours   = Math.floor(sec_num / 3600);
+                            var minutes = Math.floor((sec_num - (hours * 3600)) / 60);
+                            var seconds = sec_num - (hours * 3600) - (minutes * 60);
+                            var fewHours = false;
+                            if (hours   < 10) {
+                                hours   = "0"+hours;
+                                fewHours = true;
+                            }
+                            if (minutes < 10) {minutes = "0"+minutes;}
+                            if (seconds < 10) {seconds = "0"+seconds;}
+                            if(fewHours && hours==="00"){
+                                return  minutes + ':' + seconds;
+                            }
+                            return hours+':'+minutes+':'+seconds;
+                        }
+                        return data
+                    }
                 },
                 {
                     "data": "team",
@@ -133,9 +159,5 @@ $(function () {
 
     });
 
-    $("#playerGamesTable tbody tr").on('click',function(event) {
-        $("#playerGamesTable tbody tr").removeClass('row_selected');
-        $(this).addClass('row_selected');
-    });
 
 });

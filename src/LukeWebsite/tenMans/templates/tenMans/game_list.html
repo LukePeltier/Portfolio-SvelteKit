@@ -1,0 +1,14 @@
+{% extends "tenMans/base.html" %}
+{% load static %}
+{%block content%}
+<h1>Games</h1>
+<ul class="list-group">
+{% for game in object_list %}
+    <li class="list-group-item">
+        <a href="{% url 'detailGame' game.pk%}">{{ game.gameNumber }} - {{ game.gameDate|date:"DATETIME_FORMAT"}}</a>
+    </li>
+{% empty %}
+    <li>No games yet.</li>
+{% endfor %}
+</ul>
+{%endblock%}

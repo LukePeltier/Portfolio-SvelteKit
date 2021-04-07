@@ -2,6 +2,7 @@ from enum import unique
 from django.db import models
 from django.db.models.query_utils import Q
 import operator
+from datetime import timedelta
 
 # Create your models here.
 class Game(models.Model):
@@ -10,6 +11,9 @@ class Game(models.Model):
     gameRandomTeams = models.BooleanField()
     gameMemeStatus = models.BooleanField(default=0)
     gameDate = models.DateTimeField(default='current_timestamp()')
+    gameDuration = models.PositiveIntegerField()
+    gameRiotID = models.PositiveBigIntegerField(null=True)
+
     def getTotalGames():
         return Game.objects.all().count()
 
@@ -268,6 +272,7 @@ class Player(models.Model):
     def getUniqueChampionCount(self):
         champCounts = self.championsPlayed()
         return len(champCounts)
+
 class Champion(models.Model):
     championName = models.TextField(unique=True)
 
@@ -289,11 +294,20 @@ class GameLaner(models.Model):
     draftOrder = models.PositiveIntegerField(null=True)
     championSelectOrder = models.PositiveIntegerField(null=True)
 
+    def getDraftString(self):
+        if self.draftOrder is not None:
+            return str(self.draftOrder)
+        else:
+            if self.game.gameRandomTeams:
+                return "R"
+            else:
+                return "C"
+
     class Meta:
         unique_together = (('game', 'lane', 'blueTeam'))
 
 class GameLanerStats(models.Model):
-    gameLaner = models.ForeignKey(GameLaner, on_delete=models.CASCADE)
+    gameLaner = models.OneToOneField(GameLaner, on_delete=models.CASCADE)
 
     kills = models.PositiveIntegerField()
     deaths = models.PositiveIntegerField()
