@@ -4,64 +4,88 @@
 <h1>{{ object.playerName }}</h1>
 <div class="container-fluid">
     <div class="row">
-        <div id="winrateOverTimeContainer" class="col col-md-6">
-            <canvas id="winrateOverTimeChart" data-url="{% url 'playerWinrateOverTime' object.pk %}"></canvas>
+    <div class="col col-md-6">
+        <div class="row">
+            <div id="winrateOverTimeContainer" class="col">
+                <canvas id="winrateOverTimeChart" data-url="{% url 'playerWinrateOverTime' object.pk %}"></canvas>
+            </div>
         </div>
-        <div class="col col-sm-4">
-            <div id="playerLaneCountTableContainer">
-                <table id="playerLaneCountTable" class="table table-hover table-bordered table-sm"
-                    data-url="{% url 'playerLaneCountTable' object.pk %}">
-                    <thead>
-                        <tr>
-                            <th>Lane</th>
-                            <th>Play Count</th>
-                            <th>Average KDA</th>
-                        </tr>
-                    </thead>
-                </table>
+        <div class="row">
+            <div id="smallStatsBox" class="col">
+                <div class="row">
+                    <div class="col smallPlayerStat">
+                        Most Played Lane: <b>{{ mostPlayedLane }}</b>
+                    </div>
+                    <div class="col smallPlayerStat">
+                        Total Games Played: <b>{{ totalGamesPlayed }}</b>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6 smallPlayerStat">
+                        Most Played Champion: <b>{{ mostPlayedChamp }}</b>
+                    </div>
+                    <div class="col-6 smallPlayerStat">
+                        Highest Winrate Champion: <b>{{ highestWinrateChamp }}</b>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col smallPlayerStat">
+                        Different Champions Played:<b> {{uniqueChampionsPlayed}}</b>
+                    </div>
+                    <div class="col smallPlayerStat">
+                        Average Overall KDA:<b> {{overallAverageKDA}}</b>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col smallPlayerStat">
+                        Average Pulled Bans Per Game: <b> {{averageBansPulled}} </b>
+                    </div>
+                    <div class="col smallPlayerStat">
+                        Most Banned Champion: <b> {{mostBannedChamp}} </b>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col smallPlayerStat">
+                        Blue Win Rate: <b> {{blueSideWinrate}}%</b>
+                    </div>
+                    <div class="col smallPlayerStat">
+                        Red Win Rate:<b> {{redSideWinrate}}%</b>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-    <div class="row">
-        <div id="smallStatsBox" class="col-4">
-            <div class="row">
-                <div class="col smallPlayerStat">
-                    Most Played Lane: <b>{{ mostPlayedLane }}</b>
-                </div>
-                <div class="col smallPlayerStat">
-                    Total Games Played: <b>{{ totalGamesPlayed }}</b>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-6 smallPlayerStat">
-                    Most Played Champion: <b>{{ mostPlayedChamp }}</b>
-                </div>
-                <div class="col-6 smallPlayerStat">
-                    Highest Winrate Champion: <b>{{ highestWinrateChamp }}</b>
+    <div class="col col-sm-4">
+        <div class="row">
+            <div class="col">
+                <div id="playerLaneCountTableContainer">
+                    <table id="playerLaneCountTable" class="table table-hover table-bordered table-sm"
+                        data-url="{% url 'playerLaneCountTable' object.pk %}">
+                        <thead>
+                            <tr>
+                                <th>Lane</th>
+                                <th>Play Count</th>
+                                <th>Average KDA</th>
+                            </tr>
+                        </thead>
+                    </table>
                 </div>
             </div>
-            <div class="row">
-                <div class="col smallPlayerStat">
-                    Different Champions Played:<b> {{uniqueChampionsPlayed}}</b>
-                </div>
-                <div class="col smallPlayerStat">
-                    Average Overall KDA:<b> {{overallAverageKDA}}</b>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col smallPlayerStat">
-                    Average Pulled Bans Per Game: <b> {{averageBansPulled}} </b>
-                </div>
-                <div class="col smallPlayerStat">
-                    Most Banned Champion: <b> {{mostBannedChamp}} </b>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col smallPlayerStat">
-                    Blue Win Rate: <b> {{blueSideWinrate}}%</b>
-                </div>
-                <div class="col smallPlayerStat">
-                    Red Win Rate:<b> {{redSideWinrate}}%</b>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div id="playerChampionCountTableContainer">
+                    <table id="playerChampionCountTable" class="table table-hover table-bordered table-sm"
+                        data-url="{% url 'playerChampionCountTable' object.pk %}">
+                        <thead>
+                            <tr>
+                                <th>Champion</th>
+                                <th>Play Count</th>
+                                <th>Winrate</th>
+                                <th>Average KDA</th>
+                            </tr>
+                        </thead>
+                    </table>
                 </div>
             </div>
         </div>

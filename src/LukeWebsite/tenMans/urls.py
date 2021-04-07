@@ -17,6 +17,7 @@ urlpatterns = [
     path('averagePlayerDraftOrderTable/', views.AverageDraftOrderTable.as_view(), name='averageDraftOrderTable'),
     path('expectedPlayerDraftOrderWinrateTable/', views.ExpectedDraftOrderWinrateTable.as_view(), name='expectedDraftOrderWinrateTable'),
     path('player/<int:pk>/laneCountData/', views.PlayerLaneCountTable.as_view(), name='playerLaneCountTable'),
+    path('player/<int:pk>/championCountData/', views.PlayerChampionCountTable.as_view(), name='playerChampionCountTable'),
     path('player/<int:pk>/gamesPlayedData/', views.PlayerGamesTable.as_view(), name='playerGamesTable'),
     path('game/', views.GameListView.as_view(), name='gameListView'),
     path('game/<int:pk>/', views.GameDetailView.as_view(), name='detailGame'),

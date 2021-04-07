@@ -13,7 +13,7 @@ from django.views.generic.edit import FormView
 from django.views.generic.list import ListView
 
 from tenMans.forms import NewGameForm, UpdateAllGamesForm, UpdateGameForm
-from tenMans.models import Game, GameLaner, GameLanerStats, Lane, Player
+from tenMans.models import Champion, Game, GameLaner, GameLanerStats, Lane, Player
 import datetime
 
 
@@ -196,6 +196,29 @@ class PlayerLaneCountTable(DetailView):
             laneDict["playCount"] = self.object.getLaneCount(lane)
             laneDict["averageKDA"] = self.object.getAverageKDALaneString(lane)
             data.append(laneDict)
+
+        return JsonResponse(data={
+            'data': data
+        })
+
+class PlayerChampionCountTable(DetailView):
+    model = Player
+    object: Player
+    def get(self, request, *args, **kwargs):
+        data = []
+        self.object = self.get_object()
+        queryset = Champion.objects.all()
+        champsPlayed = self.object.championsPlayed()
+        for champ in queryset:
+            champDict = {}
+            champDict["name"] = champ.championName
+            if champ.championName not in champsPlayed:
+                continue
+            else:
+                champDict["playCount"] = champsPlayed[champ.championName]
+                champDict["winrate"] = self.object.getWinrateOnChampion(champ)
+                champDict["averageKDA"] = self.object.getAverageKDAChampionString(champ)
+            data.append(champDict)
 
         return JsonResponse(data={
             'data': data

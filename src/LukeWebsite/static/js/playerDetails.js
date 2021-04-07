@@ -19,6 +19,29 @@ $(function () {
                 [1, "desc"]
             ]
         });
+        var championCountTable = $('#playerChampionCountTable').DataTable({
+            "ajax": $('#playerChampionCountTable').data('url'),
+            "columns": [{
+                    "data": "name"
+                },
+                {
+                    "data": "playCount"
+                },
+                {
+                    "data": "winrate",
+                    "render": $.fn.dataTable.render.number(',', '.', 0, '', '%')
+                },
+                {
+                    "data": "averageKDA"
+                }
+            ],
+            paging: false,
+            searching: false,
+            info: false,
+            "order": [
+                [1, "desc"]
+            ]
+        });
 
         var playerGameTable = $('#playerGamesTable').DataTable({
             "ajax": $('#playerGamesTable').data('url'),
