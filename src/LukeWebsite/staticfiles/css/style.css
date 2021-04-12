@@ -1,4 +1,4 @@
-.smallPlayerStat {
+.smallPlayerStat{
   padding: 10px ;
   border: 1px solid #dee2e6;
   word-wrap: break-word;
@@ -13,4 +13,10 @@ table.dataTable.table-striped.DTFC_Cloned tbody tr:nth-of-type(even) {
 
 .cellnowrap {
   white-space: nowrap;
+}
+
+.championListItem{
+  padding: 10px ;
+  border: 1px solid #dee2e6;
+  word-wrap: break-word;
 }

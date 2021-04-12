@@ -23,5 +23,7 @@ urlpatterns = [
     path('game/', views.GameListView.as_view(), name='gameListView'),
     path('game/<int:pk>/', views.GameDetailView.as_view(), name='detailGame'),
     path('game/<int:pk>/blueTeamTable/', views.BlueTeamTable.as_view(), name='blueTeamTable'),
-    path('game/<int:pk>/redTeamTable/', views.RedTeamTable.as_view(), name='redTeamTable')
+    path('game/<int:pk>/redTeamTable/', views.RedTeamTable.as_view(), name='redTeamTable'),
+    path('champion/', views.ChampionListView.as_view(), name='championListView'),
+    path('champion/<int:pk>/', views.ChampionDetailView.as_view(), name='detailChampion')
 ]

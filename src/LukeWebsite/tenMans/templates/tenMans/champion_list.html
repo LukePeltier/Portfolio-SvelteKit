@@ -1,0 +1,18 @@
+{% extends "tenMans/base.html" %}
+{% load static %}
+{%block content%}
+<h1>Champions</h1>
+<div class="container-fluid">
+    <div class="row">
+        {% for champion in object_list %}
+        {% if champion.riotName is None %}
+        {% else %}
+        <div class="col-1 championListItem">
+            <a href="{% url 'detailChampion' champion.pk%}"> <img src="http://ddragon.leagueoflegends.com/cdn/{{naChampVersion}}/img/champion/{{champion.riotName}}.png" style="width:50px; height:50px;"/>
+                {{ champion.championName }}</a>
+        </div>
+        {%endif%}
+        {% endfor %}
+    </div>
+</div>
+{%endblock%}

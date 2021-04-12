@@ -1,7 +1,11 @@
+from configparser import ConfigParser
 from enum import unique
+import os
 from django.db import models
+from riotwatcher import LolWatcher
 from scipy import stats
 import numpy as np
+from django.contrib.staticfiles import finders
 
 # Create your models here.
 class Game(models.Model):
@@ -298,9 +302,13 @@ class Player(models.Model):
 
 class Champion(models.Model):
     championName = models.TextField(unique=True)
+    riotName = models.TextField(unique=True, null=True)
 
     def __str__(self):
         return self.championName
+
+    class Meta:
+        ordering = ['championName']
 
 
 class Lane(models.Model):

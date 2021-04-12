@@ -15,7 +15,9 @@ from django.views.generic.list import ListView
 from tenMans.forms import NewGameForm, UpdateAllGamesForm, UpdateGameForm
 from tenMans.models import Champion, Game, GameLaner, GameLanerStats, Lane, Player
 import datetime
-
+import os
+from configparser import ConfigParser
+from riotwatcher import LolWatcher
 
 class BaseTenMansContextMixin(ContextMixin):
     def get_context_data(self,*args, **kwargs):
@@ -209,6 +211,13 @@ class PlayerChampionCountTable(DetailView):
         self.object = self.get_object()
         queryset = Champion.objects.all()
         champsPlayed = self.object.championsPlayed()
+        config_object = ConfigParser()
+        config_object.read(os.path.join(os.path.dirname(__file__), 'conf', 'api.ini'))
+        apiKey = config_object['general']['RIOT_API_KEY']
+
+        lolWatcher = LolWatcher(apiKey)
+        region = 'na1'
+        versionNumber = lolWatcher.data_dragon.versions_for_region(region)['n']['champion']
         for champ in queryset:
             champDict = {}
             champDict["name"] = champ.championName
@@ -218,6 +227,9 @@ class PlayerChampionCountTable(DetailView):
                 champDict["playCount"] = champsPlayed[champ.championName]
                 champDict["winrate"] = self.object.getWinrateOnChampion(champ)
                 champDict["averageKDA"] = self.object.getAverageKDAChampionString(champ)
+                champDict['championID'] = champ.id
+                champDict['riotChampionName'] = champ.riotName
+                champDict['championVersion'] = versionNumber
             data.append(champDict)
 
         return JsonResponse(data={
@@ -233,6 +245,13 @@ class PlayerGamesTable(DetailView):
         self.object: Player
         gamesPlayed = GameLaner.objects.filter(player__exact=self.object.id)
         stats = GameLanerStats.objects.filter(gameLaner__in=gamesPlayed)
+        config_object = ConfigParser()
+        config_object.read(os.path.join(os.path.dirname(__file__), 'conf', 'api.ini'))
+        apiKey = config_object['general']['RIOT_API_KEY']
+
+        lolWatcher = LolWatcher(apiKey)
+        region = 'na1'
+        versionNumber = lolWatcher.data_dragon.versions_for_region(region)['n']['champion']
         for stat in stats:
             stat: GameLanerStats
             statDict = {}
@@ -279,6 +298,9 @@ class PlayerGamesTable(DetailView):
             statDict['csRateFirstTen'] = stat.csRateFirstTen
             statDict['csRateSecondTen'] = (stat.csRateSecondTen + stat.csRateFirstTen)/2
             statDict['gameID'] = stat.gameLaner.game.id
+            statDict['championID'] = stat.gameLaner.champion.id
+            statDict['riotChampionName'] = stat.gameLaner.champion.riotName
+            statDict['championVersion'] = versionNumber
 
             data.append(statDict)
 
@@ -519,3 +541,33 @@ class RedTeamTable(DetailView):
         return JsonResponse(data={
             'data': data
         })
+
+class ChampionListView(ListView, BaseTenMansContextMixin):
+    model = Champion
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        config_object = ConfigParser()
+        config_object.read(os.path.join(os.path.dirname(__file__), 'conf', 'api.ini'))
+        apiKey = config_object['general']['RIOT_API_KEY']
+
+        lolWatcher = LolWatcher(apiKey)
+        region = 'na1'
+        context['naChampVersion'] = lolWatcher.data_dragon.versions_for_region(region)['n']['champion']
+
+        return context
+
+class ChampionDetailView(DetailView, BaseTenMansContextMixin):
+    model = Champion
+    object: Champion
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        config_object = ConfigParser()
+        config_object.read(os.path.join(os.path.dirname(__file__), 'conf', 'api.ini'))
+        apiKey = config_object['general']['RIOT_API_KEY']
+
+        lolWatcher = LolWatcher(apiKey)
+        region = 'na1'
+        context['naChampVersion'] = lolWatcher.data_dragon.versions_for_region(region)['n']['champion']
+        return context

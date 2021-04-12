@@ -21,8 +21,14 @@ $(function () {
         });
         var championCountTable = $('#playerChampionCountTable').DataTable({
             "ajax": $('#playerChampionCountTable').data('url'),
-            "columns": [{
-                    "data": "name"
+            "columns": [
+                {
+                    "data": "name",
+                    "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
+                        if(oData.riotChampionName!=undefined){
+                            $(nTd).html("<a href='/ten_mans/champion/" + oData.championID+"'> <img src='http://ddragon.leagueoflegends.com/cdn/" + oData.championVersion +"/img/champion/"+oData.riotChampionName+".png' style='width:20px; height:20px;'/>"+sData+"</a>");
+                        }
+                    }
                 },
                 {
                     "data": "playCount"
@@ -33,6 +39,21 @@ $(function () {
                 },
                 {
                     "data": "averageKDA"
+                },
+                {
+                    "data": "championID"
+                },
+                {
+                    "data": "riotChampionName"
+                },
+                {
+                    "data": "championVersion"
+                },
+            ],
+            columnDefs: [
+                {
+                    targets: [4,5,6],
+                    visible: false
                 }
             ],
             paging: false,
@@ -53,7 +74,14 @@ $(function () {
                 },
                 {
                     "data": "champion",
-                    "render": $.fn.dataTable.render.text()
+                    "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
+                        if(oData.riotChampionName!=undefined){
+                            $(nTd).html("<a href='/ten_mans/champion/" + oData.championID+"'> <img src='http://ddragon.leagueoflegends.com/cdn/" + oData.championVersion +"/img/champion/"+oData.riotChampionName+".png' style='width:20px; height:20px;'/>"+sData+"</a>");
+                        }
+
+
+                    }
+
                 },
                 {
                     "data": "lane",
@@ -170,11 +198,20 @@ $(function () {
                 },
                 {
                     "data": "gameID"
-                }
+                },
+                {
+                    "data": "championID"
+                },
+                {
+                    "data": "riotChampionName"
+                },
+                {
+                    "data": "championVersion"
+                },
             ],
             columnDefs: [
                 {
-                    targets: [30],
+                    targets: [30, 31, 32, 33],
                     visible: false
                 }
             ],
