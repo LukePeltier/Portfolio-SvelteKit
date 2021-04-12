@@ -10,6 +10,7 @@ gviz-api==1.9.0
 idna==2.10
 mysqlclient==2.0.3
 numpy==1.20.2
+Pillow==8.2.0
 plotly==4.14.3
 PyMySQL==1.0.2
 pytz==2021.1
