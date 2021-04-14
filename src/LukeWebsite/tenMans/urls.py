@@ -26,5 +26,7 @@ urlpatterns = [
     path('game/<int:pk>/redTeamTable/', views.RedTeamTable.as_view(), name='redTeamTable'),
     path('champion/', views.ChampionListView.as_view(), name='championListView'),
     path('champion/<int:pk>/', views.ChampionDetailView.as_view(), name='detailChampion'),
-    path('champion/<int:pk>/playtimeChart', views.ChampionPlaytimeChartView.as_view(), name='championPlaytimeChart')
+    path('champion/<int:pk>/playtimeChart', views.ChampionPlaytimeChartView.as_view(), name='championPlaytimeChart'),
+    path('champion/<int:pk>/playerChampCountTable', views.ChampionPlayerCountTableView.as_view(), name='playerChampCountTable'),
+    path('champion/<int:pk>/gamesPlayedData/', views.ChampionGamesTable.as_view(), name='champGamesTable'),
 ]

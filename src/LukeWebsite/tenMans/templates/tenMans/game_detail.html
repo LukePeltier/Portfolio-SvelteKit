@@ -20,13 +20,13 @@
     </div>
     {% else %}
     <div class="row">
-        <div class="col">
+        <div class="col-2">
             <h3>Game Duration: {{timeString}}</h3>
         </div>
     </div>
     <div class="row">
         <div id="blueTeamTableContainer" class="col-6">
-            <h2 style="background-color: rgba(63, 127, 191, 0.2);">Blue Team</h2>
+            <h2 style="background-color: rgba(63, 127, 191, 0.2);">Blue Team: <b>{{blueTeamWinString}}</b></h2>
             <table id="blueTeamTable" class="table table-striped table-bordered"
                 data-url="{% url 'blueTeamTable' object.pk %}">
                 <thead>
@@ -65,7 +65,7 @@
             </table>
         </div>
         <div id="redTeamTableContainer" class="col-6">
-            <h2 style="background-color: rgba(191, 63, 63, 0.5)">Red Team</h2>
+            <h2 style="background-color: rgba(191, 63, 63, 0.5)">Red Team: <b>{{redTeamWinString}}</b></h2>
             <table id="redTeamTable" class="table table-striped table-bordered"
                 data-url="{% url 'redTeamTable' object.pk %}">
                 <thead>

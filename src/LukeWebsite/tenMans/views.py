@@ -438,6 +438,15 @@ class GameDetailView(DetailView, BaseTenMansContextMixin):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['timeString'] = str(datetime.timedelta(seconds=self.get_object().gameDuration))
+        if self.get_object().gameBlueWins:
+            blueTeamWinString = "Win"
+            redTeamWinString = "Loss"
+        else:
+            blueTeamWinString = "Loss"
+            redTeamWinString = "Win"
+        context['blueTeamWinString'] = blueTeamWinString
+        context['redTeamWinString'] = redTeamWinString
+
         if(self.get_object().gameMemeStatus):
             #get list of players involved
             players = GameLaner.objects.filter(game__exact=self.object.id)
@@ -459,6 +468,14 @@ class BlueTeamTable(DetailView):
         gameLaners = GameLaner.objects.filter(game__exact=self.object.id, blueTeam__exact=True)
         stats = GameLanerStats.objects.filter(gameLaner__in=gameLaners)
 
+        config_object = ConfigParser()
+        config_object.read(os.path.join(os.path.dirname(__file__), 'conf', 'api.ini'))
+        apiKey = config_object['general']['RIOT_API_KEY']
+
+        lolWatcher = LolWatcher(apiKey)
+        region = 'na1'
+        versionNumber = lolWatcher.data_dragon.versions_for_region(region)['n']['champion']
+
         for statLine in stats:
             playerDict = {}
             playerDict["playerName"] = statLine.gameLaner.player.playerName
@@ -490,6 +507,9 @@ class BlueTeamTable(DetailView):
             playerDict['csRateSecondTen'] = (statLine.csRateSecondTen + statLine.csRateFirstTen)/2
             playerDict["draftOrder"] = statLine.gameLaner.getDraftString()
             playerDict['playerID'] = statLine.gameLaner.player.id
+            playerDict['championID'] = statLine.gameLaner.champion.id
+            playerDict['riotChampionName'] = statLine.gameLaner.champion.riotName
+            playerDict['championVersion'] = versionNumber
             data.append(playerDict)
 
         return JsonResponse(data={
@@ -505,6 +525,14 @@ class RedTeamTable(DetailView):
         gameLaners = GameLaner.objects.filter(game__exact=self.object.id, blueTeam__exact=False)
         stats = GameLanerStats.objects.filter(gameLaner__in=gameLaners)
 
+        config_object = ConfigParser()
+        config_object.read(os.path.join(os.path.dirname(__file__), 'conf', 'api.ini'))
+        apiKey = config_object['general']['RIOT_API_KEY']
+
+        lolWatcher = LolWatcher(apiKey)
+        region = 'na1'
+        versionNumber = lolWatcher.data_dragon.versions_for_region(region)['n']['champion']
+
         for statLine in stats:
             playerDict = {}
             playerDict["playerName"] = statLine.gameLaner.player.playerName
@@ -536,6 +564,9 @@ class RedTeamTable(DetailView):
             playerDict['csRateSecondTen'] = (statLine.csRateSecondTen + statLine.csRateFirstTen)/2
             playerDict["draftOrder"] = statLine.gameLaner.getDraftString()
             playerDict['playerID'] = statLine.gameLaner.player.id
+            playerDict['championID'] = statLine.gameLaner.champion.id
+            playerDict['riotChampionName'] = statLine.gameLaner.champion.riotName
+            playerDict['championVersion'] = versionNumber
             data.append(playerDict)
 
         return JsonResponse(data={
@@ -571,6 +602,15 @@ class ChampionDetailView(DetailView, BaseTenMansContextMixin):
         region = 'na1'
         context['naChampVersion'] = lolWatcher.data_dragon.versions_for_region(region)['n']['champion']
         context['mostPlayedLane'] = self.object.getMainLaneString()
+
+        context['overallWinrate'] = self.object.getWinrate(None)
+        context['blueSideWinrate'] = self.object.getSideWinrate("Blue")
+        context['redSideWinrate'] = self.object.getSideWinrate("Red")
+        context['pickRate'] = self.object.getPickRate()
+        context['banRate'] = self.object.getBanRate()
+        context['pickBanRate'] = round(context['pickRate'] + context['banRate'], 2)
+        context['overallAverageKDA'] = self.object.getAverageKDALaneString(None)
+
         return context
 
 class ChampionPlaytimeChartView(DetailView):
@@ -598,3 +638,91 @@ class ChampionPlaytimeChartView(DetailView):
             'bot': botData,
             'support': suppData
         })
+class ChampionPlayerCountTableView(DetailView):
+    model = Champion
+    def get(self, request, *args, **kwargs):
+        data = []
+        self.object = self.get_object()
+        queryset = Player.objects.all()
+        playersPlayed = self.object.getPlayersPlayed()
+
+        for player in queryset:
+            playerDict = {}
+            playerDict["name"] = player.playerName
+            if player.playerName not in playersPlayed:
+                continue
+            else:
+                playerDict["playCount"] = playersPlayed[player.playerName]
+                playerDict["winrate"] = player.getWinrateOnChampion(self.object)
+                playerDict["averageKDA"] = player.getAverageKDAChampionString(self.object)
+                playerDict['playerID'] = player.id
+            data.append(playerDict)
+
+        return JsonResponse(data={
+            'data': data
+        })
+
+class ChampionGamesTable(DetailView):
+    model = Champion
+
+    def get(self, request, *args, **kwargs):
+        data = []
+        self.object = self.get_object()
+        self.object: Champion
+        gamesPlayed = GameLaner.objects.filter(champion__exact=self.object.id)
+        stats = GameLanerStats.objects.filter(gameLaner__in=gamesPlayed)
+        for stat in stats:
+            stat: GameLanerStats
+            statDict = {}
+            statDict['gameNum'] = stat.gameLaner.game.gameNumber
+            if stat.gameLaner.blueTeam:
+                teamString = "Blue"
+                if stat.gameLaner.game.gameBlueWins:
+                    win = "W"
+                else:
+                    win = "L"
+            else:
+                teamString = "Red"
+                if not stat.gameLaner.game.gameBlueWins:
+                    win = "W"
+                else:
+                    win = "L"
+            statDict['team'] = teamString
+            statDict['player'] = stat.gameLaner.player.playerName
+            statDict['lane'] = stat.gameLaner.lane.laneName
+            statDict['winLoss'] = win
+            statDict['duration'] = stat.gameLaner.game.gameDuration
+            statDict['kills'] = stat.kills
+            statDict['deaths'] = stat.deaths
+            statDict['assists'] = stat.assists
+            statDict['largestKillingSpree'] = stat.largestKillingSpree
+            statDict['largestMultiKill'] = stat.largestMultiKill
+            statDict['doubleKills'] = stat.doubleKills
+            statDict['tripleKills'] = stat.tripleKills
+            statDict['quadraKills'] = stat.quadraKills
+            statDict['pentaKills'] = stat.pentaKills
+            statDict['totalDamageDealtToChampions'] = stat.totalDamageDealtToChampions
+            statDict['visionScore'] = stat.visionScore
+            statDict['crowdControlScore'] = stat.crowdControlScore
+            statDict['totalDamageTaken'] = stat.totalDamageTaken
+            statDict['goldEarned'] = stat.goldEarned
+            statDict['turretKills'] = stat.turretKills
+            statDict['inhibitorKills'] = stat.inhibitorKills
+            statDict['cs'] = stat.laneMinionsKilled + stat.neutralMinionsKilled
+            statDict['teamJungleMinionsKilled'] = stat.teamJungleMinionsKilled
+            statDict['enemyJungleMinionsKilled'] = stat.enemyJungleMinionsKilled
+            statDict['controlWardsPurchased'] = stat.controlWardsPurchased
+            statDict['firstBlood'] = stat.firstBlood
+            statDict['firstTower'] = stat.firstTower
+            statDict['csRateFirstTen'] = stat.csRateFirstTen
+            statDict['csRateSecondTen'] = (stat.csRateSecondTen + stat.csRateFirstTen)/2
+            statDict['gameID'] = stat.gameLaner.game.id
+            statDict['playerID'] = stat.gameLaner.player.id
+
+            data.append(statDict)
+
+        return JsonResponse(
+            data={
+                'data':data
+            }
+        )

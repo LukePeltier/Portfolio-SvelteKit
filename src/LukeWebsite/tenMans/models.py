@@ -328,6 +328,85 @@ class Champion(models.Model):
                 laneNames.append(lane)
         return "/".join(laneNames) + " ({} games)".format(currentMax)
 
+    def getPlayersPlayed(self):
+        gamesPlayed = GameLaner.objects.filter(champion__exact=self.id)
+        playerCounts = {}
+        for gameLane in gamesPlayed:
+            playerName = gameLane.player.playerName
+            if(playerName in playerCounts):
+                playerCounts[playerName]+=1
+            else:
+                playerCounts[playerName] = 1
+        return playerCounts
+
+    def getWinrate(self, lane):
+        if lane is None:
+            gamesPlayed = GameLaner.objects.filter(champion__exact=self.id)
+        else:
+            gamesPlayed = GameLaner.objects.filter(champion__exact=self.id, lane__exact=lane.id)
+
+        totalGameCount = gamesPlayed.count()
+        if totalGameCount==0:
+            return "N/A"
+        winningCount = 0
+        for gameLane in gamesPlayed.iterator():
+            gameLane: GameLaner
+            blueTeam = gameLane.blueTeam
+            blueWin = gameLane.game.gameBlueWins
+            if(blueTeam==blueWin):
+                winningCount+=1
+
+        return round((winningCount/totalGameCount)*100, 2)
+
+    def getSideWinrate(self, side):
+        blueTeamDetermine = side=="Blue"
+        gamesPlayed = GameLaner.objects.filter(champion__exact=self.id, blueTeam__exact=blueTeamDetermine)
+        totalGameCount = gamesPlayed.count()
+        if totalGameCount==0:
+            return "N/A"
+        winningCount = 0
+        for gameLane in gamesPlayed.iterator():
+            gameLane: GameLaner
+            blueTeam = gameLane.blueTeam
+            blueWin = gameLane.game.gameBlueWins
+            if(blueTeam==blueWin):
+                winningCount+=1
+
+        return round((winningCount/totalGameCount)*100, 2)
+
+    def getPickRate(self):
+        totalGameCount = Game.objects.filter(gameMemeStatus__exact=False, id__gte=3).count()
+        if totalGameCount==0:
+            return 0
+        champGameCount = GameLaner.objects.filter(champion__exact=self.id, game__gameMemeStatus__exact=False, game__id__gte=3).count()
+        return round((champGameCount/totalGameCount)*100, 2)
+
+    def getBanRate(self):
+        totalGameCount = Game.objects.filter(gameMemeStatus__exact=False, id__gte=3).count()
+        if totalGameCount==0:
+            return 0
+        banCount = GameBan.objects.filter(champion__exact=self.id, game__gameMemeStatus__exact=False, game__id__gte=3).count()
+        return round((banCount/totalGameCount)*100, 2)
+
+    def getAverageKDALaneString(self, lane):
+        if lane is None:
+            gamesPlayed = GameLaner.objects.filter(champion__exact=self.id)
+        else:
+            gamesPlayed = GameLaner.objects.filter(champion__exact=self.id, lane__exact=lane.id)
+        stats = GameLanerStats.objects.filter(gameLaner__in=gamesPlayed)
+        gameCount = gamesPlayed.count()
+        if(gameCount==0):
+            return None
+        kills = 0
+        deaths = 0
+        assists = 0
+        for stat in stats:
+            stat: GameLanerStats
+            kills+=stat.kills
+            deaths+=stat.deaths
+            assists+=stat.assists
+        return "{}/{}/{}".format(round(kills/gameCount, 2), round(deaths/gameCount, 2), round(assists/gameCount, 2))
+
     def __str__(self):
         return self.championName
 
