@@ -570,4 +570,31 @@ class ChampionDetailView(DetailView, BaseTenMansContextMixin):
         lolWatcher = LolWatcher(apiKey)
         region = 'na1'
         context['naChampVersion'] = lolWatcher.data_dragon.versions_for_region(region)['n']['champion']
+        context['mostPlayedLane'] = self.object.getMainLaneString()
         return context
+
+class ChampionPlaytimeChartView(DetailView):
+    model = Champion
+    def get(self, request, *args, **kwargs):
+        labels, overallData, topData, jungData, midData, botData, suppData = ([] for i in range(7))
+        self.object = self.get_object()
+        self.object: Champion
+
+        labels.append("Overall")
+        overallData.append(self.object.getLaneCount(None))
+        topData.append(self.object.getLaneCount(Lane.objects.get(laneName__exact="Top")))
+        jungData.append(self.object.getLaneCount(Lane.objects.get(laneName__exact="Jungle")))
+        midData.append(self.object.getLaneCount(Lane.objects.get(laneName__exact="Mid")))
+        botData.append(self.object.getLaneCount(Lane.objects.get(laneName__exact="Bot")))
+        suppData.append(self.object.getLaneCount(Lane.objects.get(laneName__exact="Support")))
+
+
+        return JsonResponse(data={
+            'labels': labels,
+            'overall': overallData,
+            'top': topData,
+            'jungle': jungData,
+            'mid': midData,
+            'bot': botData,
+            'support': suppData
+        })

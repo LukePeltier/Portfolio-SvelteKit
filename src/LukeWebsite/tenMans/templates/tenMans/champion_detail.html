@@ -6,11 +6,15 @@
         <div class="col">
             <h1><img src="http://ddragon.leagueoflegends.com/cdn/{{naChampVersion}}/img/champion/{{object.riotName}}.png" style="height:100px; width:100px; margin-top: 5px;"/>{{object.championName}}</h1>
         </div>
+        <div class="col">
+            <h2>Main Lane: {{mostPlayedLane}}</h2>
+        </div>
     </div>
     <div class="row">
-        <div class="col col-md-6">
-        <p>Insert chart here</p>
+        <div id="championPlaytimeChartContainer" class="col-6">
+            <canvas id="championPlaytimeChart" data-url="{% url 'championPlaytimeChart' object.pk %}"></canvas>
         </div>
     </div>
 </div>
+<script src="{%static 'js/championDetails.js'%}"></script>
 {%endblock%}

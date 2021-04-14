@@ -29,6 +29,7 @@ $(function () {
                             var value = context.dataset.data[index];
                             return getRGBHeatmapColor(value, window.chartColors.white, window.chartColors.green, window.chartColors.yellow, 1, false, 0, 50, data.max)
                         },
+                        borderColor: window.chartColors.green,
                         borderWidth: 1,
                         minBarLength: 5
                     }, {
@@ -40,6 +41,7 @@ $(function () {
                             var value = context.dataset.data[index];
                             return getRGBHeatmapColor(value, window.chartColors.white, window.chartColors.green, window.chartColors.yellow, 1, false, 0, 50, data.max)
                         },
+                        borderColor: window.chartColors.green,
                         borderWidth: 1,
                         minBarLength: 5
                     }, {
@@ -51,6 +53,7 @@ $(function () {
                             var value = context.dataset.data[index];
                             return getRGBHeatmapColor(value, window.chartColors.white, window.chartColors.green, window.chartColors.yellow, 1, false, 0, 50, data.max)
                         },
+                        borderColor: window.chartColors.green,
                         borderWidth: 1,
                         minBarLength: 5
                     }, {
@@ -62,6 +65,7 @@ $(function () {
                             var value = context.dataset.data[index];
                             return getRGBHeatmapColor(value, window.chartColors.white, window.chartColors.green, window.chartColors.yellow, 1, false, 0, 50, data.max)
                         },
+                        borderColor: window.chartColors.green,
                         borderWidth: 1,
                         minBarLength: 5
                     }, {
@@ -73,6 +77,7 @@ $(function () {
                             var value = context.dataset.data[index];
                             return getRGBHeatmapColor(value, window.chartColors.white, window.chartColors.green, window.chartColors.yellow, 1, false, 0, 50, data.max)
                         },
+                        borderColor: window.chartColors.green,
                         borderWidth: 1,
                         minBarLength: 5
                     }, {
@@ -84,6 +89,7 @@ $(function () {
                             var value = context.dataset.data[index];
                             return getRGBHeatmapColor(value, window.chartColors.white, window.chartColors.green, window.chartColors.yellow, 1, false, 0, 50, data.max)
                         },
+                        borderColor: window.chartColors.green,
                         borderWidth: 1,
                         minBarLength: 5
                     }]

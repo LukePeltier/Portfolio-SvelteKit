@@ -304,6 +304,30 @@ class Champion(models.Model):
     championName = models.TextField(unique=True)
     riotName = models.TextField(unique=True, null=True)
 
+    def getLaneCount(self, lane):
+        if(lane is None):
+            return GameLaner.objects.filter(champion__exact=self.id).count()
+        else:
+            return GameLaner.objects.filter(champion__exact=self.id, lane__exact=lane.id).count()
+
+    def getMainLaneString(self):
+        gamesPlayed = GameLaner.objects.filter(champion__exact=self.id)
+        laneCounts = {"Top": 0, "Jungle": 0, "Mid": 0, "Bot": 0, "Support": 0}
+        for gameLane in gamesPlayed:
+            laneCounts[gameLane.lane.laneName]+=1
+        laneNames = []
+        currentMax = 0
+        for lane,count in laneCounts.items():
+            if(count<currentMax):
+                continue
+            elif(count==currentMax):
+                laneNames.append(lane)
+            elif(count>currentMax):
+                currentMax = count
+                laneNames.clear()
+                laneNames.append(lane)
+        return "/".join(laneNames) + " ({} games)".format(currentMax)
+
     def __str__(self):
         return self.championName
 
