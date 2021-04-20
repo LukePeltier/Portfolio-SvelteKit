@@ -6,13 +6,13 @@ from django.http.response import JsonResponse
 from django.shortcuts import render
 from django.template import loader
 from django.views import View
-from django.views.generic.base import (ContextMixin, TemplateResponseMixin,
+from django.views.generic.base import (ContextMixin,
                                        TemplateView)
-from django.views.generic.detail import DetailView, SingleObjectMixin
+from django.views.generic.detail import DetailView
 from django.views.generic.edit import FormView
 from django.views.generic.list import ListView
 
-from tenMans.forms import NewGameForm, UpdateAllGamesForm, UpdateGameForm
+from tenMans.forms import CreatePlayer, NewGameForm, UpdateAllGamesForm, UpdateGameForm
 from tenMans.models import Champion, Game, GameLaner, GameLanerStats, Lane, Player
 import datetime
 import os
@@ -726,3 +726,20 @@ class ChampionGamesTable(DetailView):
                 'data':data
             }
         )
+
+class NewPlayerView(FormView, BaseTenMansContextMixin):
+    template_name = 'tenMans/new_player.html'
+    form_class = CreatePlayer
+    success_url = '/ten_mans/'
+
+    @transaction.atomic
+    def form_valid(self, form: CreatePlayer):
+        # This method is called when valid form data has been POSTed.
+        # It should return an HttpResponse.
+        try:
+            form.submit_player()
+        except Error:
+            return super().form_invalid(form)
+
+
+        return super().form_valid(form)

@@ -1,3 +1,4 @@
+from django import urls
 from django.urls import path
 
 from . import views
@@ -29,4 +30,5 @@ urlpatterns = [
     path('champion/<int:pk>/playtimeChart', views.ChampionPlaytimeChartView.as_view(), name='championPlaytimeChart'),
     path('champion/<int:pk>/playerChampCountTable', views.ChampionPlayerCountTableView.as_view(), name='playerChampCountTable'),
     path('champion/<int:pk>/gamesPlayedData/', views.ChampionGamesTable.as_view(), name='champGamesTable'),
+    path('newplayer/', views.NewPlayerView.as_view(), name='newPlayerFormView')
 ]

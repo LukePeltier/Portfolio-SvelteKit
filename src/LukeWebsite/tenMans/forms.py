@@ -24,17 +24,17 @@ class NewGameForm(forms.Form):
     gameDate = forms.DateTimeField(label="Date of Game", widget=DateTimePickerInput())
     remoteGameID = forms.IntegerField(label = "Riot Game ID", widget=forms.TextInput, required=False)
 
-    blueTopLaner = forms.CharField(label="Blue Top Laner")
-    blueJungLaner = forms.CharField(label="Blue Jungler")
-    blueMidLaner = forms.CharField(label="Blue Mid Laner")
-    blueBotLaner = forms.CharField(label="Blue Bot Laner")
-    blueSuppLaner = forms.CharField(label="Blue Support")
+    blueTopLaner = forms.ModelChoiceField(label="Blue Top Laner", queryset=Player.objects.all().order_by('playerName'))
+    blueJungLaner = forms.ModelChoiceField(label="Blue Jungler", queryset=Player.objects.all().order_by('playerName'))
+    blueMidLaner = forms.ModelChoiceField(label="Blue Mid Laner", queryset=Player.objects.all().order_by('playerName'))
+    blueBotLaner = forms.ModelChoiceField(label="Blue Bot Laner", queryset=Player.objects.all().order_by('playerName'))
+    blueSuppLaner = forms.ModelChoiceField(label="Blue Support", queryset=Player.objects.all().order_by('playerName'))
 
-    redTopLaner = forms.CharField(label="Red Top Laner")
-    redJungLaner = forms.CharField(label="Red Jungler")
-    redMidLaner = forms.CharField(label="Red Mid Laner")
-    redBotLaner = forms.CharField(label="Red Bot Laner")
-    redSuppLaner = forms.CharField(label="Red Support")
+    redTopLaner = forms.ModelChoiceField(label="Red Top Laner", queryset=Player.objects.all().order_by('playerName'))
+    redJungLaner = forms.ModelChoiceField(label="Red Jungler", queryset=Player.objects.all().order_by('playerName'))
+    redMidLaner = forms.ModelChoiceField(label="Red Mid Laner", queryset=Player.objects.all().order_by('playerName'))
+    redBotLaner = forms.ModelChoiceField(label="Red Bot Laner", queryset=Player.objects.all().order_by('playerName'))
+    redSuppLaner = forms.ModelChoiceField(label="Red Support", queryset=Player.objects.all().order_by('playerName'))
 
     bluePlayerPickTop = forms.CharField(label="Blue Top Player Pick Order", max_length=1, required=False)
     bluePlayerPickJung = forms.CharField(label="Blue Jungle Player Pick Order", max_length=1, required=False)
@@ -84,17 +84,17 @@ class NewGameForm(forms.Form):
     redBan4 = forms.ModelChoiceField(label="Red Ban 4", queryset=Champion.objects.all().order_by('championName'))
     redBan5 = forms.ModelChoiceField(label="Red Ban 5", queryset=Champion.objects.all().order_by('championName'))
 
-    blueTargetBan1 = forms.CharField(label="Blue Ban 1 Target Player", required=False)
-    blueTargetBan2 = forms.CharField(label="Blue Ban 2 Target Player", required=False)
-    blueTargetBan3 = forms.CharField(label="Blue Ban 3 Target Player", required=False)
-    blueTargetBan4 = forms.CharField(label="Blue Ban 4 Target Player", required=False)
-    blueTargetBan5 = forms.CharField(label="Blue Ban 5 Target Player", required=False)
+    blueTargetBan1 = forms.ModelChoiceField(label="Blue Ban 1 Target Player", required=False, queryset=Player.objects.all().order_by('playerName'))
+    blueTargetBan2 = forms.ModelChoiceField(label="Blue Ban 2 Target Player", required=False, queryset=Player.objects.all().order_by('playerName'))
+    blueTargetBan3 = forms.ModelChoiceField(label="Blue Ban 3 Target Player", required=False, queryset=Player.objects.all().order_by('playerName'))
+    blueTargetBan4 = forms.ModelChoiceField(label="Blue Ban 4 Target Player", required=False, queryset=Player.objects.all().order_by('playerName'))
+    blueTargetBan5 = forms.ModelChoiceField(label="Blue Ban 5 Target Player", required=False, queryset=Player.objects.all().order_by('playerName'))
 
-    redTargetBan1 = forms.CharField(label="Red Ban 1 Target Player", required=False)
-    redTargetBan2 = forms.CharField(label="Red Ban 2 Target Player", required=False)
-    redTargetBan3 = forms.CharField(label="Red Ban 3 Target Player", required=False)
-    redTargetBan4 = forms.CharField(label="Red Ban 4 Target Player", required=False)
-    redTargetBan5 = forms.CharField(label="Red Ban 5 Target Player", required=False)
+    redTargetBan1 = forms.ModelChoiceField(label="Red Ban 1 Target Player", required=False, queryset=Player.objects.all().order_by('playerName'))
+    redTargetBan2 = forms.ModelChoiceField(label="Red Ban 2 Target Player", required=False, queryset=Player.objects.all().order_by('playerName'))
+    redTargetBan3 = forms.ModelChoiceField(label="Red Ban 3 Target Player", required=False, queryset=Player.objects.all().order_by('playerName'))
+    redTargetBan4 = forms.ModelChoiceField(label="Red Ban 4 Target Player", required=False, queryset=Player.objects.all().order_by('playerName'))
+    redTargetBan5 = forms.ModelChoiceField(label="Red Ban 5 Target Player", required=False, queryset=Player.objects.all().order_by('playerName'))
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -327,18 +327,7 @@ class NewGameForm(forms.Form):
 
         playersInGame = []
 
-        for laneName, playerName in playerNameLaneDict.items():
-            cleanName = playerName.strip()
-            cleanName = cleanName.replace('.', '')
-            foundPlayer = Player.objects.filter(playerName__exact=cleanName).exists()
-            player = None
-            if not foundPlayer:
-                #Make new player
-                player = Player(playerName=cleanName)
-                player.save()
-            else:
-                player = Player.objects.filter(playerName__exact=cleanName).get()
-
+        for laneName, player in playerNameLaneDict.items():
             playersInGame.append(player)
 
             gameLanerBlueTeam = laneName.startswith('Blue')
@@ -880,3 +869,54 @@ class UpdateAllGamesForm(forms.Form):
         if user is None:
             raise ValidationError("Incorrect Password")
         return data
+
+class CreatePlayer(forms.Form):
+    password = forms.CharField(widget = forms.PasswordInput())
+
+    playerName = forms.CharField(label="Unique Player Name")
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_id = 'id-newPlayerForm'
+        self.helper.form_method = 'post'
+        self.helper.form_action = ''
+
+        self.helper.layout = Layout(
+            Fieldset(
+                'Password',
+                Row(
+                    Column('password', css_class='col-2')
+                )
+            ),
+            Fieldset(
+                'Player',
+                Row(
+                    Column('playerName', css_class='col-2')
+                ),
+            ),
+            ButtonHolder(
+                Submit('submit', 'Submit')
+            )
+        )
+
+    def create_player(self):
+        #Make new player
+        player = Player(playerName=self.cleaned_data['playerName'])
+        player.save()
+
+    def clean_password(self):
+        data = self.cleaned_data['password']
+        user = authenticate(username='gameSubmitter', password=data)
+        if user is None:
+            raise ValidationError("Incorrect Password")
+        return data
+
+    def clean_playerName(self):
+        data = self.cleaned_data['playerName']
+        cleanName = data.strip()
+        cleanName = cleanName.replace('.', '')
+        foundPlayer = Player.objects.filter(playerName__exact=cleanName).exists()
+        if foundPlayer:
+            raise ValidationError('Player with same name already exists: {}'.format(Player.objects.filter(playerName__exact=cleanName).get().playerName))
+        return cleanName

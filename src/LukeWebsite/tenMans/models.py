@@ -35,6 +35,9 @@ class Player(models.Model):
             #Overall winrate
             gamesPlayed = GameLaner.objects.filter(player__exact=self.id)
             totalGameCount = gamesPlayed.count()
+            totalGameCount = gamesPlayed.count()
+            if totalGameCount==0:
+                return "N/A"
             winningCount = 0
             for gameLane in gamesPlayed.iterator():
                 gameLane: GameLaner
@@ -81,6 +84,8 @@ class Player(models.Model):
             #Overall winrate
             gamesPlayed = GameLaner.objects.filter(player__exact=self.id, game__gameNumber__lte=maxGame.gameNumber)
             totalGameCount = gamesPlayed.count()
+            if totalGameCount==0:
+                return None
             winningCount = 0
             for gameLane in gamesPlayed.iterator():
                 gameLane: GameLaner
@@ -201,6 +206,9 @@ class Player(models.Model):
     def getAveragePulledBans(self):
         bansTargeted = GameBan.objects.filter(targetPlayer__exact=self.id).count()
         gamesWithBans = GameBan.objects.values('game').distinct()
+        totalGameCount = gamesWithBans.count()
+        if totalGameCount==0:
+            return "N/A"
         playerGamesWithBansCount = 0
         for gameBanDict in gamesWithBans:
             gameObject = Game.objects.get(id__exact=gameBanDict['game'])
@@ -299,6 +307,9 @@ class Player(models.Model):
     def getUniqueChampionCount(self):
         champCounts = self.championsPlayed()
         return len(champCounts)
+
+    def __str__(self):
+        return self.playerName
 
 class Champion(models.Model):
     championName = models.TextField(unique=True)
