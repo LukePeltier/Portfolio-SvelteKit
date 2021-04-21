@@ -1,10 +1,6 @@
-from django.contrib.auth import authenticate
 from django.db import transaction
-from django.db.utils import Error, IntegrityError
-from django.http import HttpResponse
+from django.db.utils import Error
 from django.http.response import JsonResponse
-from django.shortcuts import render
-from django.template import loader
 from django.views import View
 from django.views.generic.base import (ContextMixin,
                                        TemplateView)
@@ -19,13 +15,17 @@ import os
 from configparser import ConfigParser
 from riotwatcher import LolWatcher
 
+
 class BaseTenMansContextMixin(ContextMixin):
-    def get_context_data(self,*args, **kwargs):
-        context = super(BaseTenMansContextMixin, self).get_context_data(*args,**kwargs)
+    def get_context_data(self, *args, **kwargs):
+        context = super(BaseTenMansContextMixin, self).get_context_data(*args, **kwargs)
         context['player_list'] = Player.objects.all().order_by('playerName')
         return context
+
+
 class Dashboard(TemplateView, BaseTenMansContextMixin):
     template_name = "tenMans/index.html"
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['gameTotal'] = Game.objects.all().count()
@@ -54,7 +54,6 @@ def overallWinrateBarChart(request):
         botAlpha.append(player.getLaneRate(Lane.objects.get(laneName__exact="Bot")))
         suppAlpha.append(player.getLaneRate(Lane.objects.get(laneName__exact="Support")))
 
-
     return JsonResponse(data={
         'labels': labels,
         'overall': overallData,
@@ -70,6 +69,8 @@ def overallWinrateBarChart(request):
         'botAlpha': botAlpha,
         'supportAlpha': suppAlpha
     })
+
+
 def overallPlaytimeBarChart(request):
     labels, overallData, topData, jungData, midData, botData, suppData = ([] for i in range(7))
     queryset = Player.objects.order_by('playerName')
@@ -84,7 +85,6 @@ def overallPlaytimeBarChart(request):
         botData.append(player.getLaneCount(Lane.objects.get(laneName__exact="Bot")))
         suppData.append(player.getLaneCount(Lane.objects.get(laneName__exact="Support")))
 
-
     return JsonResponse(data={
         'labels': labels,
         'overall': overallData,
@@ -95,6 +95,7 @@ def overallPlaytimeBarChart(request):
         'support': suppData,
         'max': Game.getTotalGames()
     })
+
 
 def overallWinrateTable(request):
     data = []
@@ -122,6 +123,7 @@ def overallWinrateTable(request):
         'data': data
     })
 
+
 def overallPlaytimeTable(request):
     data = []
     queryset = Player.objects.order_by('playerName')
@@ -142,6 +144,7 @@ def overallPlaytimeTable(request):
         'data': data
     })
 
+
 class PlayerDetailView(DetailView, BaseTenMansContextMixin):
     model = Player
     object: Player
@@ -160,9 +163,11 @@ class PlayerDetailView(DetailView, BaseTenMansContextMixin):
         context['uniqueChampionsPlayed'] = self.object.getUniqueChampionCount()
         return context
 
+
 class PlayerWinrateOverTimeView(DetailView):
     model = Player
     object: Player
+
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
         labels, overallData, topData, jungData, midData, botData, suppData = ([] for i in range(7))
@@ -176,18 +181,20 @@ class PlayerWinrateOverTimeView(DetailView):
             botData.append(self.object.getWinrateHistorical(game, Lane.objects.get(laneName__exact="Bot")))
             suppData.append(self.object.getWinrateHistorical(game, Lane.objects.get(laneName__exact="Support")))
         return JsonResponse(data={
-        'labels': labels,
-        'overall': overallData,
-        'top': topData,
-        'jungle': jungData,
-        'mid': midData,
-        'bot': botData,
-        'support': suppData
-    })
+            'labels': labels,
+            'overall': overallData,
+            'top': topData,
+            'jungle': jungData,
+            'mid': midData,
+            'bot': botData,
+            'support': suppData
+        })
+
 
 class PlayerLaneCountTable(DetailView):
     model = Player
     object: Player
+
     def get(self, request, *args, **kwargs):
         data = []
         self.object = self.get_object()
@@ -203,9 +210,11 @@ class PlayerLaneCountTable(DetailView):
             'data': data
         })
 
+
 class PlayerChampionCountTable(DetailView):
     model = Player
     object: Player
+
     def get(self, request, *args, **kwargs):
         data = []
         self.object = self.get_object()
@@ -235,6 +244,7 @@ class PlayerChampionCountTable(DetailView):
         return JsonResponse(data={
             'data': data
         })
+
 
 class PlayerGamesTable(DetailView):
     model = Player
@@ -296,7 +306,7 @@ class PlayerGamesTable(DetailView):
             statDict['firstBlood'] = stat.firstBlood
             statDict['firstTower'] = stat.firstTower
             statDict['csRateFirstTen'] = stat.csRateFirstTen
-            statDict['csRateSecondTen'] = (stat.csRateSecondTen + stat.csRateFirstTen)/2
+            statDict['csRateSecondTen'] = (stat.csRateSecondTen + stat.csRateFirstTen) / 2
             statDict['gameID'] = stat.gameLaner.game.id
             statDict['championID'] = stat.gameLaner.champion.id
             statDict['riotChampionName'] = stat.gameLaner.champion.riotName
@@ -306,9 +316,11 @@ class PlayerGamesTable(DetailView):
 
         return JsonResponse(
             data={
-                'data':data
+                'data': data
             }
         )
+
+
 class PlayerDraftStats(TemplateView, BaseTenMansContextMixin):
     template_name = 'tenMans/playerDraftStats.html'
 
@@ -332,6 +344,7 @@ class AverageDraftOrderTable(View):
             'data': data
         })
 
+
 class ExpectedDraftOrderWinrateTable(View):
 
     def get(self, request, *args, **kwargs):
@@ -350,6 +363,8 @@ class ExpectedDraftOrderWinrateTable(View):
         return JsonResponse(data={
             'data': data
         })
+
+
 class ExpectedDraftOrderWinrateLaneTable(View):
 
     def get(self, request, *args, **kwargs):
@@ -372,6 +387,7 @@ class ExpectedDraftOrderWinrateLaneTable(View):
             'data': data
         })
 
+
 class NewGameView(FormView, BaseTenMansContextMixin):
     template_name = 'tenMans/new_game.html'
     form_class = NewGameForm
@@ -386,8 +402,8 @@ class NewGameView(FormView, BaseTenMansContextMixin):
         except Error:
             return super().form_invalid(form)
 
-
         return super().form_valid(form)
+
 
 class UpdateGameView(FormView, BaseTenMansContextMixin):
     template_name = 'tenMans/updateGame.html'
@@ -404,7 +420,6 @@ class UpdateGameView(FormView, BaseTenMansContextMixin):
             return super().form_invalid(form)
 
         return super().form_valid(form)
-
 
 
 class UpdateAllGamesView(FormView, BaseTenMansContextMixin):
@@ -431,6 +446,7 @@ class GameListView(ListView, BaseTenMansContextMixin):
         context = super().get_context_data(**kwargs)
         return context
 
+
 class GameDetailView(DetailView, BaseTenMansContextMixin):
     model = Game
     object: Game
@@ -448,7 +464,7 @@ class GameDetailView(DetailView, BaseTenMansContextMixin):
         context['redTeamWinString'] = redTeamWinString
 
         if(self.get_object().gameMemeStatus):
-            #get list of players involved
+            # get list of players involved
             players = GameLaner.objects.filter(game__exact=self.object.id)
             playerNames = []
             reasons = []
@@ -459,8 +475,10 @@ class GameDetailView(DetailView, BaseTenMansContextMixin):
             context['reasons'] = ','.join(reasons)
         return context
 
+
 class BlueTeamTable(DetailView):
-    model= Game
+    model = Game
+
     def get(self, request, *args, **kwargs):
         data = []
         self.object = self.get_object()
@@ -504,7 +522,7 @@ class BlueTeamTable(DetailView):
             playerDict['firstBlood'] = statLine.firstBlood
             playerDict['firstTower'] = statLine.firstTower
             playerDict['csRateFirstTen'] = statLine.csRateFirstTen
-            playerDict['csRateSecondTen'] = (statLine.csRateSecondTen + statLine.csRateFirstTen)/2
+            playerDict['csRateSecondTen'] = (statLine.csRateSecondTen + statLine.csRateFirstTen) / 2
             playerDict["draftOrder"] = statLine.gameLaner.getDraftString()
             playerDict['playerID'] = statLine.gameLaner.player.id
             playerDict['championID'] = statLine.gameLaner.champion.id
@@ -516,8 +534,10 @@ class BlueTeamTable(DetailView):
             'data': data
         })
 
+
 class RedTeamTable(DetailView):
-    model= Game
+    model = Game
+
     def get(self, request, *args, **kwargs):
         data = []
         self.object = self.get_object()
@@ -561,7 +581,7 @@ class RedTeamTable(DetailView):
             playerDict['firstBlood'] = statLine.firstBlood
             playerDict['firstTower'] = statLine.firstTower
             playerDict['csRateFirstTen'] = statLine.csRateFirstTen
-            playerDict['csRateSecondTen'] = (statLine.csRateSecondTen + statLine.csRateFirstTen)/2
+            playerDict['csRateSecondTen'] = (statLine.csRateSecondTen + statLine.csRateFirstTen) / 2
             playerDict["draftOrder"] = statLine.gameLaner.getDraftString()
             playerDict['playerID'] = statLine.gameLaner.player.id
             playerDict['championID'] = statLine.gameLaner.champion.id
@@ -572,6 +592,7 @@ class RedTeamTable(DetailView):
         return JsonResponse(data={
             'data': data
         })
+
 
 class ChampionListView(ListView, BaseTenMansContextMixin):
     model = Champion
@@ -587,6 +608,7 @@ class ChampionListView(ListView, BaseTenMansContextMixin):
         context['naChampVersion'] = lolWatcher.data_dragon.versions_for_region(region)['n']['champion']
 
         return context
+
 
 class ChampionDetailView(DetailView, BaseTenMansContextMixin):
     model = Champion
@@ -613,8 +635,10 @@ class ChampionDetailView(DetailView, BaseTenMansContextMixin):
 
         return context
 
+
 class ChampionPlaytimeChartView(DetailView):
     model = Champion
+
     def get(self, request, *args, **kwargs):
         labels, overallData, topData, jungData, midData, botData, suppData = ([] for i in range(7))
         self.object = self.get_object()
@@ -628,7 +652,6 @@ class ChampionPlaytimeChartView(DetailView):
         botData.append(self.object.getLaneCount(Lane.objects.get(laneName__exact="Bot")))
         suppData.append(self.object.getLaneCount(Lane.objects.get(laneName__exact="Support")))
 
-
         return JsonResponse(data={
             'labels': labels,
             'overall': overallData,
@@ -638,8 +661,11 @@ class ChampionPlaytimeChartView(DetailView):
             'bot': botData,
             'support': suppData
         })
+
+
 class ChampionPlayerCountTableView(DetailView):
     model = Champion
+
     def get(self, request, *args, **kwargs):
         data = []
         self.object = self.get_object()
@@ -661,6 +687,7 @@ class ChampionPlayerCountTableView(DetailView):
         return JsonResponse(data={
             'data': data
         })
+
 
 class ChampionGamesTable(DetailView):
     model = Champion
@@ -715,7 +742,7 @@ class ChampionGamesTable(DetailView):
             statDict['firstBlood'] = stat.firstBlood
             statDict['firstTower'] = stat.firstTower
             statDict['csRateFirstTen'] = stat.csRateFirstTen
-            statDict['csRateSecondTen'] = (stat.csRateSecondTen + stat.csRateFirstTen)/2
+            statDict['csRateSecondTen'] = (stat.csRateSecondTen + stat.csRateFirstTen) / 2
             statDict['gameID'] = stat.gameLaner.game.id
             statDict['playerID'] = stat.gameLaner.player.id
 
@@ -723,9 +750,10 @@ class ChampionGamesTable(DetailView):
 
         return JsonResponse(
             data={
-                'data':data
+                'data': data
             }
         )
+
 
 class NewPlayerView(FormView, BaseTenMansContextMixin):
     template_name = 'tenMans/new_player.html'
@@ -740,6 +768,5 @@ class NewPlayerView(FormView, BaseTenMansContextMixin):
             form.submit_player()
         except Error:
             return super().form_invalid(form)
-
 
         return super().form_valid(form)

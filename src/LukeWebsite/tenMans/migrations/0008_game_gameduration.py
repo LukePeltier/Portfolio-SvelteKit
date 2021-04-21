@@ -2,6 +2,8 @@
 
 from django.db import migrations, models
 from datetime import timedelta
+
+
 class Migration(migrations.Migration):
 
     dependencies = [
