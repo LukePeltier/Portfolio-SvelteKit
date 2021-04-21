@@ -41,7 +41,7 @@ class Player(models.Model):
                 gameLane: GameLaner
                 blueTeam = gameLane.blueTeam
                 blueWin = gameLane.game.gameBlueWins
-                if(blueTeam == blueWin):
+                if blueTeam == blueWin:
                     winningCount += 1
 
             return round((winningCount / totalGameCount) * 100, 2)
@@ -57,7 +57,7 @@ class Player(models.Model):
                 gameLane: GameLaner
                 blueTeam = gameLane.blueTeam
                 blueWin = gameLane.game.gameBlueWins
-                if(blueTeam == blueWin):
+                if blueTeam == blueWin:
                     winningCount += 1
 
             return round((winningCount / totalGameCount) * 100, 2)
@@ -92,10 +92,8 @@ class Player(models.Model):
                 gameLane: GameLaner
                 blueTeam = gameLane.blueTeam
                 blueWin = gameLane.game.gameBlueWins
-                if(blueTeam == blueWin):
+                if blueTeam == blueWin:
                     winningCount += 1
-            if(totalGameCount == 0):
-                return None
             return round((winningCount / totalGameCount) * 100, 2)
         else:
             # Lane winrate
@@ -111,7 +109,7 @@ class Player(models.Model):
                 gameLane: GameLaner
                 blueTeam = gameLane.blueTeam
                 blueWin = gameLane.game.gameBlueWins
-                if(blueTeam == blueWin):
+                if blueTeam == blueWin:
                     winningCount += 1
             return round((winningCount / totalGameCount) * 100, 2)
 
@@ -126,6 +124,8 @@ class Player(models.Model):
                 totalDraftDivisor -= 1
                 continue
             totalDraftSum += gameLane.draftOrder
+        if totalDraftDivisor == 0:
+            return None
         return round(totalDraftSum / totalDraftDivisor, 2)
 
     def getMinConfidenceWinrate(self, lane):
@@ -180,7 +180,7 @@ class Player(models.Model):
             gameLane: GameLaner
             blueTeam = gameLane.blueTeam
             blueWin = gameLane.game.gameBlueWins
-            if(blueTeam == blueWin):
+            if blueTeam == blueWin:
                 winningCount += 1
 
         return round((winningCount / totalGameCount) * 100, 2)
@@ -260,7 +260,7 @@ class Player(models.Model):
             gameLane: GameLaner
             blueTeam = gameLane.blueTeam
             blueWin = gameLane.game.gameBlueWins
-            if(blueTeam == blueWin):
+            if blueTeam == blueWin:
                 winningCount += 1
 
         return round((winningCount / totalGameCount) * 100, 2)
@@ -382,7 +382,7 @@ class Champion(models.Model):
             gameLane: GameLaner
             blueTeam = gameLane.blueTeam
             blueWin = gameLane.game.gameBlueWins
-            if(blueTeam == blueWin):
+            if blueTeam == blueWin:
                 winningCount += 1
 
         return round((winningCount / totalGameCount) * 100, 2)
@@ -399,7 +399,7 @@ class Champion(models.Model):
             gameLane: GameLaner
             blueTeam = gameLane.blueTeam
             blueWin = gameLane.game.gameBlueWins
-            if(blueTeam == blueWin):
+            if blueTeam == blueWin:
                 winningCount += 1
 
         return round((winningCount / totalGameCount) * 100, 2)
@@ -480,7 +480,7 @@ class GameLaner(models.Model):
                 return "C"
 
     class Meta:
-        unique_together = (('game', 'lane', 'blueTeam'))
+        unique_together = (('game', 'lane', 'blueTeam'), ('player', 'game'))
 
 
 class GameLanerStats(models.Model):
