@@ -20,3 +20,11 @@ table.dataTable.table-striped.DTFC_Cloned tbody tr:nth-of-type(even) {
   border: 1px solid #dee2e6;
   word-wrap: break-word;
 }
+
+.yellowRow{
+  background-color:rgb(255, 205, 86, 0.2) !important;
+}
+
+.rightBorder{
+  border-right: solid 2px !important;
+}

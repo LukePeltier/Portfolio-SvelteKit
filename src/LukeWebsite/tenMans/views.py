@@ -1,19 +1,21 @@
+import datetime
+import os
+from configparser import ConfigParser
+
 from django.db import transaction
 from django.db.utils import Error
 from django.http.response import JsonResponse
 from django.views import View
-from django.views.generic.base import (ContextMixin,
-                                       TemplateView)
+from django.views.generic.base import ContextMixin, TemplateView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import FormView
 from django.views.generic.list import ListView
-
-from tenMans.forms import CreatePlayer, NewGameForm, UpdateAllGamesForm, UpdateGameForm
-from tenMans.models import Champion, Game, GameLaner, GameLanerStats, Lane, Player
-import datetime
-import os
-from configparser import ConfigParser
 from riotwatcher import LolWatcher
+
+from tenMans.forms import (CreatePlayer, LaneMatchup, NewGameForm, UpdateAllGamesForm,
+                           UpdateGameForm)
+from tenMans.models import (Champion, Game, GameLaner, GameLanerStats, Lane,
+                            Player)
 
 
 class BaseTenMansContextMixin(ContextMixin):
@@ -770,3 +772,137 @@ class NewPlayerView(FormView, BaseTenMansContextMixin):
             return super().form_invalid(form)
 
         return super().form_valid(form)
+
+
+class LaneMatchupView(FormView, BaseTenMansContextMixin):
+    template_name = 'tenMans/lane_matchup.html'
+    form_class = LaneMatchup
+
+    def get(self, request, *args, **kwargs):
+        self.player1 = None
+        self.player2 = None
+        self.show_results = False
+        form = LaneMatchup(self.request.GET or None)
+        if form.is_valid():
+            self.show_results = True
+            self.player1 = form.cleaned_data['player1']
+            self.player2 = form.cleaned_data['player2']
+
+        return self.render_to_response(self.get_context_data(form=form))
+
+    def get_context_data(self, **kwargs):
+        context = super(LaneMatchupView, self).get_context_data(**kwargs)
+        context.update({
+            'show_results': self.show_results,
+            'player1': self.player1,
+            'player2': self.player2
+        })
+        return context
+
+
+class LaneMatchupChartView(View):
+
+    def get(self, request, pk1, pk2, *args, **kwargs):
+        player1 = Player.objects.get(pk=pk1)
+        player1: Player
+        player2 = Player.objects.get(pk=pk2)
+        player2: Player
+        labels, player1Data, player2Data = ([] for i in range(3))
+
+        labels.append("Overall")
+        labels.append("Top")
+        labels.append("Jungle")
+        labels.append("Mid")
+        labels.append("Bot/Support")
+
+        player1Data.append(player1.getMatchupWinrate(player2, None))
+        player1Data.append(player1.getMatchupWinrate(player2, [Lane.objects.get(laneName__exact="Top")]))
+        player1Data.append(player1.getMatchupWinrate(player2, [Lane.objects.get(laneName__exact="Jungle")]))
+        player1Data.append(player1.getMatchupWinrate(player2, [Lane.objects.get(laneName__exact="Mid")]))
+        player1Data.append(player1.getMatchupWinrate(player2, [Lane.objects.get(laneName__exact="Bot"), Lane.objects.get(laneName__exact="Support")]))
+
+        player2Data.append(player2.getMatchupWinrate(player1, None))
+        player2Data.append(player2.getMatchupWinrate(player1, [Lane.objects.get(laneName__exact="Top")]))
+        player2Data.append(player2.getMatchupWinrate(player1, [Lane.objects.get(laneName__exact="Jungle")]))
+        player2Data.append(player2.getMatchupWinrate(player1, [Lane.objects.get(laneName__exact="Mid")]))
+        player2Data.append(player2.getMatchupWinrate(player1, [Lane.objects.get(laneName__exact="Bot"), Lane.objects.get(laneName__exact="Support")]))
+
+        return JsonResponse(data={
+            'labels': labels,
+            'player1Name': player1.playerName,
+            'player2Name': player2.playerName,
+            'player1Data': player1Data,
+            'player2Data': player2Data
+        })
+
+
+class MatchupGamesTable(View):
+
+    def get(self, request, pk1, pk2, *args, **kwargs):
+        data = []
+        player1 = Player.objects.get(pk=pk1)
+        player1: Player
+        player2 = Player.objects.get(pk=pk2)
+        player2: Player
+        gamesPlayedLeft = player1.getGameLanerMatchupList(player2, None)
+        gamesPlayedRight = player2.getGameLanerMatchupList(player1, None)
+        statsLeft = GameLanerStats.objects.filter(gameLaner__in=gamesPlayedLeft)
+        statsRight = GameLanerStats.objects.filter(gameLaner__in=gamesPlayedRight)
+        config_object = ConfigParser()
+        config_object.read(os.path.join(os.path.dirname(__file__), 'conf', 'api.ini'))
+        apiKey = config_object['general']['RIOT_API_KEY']
+
+        lolWatcher = LolWatcher(apiKey)
+        region = 'na1'
+        versionNumber = lolWatcher.data_dragon.versions_for_region(region)['n']['champion']
+        for i in range(len(statsLeft)):
+            statLeft = statsLeft[i]
+            statRight = statsRight[i]
+            statLeft: GameLanerStats
+            statRight: GameLanerStats
+            statDict = {}
+            statDict['gameNum'] = statLeft.gameLaner.game.gameNumber
+            if statLeft.gameLaner.blueTeam:
+                if statLeft.gameLaner.game.gameBlueWins:
+                    leftwin = "W"
+                    rightwin = "L"
+                else:
+                    leftwin = "L"
+                    rightwin = "W"
+            else:
+                if not statLeft.gameLaner.game.gameBlueWins:
+                    leftwin = "W"
+                    rightwin = "L"
+                else:
+                    leftwin = "L"
+                    rightwin = "W"
+
+            statDict['leftchampion'] = statLeft.gameLaner.champion.championName
+            statDict['leftcs'] = statLeft.laneMinionsKilled + statLeft.neutralMinionsKilled
+            statDict['leftkda'] = "{}/{}/{}".format(statLeft.kills, statLeft.deaths, statLeft.assists)
+            statDict['leftlane'] = statLeft.gameLaner.lane.laneName
+            statDict['leftwinLoss'] = leftwin
+
+            statDict['rightchampion'] = statRight.gameLaner.champion.championName
+            statDict['rightcs'] = statRight.laneMinionsKilled + statRight.neutralMinionsKilled
+            statDict['rightkda'] = "{}/{}/{}".format(statRight.kills, statRight.deaths, statRight.assists)
+            statDict['rightlane'] = statRight.gameLaner.lane.laneName
+            statDict['rightwinLoss'] = rightwin
+
+            statDict['gameID'] = statLeft.gameLaner.game.id
+            statDict['leftchampionID'] = statLeft.gameLaner.champion.id
+            statDict['leftriotChampionName'] = statLeft.gameLaner.champion.riotName
+            statDict['rightchampionID'] = statRight.gameLaner.champion.id
+            statDict['rightriotChampionName'] = statRight.gameLaner.champion.riotName
+            statDict['championVersion'] = versionNumber
+            statDict['highlightRow'] = False
+            if statLeft.gameLaner.lane == statRight.gameLaner.lane or (statLeft.gameLaner.lane.laneName == "Support" and statRight.gameLaner.lane.laneName == "Bot") or statLeft.gameLaner.lane.laneName == "Bot" and statRight.gameLaner.lane.laneName == "Support":
+                statDict['highlightRow'] = True
+
+            data.append(statDict)
+
+        return JsonResponse(
+            data={
+                'data': data
+            }
+        )

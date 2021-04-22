@@ -12,7 +12,7 @@ $(function () {
                     "data": "champion",
                     "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
                         if(oData.riotChampionName!=undefined){
-                            $(nTd).html("<a href='/ten_mans/champion/" + oData.championID+"'> <img src='http://ddragon.leagueoflegends.com/cdn/" + oData.championVersion +"/img/champion/"+oData.riotChampionName+".png' style='width:20px; height:20px;'/>"+sData+"</a>");
+                            $(nTd).html("<a href='/ten_mans/champion/" + oData.championID+"'> <img src='http://ddragon.leagueoflegends.com/cdn/" + oData.championVersion +"/img/champion/"+oData.riotChampionName+".png' style='width:20px; height:20px;'/> "+sData+"</a>");
                         }
                     }
                 },
@@ -160,7 +160,7 @@ $(function () {
                     "data": "champion",
                     "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
                         if(oData.riotChampionName!=undefined){
-                            $(nTd).html("<a href='/ten_mans/champion/" + oData.championID+"'> <img src='http://ddragon.leagueoflegends.com/cdn/" + oData.championVersion +"/img/champion/"+oData.riotChampionName+".png' style='width:20px; height:20px;'/>"+sData+"</a>");
+                            $(nTd).html("<a href='/ten_mans/champion/" + oData.championID+"'> <img src='http://ddragon.leagueoflegends.com/cdn/" + oData.championVersion +"/img/champion/"+oData.riotChampionName+".png' style='width:20px; height:20px;'/> "+sData+"</a>");
                         }
                     }
                 },

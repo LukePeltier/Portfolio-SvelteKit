@@ -1,0 +1,48 @@
+{% extends "tenMans/base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+{%block header%}
+{{form.media}}
+{%endblock%}
+{%block content%}
+<div class="container-fluid">
+    {% crispy form %}
+    {% if player1 and player2 %}
+    <div class="row">
+        <div id="laneMatchupChartContainer" class="col-6">
+            <canvas id="laneMatchupChart" data-url="{% url 'laneMatchupChart' player1.id player2.id %}"></canvas>
+        </div>
+    </div>
+    <div class="row justify-content-center" style="padding: 20px;">
+        <div id="matchupGamesTableContainer" class="col-9" style="padding: 0px;">
+            <table id="matchupGamesTable" class="table table-sm table-bordered"
+                data-url="{% url 'matchupGamesTable' player1.id player2.id %}">
+                <thead>
+                    <tr>
+                        <th>Game</th>
+                        <th>{{player1.playerName}} Champion</th>
+                        <th>{{player1.playerName}} CS</th>
+                        <th>{{player1.playerName}} KDA</th>
+                        <th>{{player1.playerName}} Lane</th>
+                        <th>{{player1.playerName}} W/L?</th>
+                        <th>{{player2.playerName}} W/L?</th>
+                        <th>{{player2.playerName}} Lane</th>
+                        <th>{{player2.playerName}} KDA</th>
+                        <th>{{player2.playerName}} CS</th>
+                        <th>{{player2.playerName}} Champion</th>
+                        <th>gameID</th>
+                        <th>leftchampionID</th>
+                        <th>leftriotChampionName</th>
+                        <th>rightchampionID</th>
+                        <th>rightriotChampionName</th>
+                        <th>championVersion</th>
+                        <th>highlightRow</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+    {%endif%}
+</div>
+<script src="{%static 'js/lane_matchup.js'%}"></script>
+{%endblock%}

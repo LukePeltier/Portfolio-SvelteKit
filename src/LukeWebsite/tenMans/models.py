@@ -32,35 +32,22 @@ class Player(models.Model):
         if(lane is None):
             # Overall winrate
             gamesPlayed = GameLaner.objects.filter(player__exact=self.id)
-            totalGameCount = gamesPlayed.count()
-            totalGameCount = gamesPlayed.count()
-            if totalGameCount == 0:
-                return "N/A"
-            winningCount = 0
-            for gameLane in gamesPlayed.iterator():
-                gameLane: GameLaner
-                blueTeam = gameLane.blueTeam
-                blueWin = gameLane.game.gameBlueWins
-                if blueTeam == blueWin:
-                    winningCount += 1
-
-            return round((winningCount / totalGameCount) * 100, 2)
         else:
             # Lane winrate
             gamesPlayed = GameLaner.objects.filter(
                 player__exact=self.id, lane__exact=lane.id)
-            totalGameCount = gamesPlayed.count()
-            if totalGameCount == 0:
-                return "N/A"
-            winningCount = 0
-            for gameLane in gamesPlayed.iterator():
-                gameLane: GameLaner
-                blueTeam = gameLane.blueTeam
-                blueWin = gameLane.game.gameBlueWins
-                if blueTeam == blueWin:
-                    winningCount += 1
+        totalGameCount = gamesPlayed.count()
+        if totalGameCount == 0:
+            return "N/A"
+        winningCount = 0
+        for gameLane in gamesPlayed.iterator():
+            gameLane: GameLaner
+            blueTeam = gameLane.blueTeam
+            blueWin = gameLane.game.gameBlueWins
+            if blueTeam == blueWin:
+                winningCount += 1
 
-            return round((winningCount / totalGameCount) * 100, 2)
+        return round((winningCount / totalGameCount) * 100, 2)
 
     def getLaneRate(self, lane):
         players = Player.objects.all()
@@ -322,6 +309,44 @@ class Player(models.Model):
     def getUniqueChampionCount(self):
         champCounts = self.championsPlayed()
         return len(champCounts)
+
+    def getMatchupWinrate(self, player, lanes):
+        trueMatchups = self.getGameLanerMatchupList(player, lanes)
+
+        totalGameCount = len(trueMatchups)
+        if totalGameCount == 0:
+            return None
+        winningCount = 0
+        for gameLane in trueMatchups:
+            gameLane: GameLaner
+            blueTeam = gameLane.blueTeam
+            blueWin = gameLane.game.gameBlueWins
+            if blueTeam == blueWin:
+                winningCount += 1
+
+        return round((winningCount / totalGameCount) * 100, 2)
+
+    def getGameLanerMatchupList(self, player, lanes):
+        trueMatchups = []
+        if(lanes is None):
+            # Overall winrate
+            gamesPlayed = GameLaner.objects.filter(player__exact=self.id)
+            # find games opponent was also in
+            for gameLane in gamesPlayed:
+                opponentGame = GameLaner.objects.filter(player__exact=player.id, game__exact=gameLane.game.id, blueTeam__exact=(not gameLane.blueTeam))
+                if opponentGame.exists():
+                    trueMatchups.append(gameLane)
+
+        else:
+            # Lane winrate
+            gamesPlayed = GameLaner.objects.filter(
+                player__exact=self.id, lane__in=[lane.id for lane in lanes])
+            # find games opponent was also in
+            for gameLane in gamesPlayed:
+                opponentGame = GameLaner.objects.filter(player__exact=player.id, game__exact=gameLane.game.id, blueTeam__exact=(not gameLane.blueTeam), lane__in=[lane.id for lane in lanes])
+                if opponentGame.exists():
+                    trueMatchups.append(gameLane)
+        return trueMatchups
 
     def __str__(self):
         return self.playerName
