@@ -84,7 +84,7 @@ $(function () {
                     "data": "leftchampion",
                     "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
                         if (oData.leftriotChampionName != undefined) {
-                            $(nTd).html("<a href='/ten_mans/champion/" + oData.leftchampionID + "'>" + sData + " <img src='http://ddragon.leagueoflegends.com/cdn/" + oData.championVersion + "/img/champion/" + oData.leftriotChampionName + ".png' style='width:20px; height:20px;'/> " + "</a>");
+                            $(nTd).html("<a href='/ten_mans/champion/" + oData.leftchampionID + "'>" + sData + " <img src='https://ddragon.leagueoflegends.com/cdn/" + oData.championVersion + "/img/champion/" + oData.leftriotChampionName + ".png' style='width:20px; height:20px;'/> " + "</a>");
                         }
 
 
@@ -126,7 +126,7 @@ $(function () {
                     "data": "rightchampion",
                     "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
                         if (oData.rightriotChampionName != undefined) {
-                            $(nTd).html("<a href='/ten_mans/champion/" + oData.rightchampionID + "'> <img src='http://ddragon.leagueoflegends.com/cdn/" + oData.championVersion + "/img/champion/" + oData.rightriotChampionName + ".png' style='width:20px; height:20px;'/> " + sData + "</a>");
+                            $(nTd).html("<a href='/ten_mans/champion/" + oData.rightchampionID + "'> <img src='https://ddragon.leagueoflegends.com/cdn/" + oData.championVersion + "/img/champion/" + oData.rightriotChampionName + ".png' style='width:20px; height:20px;'/> " + sData + "</a>");
                         }
 
 

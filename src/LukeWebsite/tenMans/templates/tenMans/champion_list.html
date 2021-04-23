@@ -8,7 +8,7 @@
         {% if champion.riotName is None %}
         {% else %}
         <div class="col-1 championListItem">
-            <a href="{% url 'detailChampion' champion.pk%}"> <img src="http://ddragon.leagueoflegends.com/cdn/{{naChampVersion}}/img/champion/{{champion.riotName}}.png" style="width:25px; height:25px;"/>
+            <a href="{% url 'detailChampion' champion.pk%}"> <img src="https://ddragon.leagueoflegends.com/cdn/{{naChampVersion}}/img/champion/{{champion.riotName}}.png" style="width:25px; height:25px;"/>
                 {{ champion.championName }}</a>
         </div>
         {%endif%}
