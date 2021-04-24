@@ -896,12 +896,14 @@ class DuoView(FormView, BaseTenMansContextMixin):
     def get(self, request, *args, **kwargs):
         self.player1 = None
         self.player2 = None
+        self.duoWinrate = None
         self.show_results = False
         form = DuoForm(self.request.GET or None)
         if form.is_valid():
             self.show_results = True
             self.player1 = form.cleaned_data['player1']
             self.player2 = form.cleaned_data['player2']
+            self.duoWinrate = self.player1.getDuoWinrate(self.player2)
 
         return self.render_to_response(self.get_context_data(form=form))
 
@@ -911,7 +913,7 @@ class DuoView(FormView, BaseTenMansContextMixin):
             'show_results': self.show_results,
             'player1': self.player1,
             'player2': self.player2,
-            'duoWinrate': self.player1.getDuoWinrate(self.player2)
+            'duoWinrate': self.duoWinrate
         })
         return context
 
