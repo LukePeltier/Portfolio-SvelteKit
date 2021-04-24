@@ -10,7 +10,7 @@ from django.views.generic.edit import FormView
 from django.views.generic.list import ListView
 from django_cassiopeia import cassiopeia as cass
 
-from tenMans.forms import (CreatePlayer, LaneMatchup, NewGameForm, UpdateAllGamesForm,
+from tenMans.forms import (CreatePlayer, DuoForm, LaneMatchup, NewGameForm, UpdateAllGamesForm,
                            UpdateGameForm)
 from tenMans.models import (Champion, Game, GameLaner, GameLanerStats, Lane,
                             Player)
@@ -844,6 +844,119 @@ class MatchupGamesTable(View):
             statDict['rightkda'] = "{}/{}/{}".format(statRight.kills, statRight.deaths, statRight.assists)
             statDict['rightlane'] = statRight.gameLaner.lane.laneName
             statDict['rightwinLoss'] = rightwin
+
+            statDict['gameID'] = statLeft.gameLaner.game.id
+            statDict['leftchampionID'] = statLeft.gameLaner.champion.id
+            statDict['leftriotChampionName'] = statLeft.gameLaner.champion.riotName
+            statDict['rightchampionID'] = statRight.gameLaner.champion.id
+            statDict['rightriotChampionName'] = statRight.gameLaner.champion.riotName
+            statDict['championVersion'] = versionNumber
+            statDict['highlightRow'] = False
+            if statLeft.gameLaner.lane == statRight.gameLaner.lane or (statLeft.gameLaner.lane.laneName == "Support" and statRight.gameLaner.lane.laneName == "Bot") or statLeft.gameLaner.lane.laneName == "Bot" and statRight.gameLaner.lane.laneName == "Support":
+                statDict['highlightRow'] = True
+
+            data.append(statDict)
+
+        return JsonResponse(
+            data={
+                'data': data
+            }
+        )
+
+
+class MatchupCountTable(View):
+
+    def get(self, request, pk1, pk2, *args, **kwargs):
+        data = []
+        player1 = Player.objects.get(pk=pk1)
+        player1: Player
+        player2 = Player.objects.get(pk=pk2)
+        player2: Player
+        laneNames = [["Top"], ["Jungle"], ["Mid"], ["Bot", "Support"]]
+        laneDict = {}
+        laneDict["lane"] = "Overall"
+        laneDict["playCount"] = len(player1.getGameLanerMatchupList(player2, None))
+        data.append(laneDict)
+
+        for lane in laneNames:
+            laneDict = {}
+            laneDict["lane"] = '/'.join(lane)
+            laneDict["playCount"] = len(player1.getGameLanerMatchupList(player2, [Lane.objects.get(laneName__exact=x) for x in lane]))
+            data.append(laneDict)
+
+        return JsonResponse(data={
+            'data': data
+        })
+
+
+class DuoView(FormView, BaseTenMansContextMixin):
+    template_name = 'tenMans/duos.html'
+    form_class = DuoForm
+
+    def get(self, request, *args, **kwargs):
+        self.player1 = None
+        self.player2 = None
+        self.show_results = False
+        form = DuoForm(self.request.GET or None)
+        if form.is_valid():
+            self.show_results = True
+            self.player1 = form.cleaned_data['player1']
+            self.player2 = form.cleaned_data['player2']
+
+        return self.render_to_response(self.get_context_data(form=form))
+
+    def get_context_data(self, **kwargs):
+        context = super(DuoView, self).get_context_data(**kwargs)
+        context.update({
+            'show_results': self.show_results,
+            'player1': self.player1,
+            'player2': self.player2,
+            'duoWinrate': self.player1.getDuoWinrate(self.player2)
+        })
+        return context
+
+
+class DuoGamesTable(View):
+
+    def get(self, request, pk1, pk2, *args, **kwargs):
+        data = []
+        player1 = Player.objects.get(pk=pk1)
+        player1: Player
+        player2 = Player.objects.get(pk=pk2)
+        player2: Player
+        gamesPlayedLeft = player1.getGameLanerDuoList(player2)
+        gamesPlayedRight = player2.getGameLanerDuoList(player1)
+        statsLeft = GameLanerStats.objects.filter(gameLaner__in=gamesPlayedLeft)
+        statsRight = GameLanerStats.objects.filter(gameLaner__in=gamesPlayedRight)
+        versionNumber = cass.get_version()
+        for i in range(len(statsLeft)):
+            statLeft = statsLeft[i]
+            statRight = statsRight[i]
+            statLeft: GameLanerStats
+            statRight: GameLanerStats
+            statDict = {}
+            statDict['gameNum'] = statLeft.gameLaner.game.gameNumber
+            if statLeft.gameLaner.blueTeam:
+                if statLeft.gameLaner.game.gameBlueWins:
+                    leftwin = "W"
+                else:
+                    leftwin = "L"
+            else:
+                if not statLeft.gameLaner.game.gameBlueWins:
+                    leftwin = "W"
+                else:
+                    leftwin = "L"
+
+            statDict['leftchampion'] = statLeft.gameLaner.champion.championName
+            statDict['leftcs'] = statLeft.laneMinionsKilled + statLeft.neutralMinionsKilled
+            statDict['leftkda'] = "{}/{}/{}".format(statLeft.kills, statLeft.deaths, statLeft.assists)
+            statDict['leftlane'] = statLeft.gameLaner.lane.laneName
+            statDict['leftwinLoss'] = leftwin
+
+            statDict['rightchampion'] = statRight.gameLaner.champion.championName
+            statDict['rightcs'] = statRight.laneMinionsKilled + statRight.neutralMinionsKilled
+            statDict['rightkda'] = "{}/{}/{}".format(statRight.kills, statRight.deaths, statRight.assists)
+            statDict['rightlane'] = statRight.gameLaner.lane.laneName
 
             statDict['gameID'] = statLeft.gameLaner.game.id
             statDict['leftchampionID'] = statLeft.gameLaner.champion.id

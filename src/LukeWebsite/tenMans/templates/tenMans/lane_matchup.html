@@ -6,17 +6,44 @@
 {%endblock%}
 {%block content%}
 <div class="container-fluid">
-    {% crispy form %}
-    {% if player1 and player2 %}
     <div class="row">
-        <div id="laneMatchupChartContainer" class="col-6">
-            <canvas id="laneMatchupChart" data-url="{% url 'laneMatchupChart' player1.id player2.id %}"></canvas>
+        {% crispy form %}
+    </div>
+    {% if player1 and player2 %}
+    <div class="row justify-content-center" style='padding-bottom: 35px;'>
+        <div class="col-4 text-right display-4">
+            <a href='/ten_mans/player/{{player1.id}}'>{{player1.playerName}}</a>
+        </div>
+        <div class="col-4 text-center display-4">
+        VS
+        </div>
+        <div class="col-4 text-left display-4">
+            <a href='/ten_mans/player/{{player2.id}}'>{{player2.playerName}}</a>
         </div>
     </div>
-    <div class="row justify-content-center" style="padding: 20px;">
+    <div class="row">
+        <div id="laneMatchupChartContainer" class="col-6">
+            <canvas id="laneMatchupChart" data-url="{% url 'laneMatchupChart' player1.id player2.id %}">
+            </canvas>
+        </div>
+        <div class="col col-md-6">
+            <div id="matchupCountTableContainer">
+                <table id="matchupCountTable" class="table table-hover table-bordered table-sm" style="width:100%;"
+                    data-url="{% url 'matchupCountTable' player1.id player2.id %}">
+                    <thead>
+                        <tr>
+                            <th>Lane</th>
+                            <th>Occurences</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="row justify-content-center" style='padding-bottom: 35px;'>
         <div id="matchupGamesTableContainer" class="col-9" style="padding: 0px;">
             <table id="matchupGamesTable" class="table table-sm table-bordered"
-                data-url="{% url 'matchupGamesTable' player1.id player2.id %}">
+                data-url="{% url 'matchupGamesTable' player1.id player2.id %}" style="margin: 0 auto; width: 100%; height: 100%;">
                 <thead>
                     <tr>
                         <th>Game</th>
@@ -42,6 +69,7 @@
             </table>
         </div>
     </div>
+    {%else%}
     {%endif%}
 </div>
 <script src="{%static 'js/lane_matchup.js'%}"></script>

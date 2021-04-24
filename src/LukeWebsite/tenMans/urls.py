@@ -31,5 +31,8 @@ urlpatterns = [
     path('newplayer/', views.NewPlayerView.as_view(), name='newPlayerFormView'),
     path('laneMatchup/', views.LaneMatchupView.as_view(), name='laneMatchupFormView'),
     path('laneMatchupChart/<int:pk1>/<int:pk2>/', views.LaneMatchupChartView.as_view(), name='laneMatchupChart'),
-    path('laneMatchupGamesTable/<int:pk1>/<int:pk2>/', views.MatchupGamesTable.as_view(), name='matchupGamesTable')
+    path('laneMatchupGamesTable/<int:pk1>/<int:pk2>/', views.MatchupGamesTable.as_view(), name='matchupGamesTable'),
+    path('laneMatchupCountTable/<int:pk1>/<int:pk2>/', views.MatchupCountTable.as_view(), name='matchupCountTable'),
+    path('duos/', views.DuoView.as_view(), name='duoView'),
+    path('duoGamesTable/<int:pk1>/<int:pk2>/', views.DuoGamesTable.as_view(), name='duoGamesTable'),
 ]

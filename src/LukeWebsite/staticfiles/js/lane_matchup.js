@@ -185,6 +185,22 @@ $(function () {
                     $(row).addClass('yellowRow');
                 }
             }
-        })
+        });
+        var matchupCountTable = $('#matchupCountTable').DataTable({
+            "ajax": $('#matchupCountTable').data('url'),
+            "columns": [{
+                    "data": "lane"
+                },
+                {
+                    "data": "playCount"
+                }
+            ],
+            paging: false,
+            searching: false,
+            info: false,
+            "order": [
+                [1, "desc"]
+            ]
+        });
     });
 });

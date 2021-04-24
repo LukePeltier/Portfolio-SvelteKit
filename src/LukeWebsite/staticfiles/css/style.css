@@ -28,3 +28,10 @@ table.dataTable.table-striped.DTFC_Cloned tbody tr:nth-of-type(even) {
 .rightBorder{
   border-right: solid 2px !important;
 }
+.leftBorder{
+  border-left: solid 2px !important;
+}
+
+#id-laneMatchupForm{
+  width: 15%;
+}

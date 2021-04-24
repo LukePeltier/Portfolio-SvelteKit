@@ -349,6 +349,33 @@ class Player(models.Model):
                     trueMatchups.append(gameLane)
         return trueMatchups
 
+    def getGameLanerDuoList(self, player):
+        trueDuos = []
+        # Overall winrate
+        gamesPlayed = GameLaner.objects.filter(player__exact=self.id)
+        # find games opponent was also in
+        for gameLane in gamesPlayed:
+            opponentGame = GameLaner.objects.filter(player__exact=player.id, game__exact=gameLane.game.id, blueTeam__exact=gameLane.blueTeam)
+            if opponentGame.exists():
+                trueDuos.append(gameLane)
+        return trueDuos
+
+    def getDuoWinrate(self, player):
+        trueDuos = self.getGameLanerDuoList(player)
+
+        totalGameCount = len(trueDuos)
+        if totalGameCount == 0:
+            return None
+        winningCount = 0
+        for gameLane in trueDuos:
+            gameLane: GameLaner
+            blueTeam = gameLane.blueTeam
+            blueWin = gameLane.game.gameBlueWins
+            if blueTeam == blueWin:
+                winningCount += 1
+
+        return round((winningCount / totalGameCount) * 100, 2)
+
     def __str__(self):
         return self.playerName
 
