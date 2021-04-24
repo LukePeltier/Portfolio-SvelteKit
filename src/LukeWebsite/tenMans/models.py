@@ -1,6 +1,7 @@
 from django.db import models
 from scipy import stats
 import numpy as np
+from django_cassiopeia import cassiopeia as cass
 
 # Create your models here.
 
@@ -545,11 +546,10 @@ class GameLanerStats(models.Model):
     csRateFirstTen = models.FloatField()
     csRateSecondTen = models.FloatField()
 
-    def provideStats(self, localGame, championList, match):
-        for participant in match['participants']:
+    def provideStats(localGame, champMap, match: cass.Match):
+        for participant in match.participants:
             # find champ
-            championDataName = championList['keys'][str(participant['championId'])]
-            championTrueName = championList['data'][championDataName]['name']
+            championTrueName = champMap[participant.champion.id]
             championObject = Champion.objects.filter(championName__exact=championTrueName).get()
             gameLaner = GameLaner.objects.filter(champion__exact=championObject, game__exact=localGame).get()
             # check for existing statsObject
@@ -557,59 +557,64 @@ class GameLanerStats(models.Model):
             if statsObject is not None:
                 statsObject: GameLanerStats
                 statsObject.gameLaner = gameLaner
-                statsObject.kills = participant['stats']['kills']
-                statsObject.deaths = participant['stats']['deaths']
-                statsObject.assists = participant['stats']['assists']
-                statsObject.largestKillingSpree = participant['stats']['largestKillingSpree']
-                statsObject.largestMultiKill = participant['stats']['largestMultiKill']
-                statsObject.doubleKills = participant['stats']['doubleKills']
-                statsObject.tripleKills = participant['stats']['tripleKills']
-                statsObject.quadraKills = participant['stats']['quadraKills']
-                statsObject.pentaKills = participant['stats']['pentaKills']
-                statsObject.totalDamageDealtToChampions = participant['stats']['totalDamageDealtToChampions']
-                statsObject.visionScore = participant['stats']['visionScore']
-                statsObject.crowdControlScore = participant['stats']['timeCCingOthers']
-                statsObject.totalDamageTaken = participant['stats']['totalDamageTaken']
-                statsObject.goldEarned = participant['stats']['goldEarned']
-                statsObject.turretKills = participant['stats']['turretKills']
-                statsObject.inhibitorKills = participant['stats']['inhibitorKills']
-                statsObject.laneMinionsKilled = participant['stats']['totalMinionsKilled']
-                statsObject.neutralMinionsKilled = participant['stats']['neutralMinionsKilled']
-                statsObject.teamJungleMinionsKilled = participant['stats']['neutralMinionsKilledTeamJungle']
-                statsObject.enemyJungleMinionsKilled = participant['stats']['neutralMinionsKilledEnemyJungle']
-                statsObject.controlWardsPurchased = participant['stats']['visionWardsBoughtInGame']
-                statsObject.firstBlood = participant['stats']['firstBloodKill']
-                statsObject.firstTower = participant['stats']['firstTowerKill']
-                statsObject.csRateFirstTen = participant['timeline']['creepsPerMinDeltas']['0-10']
-                statsObject.csRateSecondTen = participant['timeline']['creepsPerMinDeltas']['10-20']
+                participant: cass.core.match.Participant
+                stats = participant.stats
+                stats: cass.core.match.ParticipantStats
+                timeline = participant.timeline
+                timeline: cass.core.match.ParticipantTimeline
+                statsObject.kills = stats.kills
+                statsObject.deaths = stats.deaths
+                statsObject.assists = stats.assists
+                statsObject.largestKillingSpree = stats.largest_killing_spree
+                statsObject.largestMultiKill = stats.largest_multi_kill
+                statsObject.doubleKills = stats.double_kills
+                statsObject.tripleKills = stats.triple_kills
+                statsObject.quadraKills = stats.quadra_kills
+                statsObject.pentaKills = stats.penta_kills
+                statsObject.totalDamageDealtToChampions = stats.total_damage_dealt_to_champions
+                statsObject.visionScore = stats.vision_score
+                statsObject.crowdControlScore = stats.time_CCing_others
+                statsObject.totalDamageTaken = stats.total_damage_taken
+                statsObject.goldEarned = stats.gold_earned
+                statsObject.turretKills = stats.turret_kills
+                statsObject.inhibitorKills = stats.inhibitor_kills
+                statsObject.laneMinionsKilled = stats.total_minions_killed
+                statsObject.neutralMinionsKilled = stats.neutral_minions_killed
+                statsObject.teamJungleMinionsKilled = stats.neutral_minions_killed_team_jungle
+                statsObject.enemyJungleMinionsKilled = stats.neutral_minions_killed_enemy_jungle
+                statsObject.controlWardsPurchased = stats.vision_wards_bought_in_game
+                statsObject.firstBlood = stats.first_blood_kill
+                statsObject.firstTower = stats.first_tower_kill
+                statsObject.csRateFirstTen = timeline.creeps_per_min_deltas['0-10']
+                statsObject.csRateSecondTen = timeline.creeps_per_min_deltas['10-20']
             else:
                 statsObject = GameLanerStats(
                     gameLaner=gameLaner,
-                    kills=participant['stats']['kills'],
-                    deaths=participant['stats']['deaths'],
-                    assists=participant['stats']['assists'],
-                    largestKillingSpree=participant['stats']['largestKillingSpree'],
-                    largestMultiKill=participant['stats']['largestMultiKill'],
-                    doubleKills=participant['stats']['doubleKills'],
-                    tripleKills=participant['stats']['tripleKills'],
-                    quadraKills=participant['stats']['quadraKills'],
-                    pentaKills=participant['stats']['pentaKills'],
-                    totalDamageDealtToChampions=participant['stats']['totalDamageDealtToChampions'],
-                    visionScore=participant['stats']['visionScore'],
-                    crowdControlScore=participant['stats']['timeCCingOthers'],
-                    totalDamageTaken=participant['stats']['totalDamageTaken'],
-                    goldEarned=participant['stats']['goldEarned'],
-                    turretKills=participant['stats']['turretKills'],
-                    inhibitorKills=participant['stats']['inhibitorKills'],
-                    laneMinionsKilled=participant['stats']['totalMinionsKilled'],
-                    neutralMinionsKilled=participant['stats']['neutralMinionsKilled'],
-                    teamJungleMinionsKilled=participant['stats']['neutralMinionsKilledTeamJungle'],
-                    enemyJungleMinionsKilled=participant['stats']['neutralMinionsKilledEnemyJungle'],
-                    controlWardsPurchased=participant['stats']['visionWardsBoughtInGame'],
-                    firstBlood=participant['stats']['firstBloodKill'],
-                    firstTower=participant['stats']['firstTowerKill'],
-                    csRateFirstTen=participant['timeline']['creepsPerMinDeltas']['0-10'],
-                    csRateSecondTen=participant['timeline']['creepsPerMinDeltas']['10-20'])
+                    kills=stats.kills,
+                    deaths=stats.deaths,
+                    assists=stats.assists,
+                    largestKillingSpree=stats.largestKillingSpree,
+                    largestMultiKill=stats.largestMultiKill,
+                    doubleKills=stats.doubleKills,
+                    tripleKills=stats.tripleKills,
+                    quadraKills=stats.quadraKills,
+                    pentaKills=stats.pentaKills,
+                    totalDamageDealtToChampions=stats.totalDamageDealtToChampions,
+                    visionScore=stats.visionScore,
+                    crowdControlScore=stats.timeCCingOthers,
+                    totalDamageTaken=stats.totalDamageTaken,
+                    goldEarned=stats.goldEarned,
+                    turretKills=stats.turretKills,
+                    inhibitorKills=stats.inhibitorKills,
+                    laneMinionsKilled=stats.totalMinionsKilled,
+                    neutralMinionsKilled=stats.neutralMinionsKilled,
+                    teamJungleMinionsKilled=stats.neutralMinionsKilledTeamJungle,
+                    enemyJungleMinionsKilled=stats.neutralMinionsKilledEnemyJungle,
+                    controlWardsPurchased=stats.visionWardsBoughtInGame,
+                    firstBlood=stats.firstBloodKill,
+                    firstTower=stats.firstTowerKill,
+                    csRateFirstTen=timeline.creeps_per_min_deltas['0-10'],
+                    csRateSecondTen=timeline.creeps_per_min_deltas['10-20'])
             statsObject.save()
 
 

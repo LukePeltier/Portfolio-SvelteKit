@@ -1,6 +1,4 @@
 import datetime
-import os
-from configparser import ConfigParser
 
 from django.db import transaction
 from django.db.utils import Error
@@ -10,7 +8,7 @@ from django.views.generic.base import ContextMixin, TemplateView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import FormView
 from django.views.generic.list import ListView
-from riotwatcher import LolWatcher
+from django_cassiopeia import cassiopeia as cass
 
 from tenMans.forms import (CreatePlayer, LaneMatchup, NewGameForm, UpdateAllGamesForm,
                            UpdateGameForm)
@@ -222,13 +220,7 @@ class PlayerChampionCountTable(DetailView):
         self.object = self.get_object()
         queryset = Champion.objects.all()
         champsPlayed = self.object.championsPlayed()
-        config_object = ConfigParser()
-        config_object.read(os.path.join(os.path.dirname(__file__), 'conf', 'api.ini'))
-        apiKey = config_object['general']['RIOT_API_KEY']
 
-        lolWatcher = LolWatcher(apiKey)
-        region = 'na1'
-        versionNumber = lolWatcher.data_dragon.versions_for_region(region)['n']['champion']
         for champ in queryset:
             champDict = {}
             champDict["name"] = champ.championName
@@ -240,7 +232,7 @@ class PlayerChampionCountTable(DetailView):
                 champDict["averageKDA"] = self.object.getAverageKDAChampionString(champ)
                 champDict['championID'] = champ.id
                 champDict['riotChampionName'] = champ.riotName
-                champDict['championVersion'] = versionNumber
+                champDict['championVersion'] = cass.get_version()
             data.append(champDict)
 
         return JsonResponse(data={
@@ -257,13 +249,7 @@ class PlayerGamesTable(DetailView):
         self.object: Player
         gamesPlayed = GameLaner.objects.filter(player__exact=self.object.id)
         stats = GameLanerStats.objects.filter(gameLaner__in=gamesPlayed)
-        config_object = ConfigParser()
-        config_object.read(os.path.join(os.path.dirname(__file__), 'conf', 'api.ini'))
-        apiKey = config_object['general']['RIOT_API_KEY']
-
-        lolWatcher = LolWatcher(apiKey)
-        region = 'na1'
-        versionNumber = lolWatcher.data_dragon.versions_for_region(region)['n']['champion']
+        versionNumber = cass.get_version()
         for stat in stats:
             stat: GameLanerStats
             statDict = {}
@@ -488,13 +474,7 @@ class BlueTeamTable(DetailView):
         gameLaners = GameLaner.objects.filter(game__exact=self.object.id, blueTeam__exact=True)
         stats = GameLanerStats.objects.filter(gameLaner__in=gameLaners)
 
-        config_object = ConfigParser()
-        config_object.read(os.path.join(os.path.dirname(__file__), 'conf', 'api.ini'))
-        apiKey = config_object['general']['RIOT_API_KEY']
-
-        lolWatcher = LolWatcher(apiKey)
-        region = 'na1'
-        versionNumber = lolWatcher.data_dragon.versions_for_region(region)['n']['champion']
+        versionNumber = cass.get_version()
 
         for statLine in stats:
             playerDict = {}
@@ -547,13 +527,7 @@ class RedTeamTable(DetailView):
         gameLaners = GameLaner.objects.filter(game__exact=self.object.id, blueTeam__exact=False)
         stats = GameLanerStats.objects.filter(gameLaner__in=gameLaners)
 
-        config_object = ConfigParser()
-        config_object.read(os.path.join(os.path.dirname(__file__), 'conf', 'api.ini'))
-        apiKey = config_object['general']['RIOT_API_KEY']
-
-        lolWatcher = LolWatcher(apiKey)
-        region = 'na1'
-        versionNumber = lolWatcher.data_dragon.versions_for_region(region)['n']['champion']
+        versionNumber = cass.get_version()
 
         for statLine in stats:
             playerDict = {}
@@ -601,13 +575,7 @@ class ChampionListView(ListView, BaseTenMansContextMixin):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        config_object = ConfigParser()
-        config_object.read(os.path.join(os.path.dirname(__file__), 'conf', 'api.ini'))
-        apiKey = config_object['general']['RIOT_API_KEY']
-
-        lolWatcher = LolWatcher(apiKey)
-        region = 'na1'
-        context['naChampVersion'] = lolWatcher.data_dragon.versions_for_region(region)['n']['champion']
+        context['naChampVersion'] = cass.get_version()
 
         return context
 
@@ -618,13 +586,7 @@ class ChampionDetailView(DetailView, BaseTenMansContextMixin):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        config_object = ConfigParser()
-        config_object.read(os.path.join(os.path.dirname(__file__), 'conf', 'api.ini'))
-        apiKey = config_object['general']['RIOT_API_KEY']
-
-        lolWatcher = LolWatcher(apiKey)
-        region = 'na1'
-        context['naChampVersion'] = lolWatcher.data_dragon.versions_for_region(region)['n']['champion']
+        context['naChampVersion'] = cass.get_version()
         context['mostPlayedLane'] = self.object.getMainLaneString()
 
         context['overallWinrate'] = self.object.getWinrate(None)
@@ -848,13 +810,7 @@ class MatchupGamesTable(View):
         gamesPlayedRight = player2.getGameLanerMatchupList(player1, None)
         statsLeft = GameLanerStats.objects.filter(gameLaner__in=gamesPlayedLeft)
         statsRight = GameLanerStats.objects.filter(gameLaner__in=gamesPlayedRight)
-        config_object = ConfigParser()
-        config_object.read(os.path.join(os.path.dirname(__file__), 'conf', 'api.ini'))
-        apiKey = config_object['general']['RIOT_API_KEY']
-
-        lolWatcher = LolWatcher(apiKey)
-        region = 'na1'
-        versionNumber = lolWatcher.data_dragon.versions_for_region(region)['n']['champion']
+        versionNumber = cass.get_version()
         for i in range(len(statsLeft)):
             statLeft = statsLeft[i]
             statRight = statsRight[i]

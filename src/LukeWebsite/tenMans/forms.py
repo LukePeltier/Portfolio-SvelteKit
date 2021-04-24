@@ -1,15 +1,12 @@
-import os
-from configparser import ConfigParser
-
 from bootstrap_datepicker_plus import DateTimePickerInput
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import (ButtonHolder, Column, Fieldset,
-                                 Layout, Row, Submit)
+from crispy_forms.layout import (ButtonHolder, Column, Fieldset, Layout, Row,
+                                 Submit)
 from django import forms
 from django.contrib.auth import authenticate
 from django.core.exceptions import ValidationError
 from django.db.models import Max
-from riotwatcher import ApiError, LolWatcher
+from django_cassiopeia import cassiopeia as cass
 
 from tenMans.models import (Champion, Game, GameBan, GameLaner, GameLanerStats,
                             Lane, Player)
@@ -383,23 +380,14 @@ class NewGameForm(forms.Form):
 
         remoteGameID = self.cleaned_data['remoteGameID']
         if remoteGameID is not None:
-            config_object = ConfigParser()
-            config_object.read(os.path.join(os.path.dirname(__file__), 'conf', 'api.ini'))
-            apiKey = config_object['general']['RIOT_API_KEY']
+            champMap = {champion.id: champion.name for champion in cass.get_champions()}
+            match = cass.get_match(remoteGameID)
+            if match is None:
+                raise ValidationError("Match not found")
+            if match.queue != cass.Queue.custom:
+                raise ValidationError("Match not a custom game")
 
-            lolWatcher = LolWatcher(apiKey)
-            region = 'na1'
-            naChampVersion = lolWatcher.data_dragon.versions_for_region(region)['n']['champion']
-            championList = lolWatcher.data_dragon.champions(naChampVersion, True)
-            try:
-                match = lolWatcher.match.by_id(region, remoteGameID)
-            except ApiError as err:
-                if err.response.status_code == 404:
-                    raise ValidationError("Match not found")
-                else:
-                    raise
-
-            GameLanerStats.provideStats(game, championList, match)
+            GameLanerStats.provideStats(game, champMap, match)
 
     def clean(self):
         cleaned_data = super().clean()
@@ -520,20 +508,10 @@ class NewGameForm(forms.Form):
     def clean_remoteGameID(self):
         data = self.cleaned_data['remoteGameID']
 
-        config_object = ConfigParser()
-        config_object.read(os.path.join(os.path.dirname(__file__), 'conf', 'api.ini'))
-        apiKey = config_object['general']['RIOT_API_KEY']
-
-        lolWatcher = LolWatcher(apiKey)
-        region = 'na1'
-        try:
-            match = lolWatcher.match.by_id(region, data)
-        except ApiError as err:
-            if err.response.status_code == 404:
-                raise ValidationError("Match not found")
-            else:
-                raise
-        if(match['queueId'] != 0):
+        match = cass.get_match(data)
+        if match is None:
+            raise ValidationError("Match not found")
+        if(match.queue != cass.Queue.custom):
             raise ValidationError("Match not a custom game")
         return data
 
@@ -577,27 +555,19 @@ class UpdateGameForm(forms.Form):
 
         localGame: Game
 
-        config_object = ConfigParser()
-        config_object.read(os.path.join(os.path.dirname(__file__), 'conf', 'api.ini'))
-        apiKey = config_object['general']['RIOT_API_KEY']
-
-        lolWatcher = LolWatcher(apiKey)
-        region = 'na1'
-        naChampVersion = lolWatcher.data_dragon.versions_for_region(region)['n']['champion']
-        championList = lolWatcher.data_dragon.champions(naChampVersion, True)
-        try:
-            match = lolWatcher.match.by_id(region, remoteGameID)
-        except ApiError as err:
-            if err.response.status_code == 404:
+        remoteGameID = self.cleaned_data['remoteGameID']
+        if remoteGameID is not None:
+            champMap = {champion.id: champion.name for champion in cass.get_champions()}
+            match = cass.get_match(remoteGameID)
+            if match is None:
                 raise ValidationError("Match not found")
-            else:
-                raise
+            if match.queue != cass.Queue.custom:
+                raise ValidationError("Match not a custom game")
 
-        gameDuration = match['gameDuration']
-        localGame.gameDuration = gameDuration
+        localGame.gameDuration = match.duration.total_seconds()
         localGame.save()
 
-        GameLanerStats.provideStats(localGame, championList, match)
+        GameLanerStats.provideStats(localGame, champMap, match)
 
     def clean_remoteGameID(self):
         data = self.cleaned_data['remoteGameID']
@@ -609,20 +579,10 @@ class UpdateGameForm(forms.Form):
             else:
                 data = existingGame.gameRiotID
 
-        config_object = ConfigParser()
-        config_object.read(os.path.join(os.path.dirname(__file__), 'conf', 'api.ini'))
-        apiKey = config_object['general']['RIOT_API_KEY']
-
-        lolWatcher = LolWatcher(apiKey)
-        region = 'na1'
-        try:
-            match = lolWatcher.match.by_id(region, data)
-        except ApiError as err:
-            if err.response.status_code == 404:
-                raise ValidationError("Match not found")
-            else:
-                raise
-        if(match['queueId'] != 0):
+        match = cass.get_match(data)
+        if match is None:
+            raise ValidationError("Match not found")
+        if match.queue != cass.Queue.custom:
             raise ValidationError("Match not a custom game")
         return data
 
@@ -662,28 +622,19 @@ class UpdateAllGamesForm(forms.Form):
             localGame: Game
 
             remoteGameID = localGame.gameRiotID
+            if remoteGameID is not None:
+                champMap = {champion.id: champion.name for champion in cass.get_champions()}
 
-            config_object = ConfigParser()
-            config_object.read(os.path.join(os.path.dirname(__file__), 'conf', 'api.ini'))
-            apiKey = config_object['general']['RIOT_API_KEY']
+            match = cass.get_match(remoteGameID)
+            if match is None:
+                raise ValidationError("Match not found")
+            if match.queue != cass.Queue.custom:
+                raise ValidationError("Match not a custom game")
 
-            lolWatcher = LolWatcher(apiKey)
-            region = 'na1'
-            naChampVersion = lolWatcher.data_dragon.versions_for_region(region)['n']['champion']
-            championList = lolWatcher.data_dragon.champions(naChampVersion, True)
-            try:
-                match = lolWatcher.match.by_id(region, remoteGameID)
-            except ApiError as err:
-                if err.response.status_code == 404:
-                    raise ValidationError("Match not found")
-                else:
-                    raise
-
-            gameDuration = match['gameDuration']
-            localGame.gameDuration = gameDuration
+            localGame.gameDuration = match.duration.total_seconds()
             localGame.save()
 
-            GameLanerStats.provideStats(localGame, championList, match)
+            GameLanerStats.provideStats(localGame, champMap, match)
 
     def clean_password(self):
         data = self.cleaned_data['password']

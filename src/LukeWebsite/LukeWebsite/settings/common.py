@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 import os
 from pathlib import Path
+from configparser import ConfigParser
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
@@ -36,7 +37,8 @@ INSTALLED_APPS = [
     'tenMans',
     'bootstrap4',
     'bootstrap_datepicker_plus',
-    'crispy_forms'
+    'crispy_forms',
+    'django_cassiopeia'
 ]
 
 MIDDLEWARE = [
@@ -125,3 +127,16 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Custom
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+
+config_object = ConfigParser()
+apiKeyFile = os.path.join(os.path.dirname(__file__), '..', '..', 'tenMans', 'conf', 'api.ini')
+config_object.read(apiKeyFile)
+apiKey = config_object['general']['RIOT_API_KEY']
+CASSIOPEIA_RIOT_API_KEY = apiKey  # api key in env var
+CASSIOPEIA_DEFAULT_REGION = "NA"   # default region
+CASSIOPEIA_PIPELINE = {   # small pipeine to get started
+    "Omnistone": {},
+    "DDragon": {},
+    "RiotAPI": {},
+}
