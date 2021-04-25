@@ -35,4 +35,5 @@ urlpatterns = [
     path('laneMatchupCountTable/<int:pk1>/<int:pk2>/', views.MatchupCountTable.as_view(), name='matchupCountTable'),
     path('duos/', views.DuoView.as_view(), name='duoView'),
     path('duoGamesTable/<int:pk1>/<int:pk2>/', views.DuoGamesTable.as_view(), name='duoGamesTable'),
+    path('leaderboards/', views.Leaderboards.as_view(), name='leaderboards')
 ]

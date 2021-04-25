@@ -977,3 +977,14 @@ class DuoGamesTable(View):
                 'data': data
             }
         )
+
+
+class Leaderboards(TemplateView, BaseTenMansContextMixin):
+
+    template_name = "tenMans/leaderboard.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['gameTotal'] = Game.objects.all().count()
+        context['memeTotal'] = Game.objects.all().filter(gameMemeStatus=True).count()
+        return context
