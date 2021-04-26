@@ -376,6 +376,54 @@ class Player(models.Model):
 
         return round((winningCount / totalGameCount) * 100, 2)
 
+    def getHighestKillCountGameLaneStats(self, lane):
+        if lane is None:
+            gamesPlayed = GameLaner.objects.filter(player__exact=self.id)
+        else:
+            gamesPlayed = GameLaner.objects.filter(player__excact=lane.id)
+
+        stats = GameLanerStats.objects.filter(gameLaner__in=gamesPlayed)
+
+        maxKills = -1
+        currentBestStats = None
+        for stat in stats:
+            if stat.kills > maxKills:
+                currentBestStats = stat
+                maxKills = stat.kills
+        return currentBestStats
+
+    def getHighestDeathCountGameLaneStats(self, lane):
+        if lane is None:
+            gamesPlayed = GameLaner.objects.filter(player__exact=self.id)
+        else:
+            gamesPlayed = GameLaner.objects.filter(player__excact=lane.id)
+
+        stats = GameLanerStats.objects.filter(gameLaner__in=gamesPlayed)
+
+        maxDeaths = -1
+        currentBestStats = None
+        for stat in stats:
+            if stat.kills > maxDeaths:
+                currentBestStats = stat
+                maxDeaths = stat.deaths
+        return currentBestStats
+
+    def getHighestAssistCountGameLaneStats(self, lane):
+        if lane is None:
+            gamesPlayed = GameLaner.objects.filter(player__exact=self.id)
+        else:
+            gamesPlayed = GameLaner.objects.filter(player__excact=lane.id)
+
+        stats = GameLanerStats.objects.filter(gameLaner__in=gamesPlayed)
+
+        maxAssists = -1
+        currentBestStats = None
+        for stat in stats:
+            if stat.kills > maxAssists:
+                currentBestStats = stat
+                maxAssists = stat.assists
+        return currentBestStats
+
     def __str__(self):
         return self.playerName
 

@@ -35,5 +35,8 @@ urlpatterns = [
     path('laneMatchupCountTable/<int:pk1>/<int:pk2>/', views.MatchupCountTable.as_view(), name='matchupCountTable'),
     path('duos/', views.DuoView.as_view(), name='duoView'),
     path('duoGamesTable/<int:pk1>/<int:pk2>/', views.DuoGamesTable.as_view(), name='duoGamesTable'),
-    path('leaderboards/', views.Leaderboards.as_view(), name='leaderboards')
+    path('leaderboards/', views.Leaderboards.as_view(), name='leaderboards'),
+    path('mostKillsGameTable/', views.MostKillsGameTable.as_view(), name='mostKillsGameTable'),
+    path('mostDeathsGameTable/', views.MostDeathsGameTable.as_view(), name='mostDeathsGameTable'),
+    path('mostAssistsGameTable/', views.MostAssistsGameTable.as_view(), name='mostAssistsGameTable'),
 ]

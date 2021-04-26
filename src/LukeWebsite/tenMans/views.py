@@ -1,4 +1,5 @@
 import datetime
+import time
 
 from django.db import transaction
 from django.db.utils import Error
@@ -10,8 +11,8 @@ from django.views.generic.edit import FormView
 from django.views.generic.list import ListView
 from django_cassiopeia import cassiopeia as cass
 
-from tenMans.forms import (CreatePlayer, DuoForm, LaneMatchup, NewGameForm, UpdateAllGamesForm,
-                           UpdateGameForm)
+from tenMans.forms import (CreatePlayer, DuoForm, LaneMatchup, NewGameForm,
+                           UpdateAllGamesForm, UpdateGameForm)
 from tenMans.models import (Champion, Game, GameLaner, GameLanerStats, Lane,
                             Player)
 
@@ -473,8 +474,14 @@ class BlueTeamTable(DetailView):
         self.object: Game
         gameLaners = GameLaner.objects.filter(game__exact=self.object.id, blueTeam__exact=True)
         stats = GameLanerStats.objects.filter(gameLaner__in=gameLaners)
-
-        versionNumber = cass.get_version()
+        versionNumber = None
+        for i in range(5):
+            try:
+                versionNumber = cass.get_version()
+            except ValueError:
+                time.sleep(1)
+                continue
+            break
 
         for statLine in stats:
             playerDict = {}
@@ -526,8 +533,14 @@ class RedTeamTable(DetailView):
         self.object: Game
         gameLaners = GameLaner.objects.filter(game__exact=self.object.id, blueTeam__exact=False)
         stats = GameLanerStats.objects.filter(gameLaner__in=gameLaners)
-
-        versionNumber = cass.get_version()
+        versionNumber = None
+        for i in range(5):
+            try:
+                versionNumber = cass.get_version()
+            except ValueError:
+                time.sleep(1)
+                continue
+            break
 
         for statLine in stats:
             playerDict = {}
@@ -988,3 +1001,72 @@ class Leaderboards(TemplateView, BaseTenMansContextMixin):
         context['gameTotal'] = Game.objects.all().count()
         context['memeTotal'] = Game.objects.all().filter(gameMemeStatus=True).count()
         return context
+
+
+class MostKillsGameTable(View):
+    def get(self, request, *args, **kwargs):
+        data = []
+        players = Player.objects.all()
+
+        scores = [player.getHighestKillCountGameLaneStats(None).kills for player in players]
+        names = [player.playerName for player in players]
+        gameIDs = [player.getHighestKillCountGameLaneStats(None).gameLaner.game.id for player in players]
+
+        leaderboard = sorted(zip(scores, names, gameIDs), reverse=True)[:3]
+        for line in leaderboard:
+            lineDict = {}
+            lineDict['name'] = line[1]
+            lineDict['kills'] = line[0]
+            lineDict['gameID'] = line[2]
+            lineDict['game'] = Game.objects.get(pk=line[2]).gameNumber
+            data.append(lineDict)
+
+        return JsonResponse(data={
+            'data': data
+        })
+
+
+class MostDeathsGameTable(View):
+    def get(self, request, *args, **kwargs):
+        data = []
+        players = Player.objects.all()
+
+        scores = [player.getHighestDeathCountGameLaneStats(None).deaths for player in players]
+        names = [player.playerName for player in players]
+        gameIDs = [player.getHighestDeathCountGameLaneStats(None).gameLaner.game.id for player in players]
+
+        leaderboard = sorted(zip(scores, names, gameIDs), reverse=True)[:3]
+        for line in leaderboard:
+            lineDict = {}
+            lineDict['name'] = line[1]
+            lineDict['deaths'] = line[0]
+            lineDict['gameID'] = line[2]
+            lineDict['game'] = Game.objects.get(pk=line[2]).gameNumber
+            data.append(lineDict)
+
+        return JsonResponse(data={
+            'data': data
+        })
+
+
+class MostAssistsGameTable(View):
+    def get(self, request, *args, **kwargs):
+        data = []
+        players = Player.objects.all()
+
+        scores = [player.getHighestAssistCountGameLaneStats(None).assists for player in players]
+        names = [player.playerName for player in players]
+        gameIDs = [player.getHighestAssistCountGameLaneStats(None).gameLaner.game.id for player in players]
+
+        leaderboard = sorted(zip(scores, names, gameIDs), reverse=True)[:3]
+        for line in leaderboard:
+            lineDict = {}
+            lineDict['name'] = line[1]
+            lineDict['assists'] = line[0]
+            lineDict['gameID'] = line[2]
+            lineDict['game'] = Game.objects.get(pk=line[2]).gameNumber
+            data.append(lineDict)
+
+        return JsonResponse(data={
+            'data': data
+        })
