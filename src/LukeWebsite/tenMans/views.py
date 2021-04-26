@@ -1012,13 +1012,15 @@ class MostKillsGameTable(View):
         scores = [player.getHighestKillCountGameLaneStats(None).kills for player in players]
         names = [player.playerName for player in players]
         gameIDs = [player.getHighestKillCountGameLaneStats(None).gameLaner.game.id for player in players]
+        playerIDs = [player.id for player in players]
 
-        leaderboard = sorted(zip(scores, names, gameIDs), reverse=True)[:3]
+        leaderboard = sorted(zip(scores, names, gameIDs, playerIDs), reverse=True)[:3]
         for line in leaderboard:
             lineDict = {}
             lineDict['name'] = line[1]
             lineDict['kills'] = line[0]
             lineDict['gameID'] = line[2]
+            lineDict['playerID'] = line[3]
             lineDict['game'] = Game.objects.get(pk=line[2]).gameNumber
             data.append(lineDict)
 
@@ -1035,13 +1037,15 @@ class MostDeathsGameTable(View):
         scores = [player.getHighestDeathCountGameLaneStats(None).deaths for player in players]
         names = [player.playerName for player in players]
         gameIDs = [player.getHighestDeathCountGameLaneStats(None).gameLaner.game.id for player in players]
+        playerIDs = [player.id for player in players]
 
-        leaderboard = sorted(zip(scores, names, gameIDs), reverse=True)[:3]
+        leaderboard = sorted(zip(scores, names, gameIDs, playerIDs), reverse=True)[:3]
         for line in leaderboard:
             lineDict = {}
             lineDict['name'] = line[1]
             lineDict['deaths'] = line[0]
             lineDict['gameID'] = line[2]
+            lineDict['playerID'] = line[3]
             lineDict['game'] = Game.objects.get(pk=line[2]).gameNumber
             data.append(lineDict)
 
@@ -1058,13 +1062,15 @@ class MostAssistsGameTable(View):
         scores = [player.getHighestAssistCountGameLaneStats(None).assists for player in players]
         names = [player.playerName for player in players]
         gameIDs = [player.getHighestAssistCountGameLaneStats(None).gameLaner.game.id for player in players]
+        playerIDs = [player.id for player in players]
 
-        leaderboard = sorted(zip(scores, names, gameIDs), reverse=True)[:3]
+        leaderboard = sorted(zip(scores, names, gameIDs, playerIDs), reverse=True)[:3]
         for line in leaderboard:
             lineDict = {}
             lineDict['name'] = line[1]
             lineDict['assists'] = line[0]
             lineDict['gameID'] = line[2]
+            lineDict['playerID'] = line[3]
             lineDict['game'] = Game.objects.get(pk=line[2]).gameNumber
             data.append(lineDict)
 

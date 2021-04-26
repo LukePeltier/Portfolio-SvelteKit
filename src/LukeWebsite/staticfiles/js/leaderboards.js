@@ -21,11 +21,14 @@ $(function () {
                 },
                 {
                     "data": "gameID"
+                },
+                {
+                    "data": "playerID"
                 }
             ],
             columnDefs: [
                 {
-                    targets: [3],
+                    targets: [3, 4],
                     visible: false
                 }
             ],
@@ -58,11 +61,14 @@ $(function () {
                 },
                 {
                     "data": "gameID"
+                },
+                {
+                    "data": "playerID"
                 }
             ],
             columnDefs: [
                 {
-                    targets: [3],
+                    targets: [3, 4],
                     visible: false
                 }
             ],
@@ -95,11 +101,14 @@ $(function () {
                 },
                 {
                     "data": "gameID"
+                },
+                {
+                    "data": "playerID"
                 }
             ],
             columnDefs: [
                 {
-                    targets: [3],
+                    targets: [3, 4],
                     visible: false
                 }
             ],
