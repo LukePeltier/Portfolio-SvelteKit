@@ -742,7 +742,7 @@ class NewPlayerView(FormView, BaseTenMansContextMixin):
         # This method is called when valid form data has been POSTed.
         # It should return an HttpResponse.
         try:
-            form.submit_player()
+            form.create_player()
         except Error:
             return super().form_invalid(form)
 
