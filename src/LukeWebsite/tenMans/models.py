@@ -628,7 +628,11 @@ class GameLanerStats(models.Model):
             championObject = Champion.objects.filter(championName__exact=championTrueName).get()
             gameLaner = GameLaner.objects.filter(champion__exact=championObject, game__exact=localGame).get()
             # check for existing statsObject
-            statsObject = GameLanerStats.objects.get(gameLaner__exact=gameLaner)
+            try:
+                statsObject = GameLanerStats.objects.get(gameLaner__exact=gameLaner)
+            except GameLanerStats.DoesNotExist:
+                statsObject = None
+
             if statsObject is not None:
                 statsObject: GameLanerStats
                 statsObject.gameLaner = gameLaner
@@ -663,31 +667,33 @@ class GameLanerStats(models.Model):
                 statsObject.csRateFirstTen = timeline.creeps_per_min_deltas['0-10']
                 statsObject.csRateSecondTen = timeline.creeps_per_min_deltas['10-20']
             else:
+                stats = participant.stats
+                timeline = participant.timeline
                 statsObject = GameLanerStats(
                     gameLaner=gameLaner,
                     kills=stats.kills,
                     deaths=stats.deaths,
                     assists=stats.assists,
-                    largestKillingSpree=stats.largestKillingSpree,
-                    largestMultiKill=stats.largestMultiKill,
-                    doubleKills=stats.doubleKills,
-                    tripleKills=stats.tripleKills,
-                    quadraKills=stats.quadraKills,
-                    pentaKills=stats.pentaKills,
-                    totalDamageDealtToChampions=stats.totalDamageDealtToChampions,
-                    visionScore=stats.visionScore,
-                    crowdControlScore=stats.timeCCingOthers,
-                    totalDamageTaken=stats.totalDamageTaken,
-                    goldEarned=stats.goldEarned,
-                    turretKills=stats.turretKills,
-                    inhibitorKills=stats.inhibitorKills,
-                    laneMinionsKilled=stats.totalMinionsKilled,
-                    neutralMinionsKilled=stats.neutralMinionsKilled,
-                    teamJungleMinionsKilled=stats.neutralMinionsKilledTeamJungle,
-                    enemyJungleMinionsKilled=stats.neutralMinionsKilledEnemyJungle,
-                    controlWardsPurchased=stats.visionWardsBoughtInGame,
-                    firstBlood=stats.firstBloodKill,
-                    firstTower=stats.firstTowerKill,
+                    largestKillingSpree=stats.largest_killing_spree,
+                    largestMultiKill=stats.largest_multi_kill,
+                    doubleKills=stats.double_kills,
+                    tripleKills=stats.triple_kills,
+                    quadraKills=stats.quadra_kills,
+                    pentaKills=stats.penta_kills,
+                    totalDamageDealtToChampions=stats.total_damage_dealt_to_champions,
+                    visionScore=stats.vision_score,
+                    crowdControlScore=stats.time_CCing_others,
+                    totalDamageTaken=stats.total_damage_taken,
+                    goldEarned=stats.gold_earned,
+                    turretKills=stats.turret_kills,
+                    inhibitorKills=stats.inhibitor_kills,
+                    laneMinionsKilled=stats.total_minions_killed,
+                    neutralMinionsKilled=stats.neutral_minions_killed,
+                    teamJungleMinionsKilled=stats.neutral_minions_killed_team_jungle,
+                    enemyJungleMinionsKilled=stats.neutral_minions_killed_enemy_jungle,
+                    controlWardsPurchased=stats.vision_wards_bought_in_game,
+                    firstBlood=stats.first_blood_kill,
+                    firstTower=stats.first_tower_kill,
                     csRateFirstTen=timeline.creeps_per_min_deltas['0-10'],
                     csRateSecondTen=timeline.creeps_per_min_deltas['10-20'])
             statsObject.save()

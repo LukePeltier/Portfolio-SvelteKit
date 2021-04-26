@@ -1,4 +1,5 @@
 import datetime
+import logging
 import time
 
 from django.db import transaction
@@ -10,7 +11,6 @@ from django.views.generic.detail import DetailView
 from django.views.generic.edit import FormView
 from django.views.generic.list import ListView
 from django_cassiopeia import cassiopeia as cass
-
 from tenMans.forms import (CreatePlayer, DuoForm, LaneMatchup, NewGameForm,
                            UpdateAllGamesForm, UpdateGameForm)
 from tenMans.models import (Champion, Game, GameLaner, GameLanerStats, Lane,
@@ -386,6 +386,7 @@ class NewGameView(FormView, BaseTenMansContextMixin):
     def form_valid(self, form: NewGameForm):
         # This method is called when valid form data has been POSTed.
         # It should return an HttpResponse.
+        logging.info("Game submit complete")
         try:
             form.submit_game()
         except Error:

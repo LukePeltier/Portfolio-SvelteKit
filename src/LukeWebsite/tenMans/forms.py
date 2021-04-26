@@ -270,7 +270,7 @@ class NewGameForm(forms.Form):
         gameRandomTeams = self.cleaned_data.get('randomTeams')
         gameMemeStatus = self.cleaned_data.get('memeGame')
         gameDate = self.cleaned_data.get('gameDate')
-        game = Game(gameNumber=gameNumber, gameBlueWins=gameBlueWins, gameRandomTeams=gameRandomTeams, gameMemeStatus=gameMemeStatus, gameDate=gameDate)
+        game = Game(gameNumber=gameNumber, gameBlueWins=gameBlueWins, gameRandomTeams=gameRandomTeams, gameMemeStatus=gameMemeStatus, gameDate=gameDate, gameDuration=0)
         game.save()
 
         playerNameLaneDict = {}
@@ -353,17 +353,17 @@ class NewGameForm(forms.Form):
         champBansNumDict['Red5'] = self.cleaned_data.get('redBan5')
 
         banTargetNumDict = {}
-        banTargetNumDict['Blue1'] = self.cleaned_data.get('blueTargetBan1')
-        banTargetNumDict['Blue2'] = self.cleaned_data.get('blueTargetBan2')
-        banTargetNumDict['Blue3'] = self.cleaned_data.get('blueTargetBan3')
-        banTargetNumDict['Blue4'] = self.cleaned_data.get('blueTargetBan4')
-        banTargetNumDict['Blue5'] = self.cleaned_data.get('blueTargetBan5')
+        banTargetNumDict['Blue1'] = self.cleaned_data.get('blueTargetBan1').playerName
+        banTargetNumDict['Blue2'] = self.cleaned_data.get('blueTargetBan2').playerName
+        banTargetNumDict['Blue3'] = self.cleaned_data.get('blueTargetBan3').playerName
+        banTargetNumDict['Blue4'] = self.cleaned_data.get('blueTargetBan4').playerName
+        banTargetNumDict['Blue5'] = self.cleaned_data.get('blueTargetBan5').playerName
 
-        banTargetNumDict['Red1'] = self.cleaned_data.get('redTargetBan1')
-        banTargetNumDict['Red2'] = self.cleaned_data.get('redTargetBan2')
-        banTargetNumDict['Red3'] = self.cleaned_data.get('redTargetBan3')
-        banTargetNumDict['Red4'] = self.cleaned_data.get('redTargetBan4')
-        banTargetNumDict['Red5'] = self.cleaned_data.get('redTargetBan5')
+        banTargetNumDict['Red1'] = self.cleaned_data.get('redTargetBan1').playerName
+        banTargetNumDict['Red2'] = self.cleaned_data.get('redTargetBan2').playerName
+        banTargetNumDict['Red3'] = self.cleaned_data.get('redTargetBan3').playerName
+        banTargetNumDict['Red4'] = self.cleaned_data.get('redTargetBan4').playerName
+        banTargetNumDict['Red5'] = self.cleaned_data.get('redTargetBan5').playerName
 
         for i in range(1, 6):
             gameBanChampBlue = champBansNumDict['Blue{}'.format(i)]
@@ -386,6 +386,9 @@ class NewGameForm(forms.Form):
                 raise ValidationError("Match not found")
             if match.queue != cass.Queue.custom:
                 raise ValidationError("Match not a custom game")
+
+            game.gameDuration = match.duration.total_seconds()
+            game.save()
 
             GameLanerStats.provideStats(game, champMap, match)
 
@@ -483,10 +486,10 @@ class NewGameForm(forms.Form):
 
         for possibleRedPlayer in blueTargetsToRed:
             if possibleRedPlayer not in redPlayers:
-                raise ValidationError("Target Ban Target %(value)s not valid, not on other team", params={'value', possibleRedPlayer})
+                raise ValidationError("Target Ban Target %(value)s not valid, not on other team", params={'value', possibleRedPlayer.playerName})
         for possibleBluePlayer in redTargetsToBlue:
             if possibleBluePlayer not in bluePlayers:
-                raise ValidationError("Target Ban Target %(value)s not valid, not on other team", params={'value', possibleBluePlayer})
+                raise ValidationError("Target Ban Target %(value)s not valid, not on other team", params={'value', possibleBluePlayer.playerName})
         # endregion
 
         # region Random Draft verify blanks
