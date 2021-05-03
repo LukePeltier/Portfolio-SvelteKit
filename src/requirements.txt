@@ -16,7 +16,7 @@ datapipelines==1.0.7
 decorator==4.4.2
 Django==3.1.8
 django-bootstrap-datepicker-plus==3.0.5
-django-bootstrap4==2.3.1
+django-bootstrap4==3.0.1
 django-cassiopeia==2.1.0
 django-coverage-plugin==1.8.0
 django-crispy-forms==1.11.2
