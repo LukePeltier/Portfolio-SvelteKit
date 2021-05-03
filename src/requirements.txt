@@ -4,7 +4,7 @@ asgiref==3.3.4
 astroid==2.5.6
 atomicwrites==1.4.0
 attrs==20.3.0
-autopep8==1.5.6
+autopep8==1.5.7
 beautifulsoup4==4.9.3
 cassiopeia==4.0.18
 certifi==2020.12.5
