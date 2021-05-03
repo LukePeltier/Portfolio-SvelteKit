@@ -1,5 +1,5 @@
 appdirs==1.4.4
-arrow==1.1.0
+arrow==0.17.0
 asgiref==3.3.4
 astroid==2.5.6
 atomicwrites==1.4.0
@@ -13,7 +13,7 @@ click==7.1.2
 colorama==0.4.4
 coverage==5.5
 datapipelines==1.0.7
-decorator==5.0.7
+decorator==4.4.2
 Django==3.2
 django-bootstrap-datepicker-plus==3.0.5
 django-bootstrap4==3.0.1
@@ -24,7 +24,7 @@ django-nose==1.4.7
 Faker==8.1.2
 flake8==3.9.1
 gviz-api==1.9.0
-idna==3.1
+idna==2.10
 iniconfig==1.1.1
 isort==5.8.0
 lazy-object-proxy==1.6.0
