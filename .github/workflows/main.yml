@@ -35,6 +35,7 @@ jobs:
             cd LukeWebsite
             python manage.py collectstatic --settings=LukeWebsite.settings.prod
             python manage.py migrate --settings=LukeWebsite.settings.prod
+            sudo systemctl restart apache2
             
             
             
