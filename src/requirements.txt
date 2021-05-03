@@ -13,7 +13,7 @@ click==7.1.2
 colorama==0.4.4
 coverage==5.5
 datapipelines==1.0.7
-decorator==4.4.2
+decorator==5.0.7
 Django==3.1.8
 django-bootstrap-datepicker-plus==3.0.5
 django-bootstrap4==3.0.1
