@@ -140,3 +140,4 @@ CASSIOPEIA_PIPELINE = {   # small pipeine to get started
     "DDragon": {},
     "RiotAPI": {},
 }
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
