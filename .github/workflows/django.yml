@@ -28,10 +28,12 @@ jobs:
         pip install pip-tools
         pip-sync
     - name: Write API Key File
-      working-directory: ./src/LukeWebsite
+      working-directory: ./src/LukeWebsite/tenMans
+      env:
+        API_FILE: ${{ secrets.API_KEY }}
       run: |
-        mkdir ./tenMans/conf
-        echo "${{ secrets.API_KEY }}" >> ./tenMans/conf/api.ini
+        mkdir ./conf
+        echo "$API_FILE" >> ./conf/api.ini
     - name: Run Tests
       working-directory: ./src/LukeWebsite
       run: |
