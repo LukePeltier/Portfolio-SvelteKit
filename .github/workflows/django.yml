@@ -35,7 +35,8 @@ jobs:
 
     - name: Verify MariaDB connection
       run: |
-        sudo mysql -hlocalhost -e 'SHOW DATABASES' -uroot --password=${{secrets.MYSQLPW}}
+        docker ps
+        sudo mysql -h localhost -P 3306 --protocol=tcp -e 'SHOW DATABASES' -uroot --password=${{secrets.MYSQLPW}}
 
     - name: Install Dependencies
       working-directory: ./src
