@@ -26,10 +26,13 @@ jobs:
           key: ${{ secrets.KEY }}
           script_stop: true
           script: |
+            export PATH="/home/lukep/.pyenv/bin:$PATH"
+            eval "$(pyenv init -)"
+            eval "$pyenv virtualenv-init -)"
             cd LukeWebsite
             git stash && git pull
             cd src
-            /home/lukep/.pyenv/bin/pyenv activate websiteEnv
+            pyenv activate websiteEnv
             python -m pip install --upgrade pip
             pip-sync
             cd LukeWebsite
