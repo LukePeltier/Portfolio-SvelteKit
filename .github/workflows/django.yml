@@ -35,7 +35,6 @@ jobs:
 
     - name: Verify MariaDB connection
       run: |
-        mysqladmin -h mysql ping
         sudo mysql -hmysql -e 'CREATE DATABASE ${{ env.DB_DATABASE }};' -uroot
         sudo mysql -hmysql -e 'SHOW DATABASES' -uroot
 
