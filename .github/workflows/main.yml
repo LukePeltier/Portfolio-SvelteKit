@@ -31,6 +31,7 @@ jobs:
             cd src
             source venv/bin/activate
             python -m pip install --upgrade pip
+            pip install pip-tools
             pip-sync
             cd LukeWebsite
             python manage.py collectstatic --noinput --settings=LukeWebsite.settings.prod
