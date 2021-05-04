@@ -29,9 +29,8 @@ jobs:
             cd LukeWebsite
             git stash && git pull
             cd src
-            source venv/bin/activate
+            pyenv activate websiteEnv
             python -m pip install --upgrade pip
-            pip install pip-tools
             pip-sync
             cd LukeWebsite
             python manage.py collectstatic --noinput --settings=LukeWebsite.settings.prod
