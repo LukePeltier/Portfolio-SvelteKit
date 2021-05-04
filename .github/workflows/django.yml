@@ -36,12 +36,14 @@ jobs:
       uses: actions/setup-python@v2
       with:
         python-version: ${{ matrix.python-version }}
+
     - name: Install Dependencies
       working-directory: ./src
       run: |
         python -m pip install --upgrade pip
         pip install pip-tools
         pip-sync
+
     - name: Write DB Conf File
       working-directory: ./src/LukeWebsite
       env:
@@ -49,6 +51,7 @@ jobs:
       run: |
         mkdir ./privateSettings
         echo "$DB_CONF" >> ./privateSettings/db.cnf
+
     - name: Write API Key File
       working-directory: ./src/LukeWebsite/tenMans
       env:
@@ -56,9 +59,11 @@ jobs:
       run: |
         mkdir ./conf
         echo "$API_FILE" >> ./conf/api.ini
+
     - name: Run Tests
       working-directory: ./src/LukeWebsite
       run: |
+        cat ./privateSettings/db.cnf
         python manage.py collectstatic --noinput --settings=LukeWebsite.settings.prod
         python manage.py migrate --settings=LukeWebsite.settings.prod
         pytest
