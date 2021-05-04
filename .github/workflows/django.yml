@@ -23,7 +23,7 @@ jobs:
             MYSQL_ROOT_PASSWORD: ${{secrets.MYSQLPW}}
             MYSQL_DATABASE: tenmansstatistics
           ports:
-            - 3306/tcp
+            - 3306:3306/tcp
           options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=10s --health-retries=10
 
     steps:
@@ -35,7 +35,7 @@ jobs:
 
     - name: Verify MariaDB connection
       run: |
-        sudo mysql -e 'SHOW DATABASES' -uroot
+        sudo mysql -hlocalhost -e 'SHOW DATABASES' -uroot --password=${{secrets.MYSQLPW}}
 
     - name: Install Dependencies
       working-directory: ./src
