@@ -16,8 +16,15 @@ jobs:
       matrix:
         python-version: [3.9]
 
-    env:
-      DB_DATABASE: tenmansstatistics
+    services:
+      mysql:
+          image: mariadb:latest
+          env:
+            MYSQL_ROOT_PASSWORD: ${{secrets.MYSQLPW}}
+            MYSQL_DATABASE: tenmansstatistics
+          ports:
+            - 3306/tcp
+          options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=10s --health-retries=10
 
     steps:
     - uses: actions/checkout@v2
@@ -28,11 +35,9 @@ jobs:
 
     - name: Verify MariaDB connection
       run: |
-        sudo apt install mariadb-server mariadb-client
-        sudo systemctl enable mariadb.service
-        sudo systemctl start mariadb.service
-        sudo mysql -e 'CREATE DATABASE ${{ env.DB_DATABASE }};' -uroot
-        sudo mysql -e 'SHOW DATABASES' -uroot
+        mysqladmin ping
+        sudo mysql -hmysql -e 'CREATE DATABASE ${{ env.DB_DATABASE }};' -uroot
+        sudo mysql -hmysql -e 'SHOW DATABASES' -uroot
 
     - name: Install Dependencies
       working-directory: ./src
