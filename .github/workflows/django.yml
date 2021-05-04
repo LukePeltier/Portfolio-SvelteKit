@@ -11,8 +11,8 @@ jobs:
 
     runs-on: ubuntu-latest
     services:
-      mariadb:
-        image: mariadb:latest
+      mysql:
+        image: mysql:latest
         ports:
           - 3306
         env:
@@ -38,6 +38,13 @@ jobs:
         python -m pip install --upgrade pip
         pip install pip-tools
         pip-sync
+    - name: Write DB Conf File
+      working-directory: ./src/LukeWebsite
+      env:
+        DB_CONF: ${{ secrets.DB_CONF }}
+      run: |
+        mkdir ./privateSettings
+        echo "$DB_CONF" >> ./privateSettings/db.cnf
     - name: Write API Key File
       working-directory: ./src/LukeWebsite/tenMans
       env:
