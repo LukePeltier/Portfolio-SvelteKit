@@ -31,7 +31,7 @@ jobs:
       working-directory: ./src/LukeWebsite
       run: |
         mkdir ./tenMans/conf
-        echo $API_KEY >> ./tenMans/conf/api.ini
+        echo ${{ secrets.API_KEY }} >> ./tenMans/conf/api.ini
     - name: Run Tests
       working-directory: ./src/LukeWebsite
       run: |
