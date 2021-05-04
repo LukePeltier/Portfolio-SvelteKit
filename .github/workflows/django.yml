@@ -26,7 +26,8 @@ jobs:
     - name: Verify MySQL connection
       run: |
         sudo /etc/init.d/mysql start
-        mysql -u root --password=${{ secrets.MYSQLPW }} -e "SHOW DATABASES"
+        sudo mysql -u root -e "SHOW DATABASES"
+        sudo mysql -u root -e "create database tenmansstatistics"
 
     - name: Install Dependencies
       working-directory: ./src
