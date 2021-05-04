@@ -11,7 +11,7 @@ ALLOWED_HOSTS = []
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'HOST': '127.0.0.1',
+        'HOST': 'localhost',
         'PORT': '3306',
         'OPTIONS': {
             'read_default_file': os.path.join(BASE_DIR, 'privateSettings', 'db.cnf')
