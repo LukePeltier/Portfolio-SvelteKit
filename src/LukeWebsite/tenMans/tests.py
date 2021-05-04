@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.urls import reverse
-from tenMans.factory import ChampionFactory, GameBanFactory, GameFactory, GameLanerFactory, GameLanerNoSupport, GameLanerRandomGameFactory, LaneFactory, PlayerFactory
+from tenMans.factory import ChampionFactory, GameBanFactory, GameFactory, GameLanerFactory, GameLanerNoSupport, GameLanerRandomGameFactory, GameLanerStatsFactory, LaneFactory, PlayerFactory
 from tenMans.models import Champion, Game, GameLaner, Lane, Player
 
 
@@ -80,8 +80,17 @@ class PlayerTest(TestCase):
         cls.players.append(alwaysBanned)
 
         cls.gameLaners = GameLaner.objects.all()
+        for gl in cls.gameLaners:
+            GameLanerStatsFactory(gameLaner=gl)
 
         cls.allGames = Game.objects.all()
+
+        cls.lanesLists = []
+        cls.lanesLists.append(None)
+        cls.lanesLists.append([Lane.objects.get(laneName__exact="Top")])
+        cls.lanesLists.append([Lane.objects.get(laneName__exact="Jungle")])
+        cls.lanesLists.append([Lane.objects.get(laneName__exact="Mid")])
+        cls.lanesLists.append([Lane.objects.get(laneName__exact="Bot"), Lane.objects.get(laneName__exact="Support")])
 
     def test_player_creation(self):
         for player in self.players:
@@ -155,3 +164,57 @@ class PlayerTest(TestCase):
     def test_player_getmostbannedchampionstring(self):
         for player in self.players:
             player.getMostBannedChampionString()
+
+    def test_player_getSideWinrate(self):
+        for player in self.players:
+            for side in ["Blue", "Red"]:
+                player.getSideWinrate(side)
+
+    def test_player_getAverageKDALaneString(self):
+        for player in self.players:
+            player.getAverageKDALaneString(None)
+            for lane in self.lanes:
+                player.getAverageKDALaneString(lane)
+
+    def test_player_getAverageKDAChampionString(self):
+        for player in self.players:
+            player.getAverageKDAChampionString(None)
+            for champion in self.champions:
+                player.getAverageKDAChampionString(champion)
+
+    def test_player_getUniqueChampionCount(self):
+        for player in self.players:
+            player.getUniqueChampionCount()
+
+    def test_player_getMatchupWinrate(self):
+        for player in self.players:
+            for secondPlayer in self.players:
+                if player == secondPlayer:
+                    continue
+                for lane in self.lanesLists:
+                    player.getMatchupWinrate(secondPlayer, lane)
+
+    def test_player_getDuoWinrate(self):
+        for player in self.players:
+            for secondPlayer in self.players:
+                if player == secondPlayer:
+                    continue
+                player.getDuoWinrate(secondPlayer)
+
+    def test_player_getHighestKillCountGameLaneStats(self):
+        for player in self.players:
+            player.getHighestKillCountGameLaneStats(None)
+            for lane in self.lanes:
+                player.getHighestKillCountGameLaneStats(lane)
+
+    def test_player_getHighestDeathCountGameLaneStats(self):
+        for player in self.players:
+            player.getHighestDeathCountGameLaneStats(None)
+            for lane in self.lanes:
+                player.getHighestDeathCountGameLaneStats(lane)
+
+    def test_player_getHighestAssistCountGameLaneStats(self):
+        for player in self.players:
+            player.getHighestAssistCountGameLaneStats(None)
+            for lane in self.lanes:
+                player.getHighestAssistCountGameLaneStats(lane)

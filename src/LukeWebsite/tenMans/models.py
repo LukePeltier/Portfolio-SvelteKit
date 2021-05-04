@@ -374,7 +374,7 @@ class Player(models.Model):
         if lane is None:
             gamesPlayed = GameLaner.objects.filter(player__exact=self.id)
         else:
-            gamesPlayed = GameLaner.objects.filter(player__excact=lane.id)
+            gamesPlayed = GameLaner.objects.filter(player__exact=lane.id)
 
         stats = GameLanerStats.objects.filter(gameLaner__in=gamesPlayed)
 
@@ -390,7 +390,7 @@ class Player(models.Model):
         if lane is None:
             gamesPlayed = GameLaner.objects.filter(player__exact=self.id)
         else:
-            gamesPlayed = GameLaner.objects.filter(player__excact=lane.id)
+            gamesPlayed = GameLaner.objects.filter(player__exact=lane.id)
 
         stats = GameLanerStats.objects.filter(gameLaner__in=gamesPlayed)
 
@@ -406,7 +406,7 @@ class Player(models.Model):
         if lane is None:
             gamesPlayed = GameLaner.objects.filter(player__exact=self.id)
         else:
-            gamesPlayed = GameLaner.objects.filter(player__excact=lane.id)
+            gamesPlayed = GameLaner.objects.filter(player__exact=lane.id)
 
         stats = GameLanerStats.objects.filter(gameLaner__in=gamesPlayed)
 

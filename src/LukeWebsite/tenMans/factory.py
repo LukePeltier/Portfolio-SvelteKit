@@ -1,6 +1,6 @@
 import datetime
 import factory
-from tenMans.models import Champion, Game, GameBan, GameLaner, Lane, Player
+from tenMans.models import Champion, Game, GameBan, GameLaner, GameLanerStats, Lane, Player
 import factory.fuzzy
 from dateutil import tz
 
@@ -67,3 +67,43 @@ class GameBanFactory(factory.django.DjangoModelFactory):
 
     game = factory.Iterator(Game.objects.filter(gameRandomTeams=False))
     champion = factory.Iterator(Champion.objects.all())
+
+
+class GameLanerStatsFactory(factory.django.DjangoModelFactory):
+
+    class Meta:
+        model = GameLanerStats
+
+    kills = factory.fuzzy.FuzzyInteger(0)
+    deaths = factory.fuzzy.FuzzyInteger(0)
+    assists = factory.fuzzy.FuzzyInteger(0)
+
+    largestKillingSpree = factory.fuzzy.FuzzyInteger(0)
+    largestMultiKill = factory.fuzzy.FuzzyInteger(0)
+    doubleKills = factory.fuzzy.FuzzyInteger(0)
+    tripleKills = factory.fuzzy.FuzzyInteger(0)
+    quadraKills = factory.fuzzy.FuzzyInteger(0)
+    pentaKills = factory.fuzzy.FuzzyInteger(0)
+
+    totalDamageDealtToChampions = factory.fuzzy.FuzzyInteger(0)
+    visionScore = factory.fuzzy.FuzzyInteger(0)
+    crowdControlScore = factory.fuzzy.FuzzyInteger(0)
+    totalDamageTaken = factory.fuzzy.FuzzyInteger(0)
+    goldEarned = factory.fuzzy.FuzzyInteger(0)
+
+    turretKills = factory.fuzzy.FuzzyInteger(0)
+    inhibitorKills = factory.fuzzy.FuzzyInteger(0)
+
+    laneMinionsKilled = factory.fuzzy.FuzzyInteger(0)
+    neutralMinionsKilled = factory.fuzzy.FuzzyInteger(0)
+
+    teamJungleMinionsKilled = factory.fuzzy.FuzzyInteger(0)
+    enemyJungleMinionsKilled = factory.fuzzy.FuzzyInteger(0)
+
+    controlWardsPurchased = factory.fuzzy.FuzzyInteger(0)
+
+    firstBlood = factory.fuzzy.FuzzyChoice([True, False])
+    firstTower = factory.fuzzy.FuzzyChoice([True, False])
+
+    csRateFirstTen = factory.fuzzy.FuzzyFloat(0, 10, 2)
+    csRateSecondTen = factory.fuzzy.FuzzyFloat(0, 10, 2)
