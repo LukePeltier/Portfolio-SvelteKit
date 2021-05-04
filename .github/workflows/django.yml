@@ -29,6 +29,8 @@ jobs:
     - name: Verify MariaDB connection
       run: |
         sudo apt install mariadb-server mariadb-client
+        sudo systemctl enable mariadb.service
+        sudo systemctl start mariadb.service
         sudo mysql -e 'CREATE DATABASE ${{ env.DB_DATABASE }};' -uroot
         sudo mysql -e 'SHOW DATABASES' -uroot
 
