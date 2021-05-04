@@ -14,10 +14,6 @@ jobs:
     strategy:
       max-parallel: 4
       matrix:
-        db: [mariadb]
-        include:
-          - db: mariadb
-            db_port: 3306
         python-version: [3.9]
 
     steps:
@@ -27,10 +23,16 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
 
-    - name: Start mariadb
-      run: |
-        sudo systemctl start mariadb.service
-        mysql -u root -p ${{secrets.MYSQLPW}} -e "create database tenmansstatistics"
+    - name: Shutdown Ubuntu MySQL (SUDO)
+      run: sudo service mysql stop # Shutdown the Default MySQL, "sudo" is necessary, please not remove it
+
+    - name: Set up MariaDB
+      uses: getong/mariadb-action@v1.1
+      with:
+        character set server: 'utf8' # Optional, default value is 'utf8mb4'. The '--character-set-server' option for mysqld
+        collation server: 'latin_general_ci' # Optional, default value is 'utf8mb4_general_ci'. The '--collation-server' option for mysqld
+        mysql database: 'tenmansstatistics' # Optional, default value is "test". The specified database which will be create
+        mysql root password: ${{ secrets.MYSQLPW}} # Required if "mysql user" is empty, default is empty. The root superuser password
 
     - name: Install Dependencies
       working-directory: ./src
