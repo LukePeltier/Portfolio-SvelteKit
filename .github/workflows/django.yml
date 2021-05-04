@@ -35,11 +35,7 @@ jobs:
 
     - name: Verify MySQL connection
       run: |
-        mysql --version
-        sudo apt-get install -y mysql-client
-        sudo systemctl enable mysql.service
-        sudo systemctl start mysql.service
-        sudo systemctl status mysql.service
+        sudo /etc/init.d/mysql start
         mysql -u root --password=${{ secrets.MYSQLPW }} -e "SHOW DATABASES"
 
     - name: Install Dependencies
