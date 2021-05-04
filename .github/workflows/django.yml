@@ -16,6 +16,15 @@ jobs:
       matrix:
         python-version: [3.9]
 
+    services:
+      mysql:
+        image: mysql:latest
+        env:
+          MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQLPW }}
+          MYSQL_DATABASE: tenmansstatistics
+
+        ports:
+          - '8888:3306'
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python ${{ matrix.python-version }}
@@ -25,9 +34,7 @@ jobs:
 
     - name: Verify MySQL connection
       run: |
-        sudo /etc/init.d/mysql start
-        sudo mysql -u root -e "SHOW DATABASES"
-        sudo mysql -u root -e "create database tenmansstatistics"
+        mysql -h 127.0.0.1 --port 8888 -u root --password=${{ secrets.MYSQLPW }} -e 'CREATE DATABASE IF NOT EXISTS tenmansstatistics;'
 
     - name: Install Dependencies
       working-directory: ./src
