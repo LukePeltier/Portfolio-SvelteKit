@@ -28,7 +28,7 @@ jobs:
           script: |
             export PATH="/home/lukep/.pyenv/bin:$PATH"
             eval "$(pyenv init -)"
-            eval "$pyenv virtualenv-init -)"
+            eval "$(pyenv virtualenv-init -)"
             cd LukeWebsite
             git stash && git pull
             cd src
