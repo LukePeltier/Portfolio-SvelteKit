@@ -17,7 +17,6 @@ jobs:
         python-version: [3.9]
 
     env:
-      DB_PASSWORD: ${{ secrets.MYSQLPW }}
       DB_DATABASE: tenmansstatistics
 
     steps:
@@ -30,8 +29,8 @@ jobs:
     - name: Verify MySQL connection
       run: |
         sudo /etc/init.d/mysql start
-        sudo mysql -e 'CREATE DATABASE ${{ env.DB_DATABASE }};' -uroot -p${{ env.DB_PASSWORD }}
-        sudo mysql -e 'SHOW DATABASES' -uroot -p${{ env.DB_PASSWORD }}
+        sudo mysql -e 'CREATE DATABASE ${{ env.DB_DATABASE }};' -uroot -proot
+        sudo mysql -e 'SHOW DATABASES' -uroot -proot
 
     - name: Install Dependencies
       working-directory: ./src
