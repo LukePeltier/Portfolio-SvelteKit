@@ -20,22 +20,17 @@ jobs:
             db_port: 3306
         python-version: [3.9]
 
-    services:
-      mariadb:
-        image: mariadb:latest
-        ports:
-          - 3306
-        env:
-          MYSQL_DATABASE: tenmansstatistics
-          MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQLPW }}
-        options: --health-cmd="mysqladmin ping" --health-interval=5s --health-timeout=2s --health-retries=3
-
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v2
       with:
         python-version: ${{ matrix.python-version }}
+
+    - name: Start mariadb
+      run: |
+        sudo systemctl start mariadb.service
+        mysql -u root -p ${{secrets.MYSQLPW}} -e "create database tenmansstatistics"
 
     - name: Install Dependencies
       working-directory: ./src
@@ -63,7 +58,6 @@ jobs:
     - name: Run Tests
       working-directory: ./src/LukeWebsite
       run: |
-        cat ./privateSettings/db.cnf
         python manage.py collectstatic --noinput --settings=LukeWebsite.settings.prod
         python manage.py migrate --settings=LukeWebsite.settings.prod
         pytest
