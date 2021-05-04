@@ -64,6 +64,6 @@ jobs:
     - name: Run Tests
       working-directory: ./src/LukeWebsite
       run: |
-        python manage.py collectstatic --noinput --settings=LukeWebsite.settings.prod
-        python manage.py migrate --settings=LukeWebsite.settings.prod
+        python manage.py collectstatic --noinput --settings=LukeWebsite.settings.testing
+        python manage.py migrate --settings=LukeWebsite.settings.testing
         pytest
