@@ -27,8 +27,12 @@ jobs:
         python -m pip install --upgrade pip
         pip install pip-tools
         pip-sync
+    - name: Write API Key File
+      working-directory: ./src/LukeWebsite
+      run: |
+        mkdir ./tenMans/conf
+        echo $API_KEY >> ./tenMans/conf/api.ini
     - name: Run Tests
       working-directory: ./src/LukeWebsite
       run: |
-        echo $API_KEY >> ./src/LukeWebsite/tenMans/conf/api.ini
         pytest
