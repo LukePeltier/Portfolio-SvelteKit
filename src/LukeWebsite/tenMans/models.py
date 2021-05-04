@@ -200,18 +200,12 @@ class Player(models.Model):
             player__exact=self.id, game__exact=game.id).exists()
 
     def getAveragePulledBans(self):
-        bansTargeted = GameBan.objects.filter(
-            targetPlayer__exact=self.id).count()
-        gamesWithBans = GameBan.objects.values('game').distinct()
+        bansTargeted = GameBan.objects.filter(targetPlayer__exact=self.id).count()
+        gamesWithBans = GameBan.objects.filter(targetPlayer__exact=self.id).values('game').distinct()
         totalGameCount = gamesWithBans.count()
         if totalGameCount == 0:
             return "N/A"
-        playerGamesWithBansCount = 0
-        for gameBanDict in gamesWithBans:
-            gameObject = Game.objects.get(id__exact=gameBanDict['game'])
-            if(self.playerParticipatedInGame(gameObject)):
-                playerGamesWithBansCount += 1
-        return round(bansTargeted / playerGamesWithBansCount, 2)
+        return round(bansTargeted / totalGameCount, 2)
 
     def getMostBannedChampionString(self):
         bansTotal = GameBan.objects.filter(targetPlayer__exact=self.id)

@@ -11,8 +11,6 @@ django-crispy-forms
 django-nose
 flake8
 gviz-api
-mixer
-model-bakery
 mypy-extensions
 mysqlclient
 pathspec
@@ -31,3 +29,4 @@ setuptools
 typed-ast
 typing-extensions
 whitenoise
+factory-boy

@@ -2,7 +2,7 @@
 
 name: New Release
 
-# Controls when the action will run. 
+# Controls when the action will run.
 on:
   # Triggers the workflow on push or pull request events but only for the main branch
   release:
@@ -31,11 +31,8 @@ jobs:
             cd src
             source venv/bin/activate
             python -m pip install --upgrade pip
-            pip install -r requirements.txt
+            pip-sync
             cd LukeWebsite
             python manage.py collectstatic --noinput --settings=LukeWebsite.settings.prod
             python manage.py migrate --settings=LukeWebsite.settings.prod
             sudo systemctl restart apache2
-            
-            
-            
