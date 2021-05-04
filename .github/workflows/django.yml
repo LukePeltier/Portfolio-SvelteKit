@@ -32,7 +32,13 @@ jobs:
         character set server: 'utf8' # Optional, default value is 'utf8mb4'. The '--character-set-server' option for mysqld
         collation server: 'latin_general_ci' # Optional, default value is 'utf8mb4_general_ci'. The '--collation-server' option for mysqld
         mysql database: 'tenmansstatistics' # Optional, default value is "test". The specified database which will be create
-        mysql root password: ${{ secrets.MYSQLPW}} # Required if "mysql user" is empty, default is empty. The root superuser password
+        mysql root password: ${{ secrets.MYSQLPW }} # Required if "mysql user" is empty, default is empty. The root superuser password
+
+    - name: Verify MySQL connection
+      run: |
+        mysql --version
+        sudo apt-get install -y mysql-client
+        mysql --host 127.0.0.1 --port 3306 -u root -p ${{ secrets.MYSQLPW }} -e "SHOW DATABASES"
 
     - name: Install Dependencies
       working-directory: ./src
