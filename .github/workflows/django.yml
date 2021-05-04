@@ -37,7 +37,7 @@ jobs:
       run: |
         mysql --version
         sudo apt-get install -y mysql-client
-        mysql -u root -p ${{ secrets.MYSQLPW }} -e "SHOW DATABASES"
+        mysql -u root --password=${{ secrets.MYSQLPW }} -e "SHOW DATABASES"
 
     - name: Install Dependencies
       working-directory: ./src
