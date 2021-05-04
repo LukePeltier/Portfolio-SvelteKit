@@ -26,6 +26,7 @@ jobs:
           key: ${{ secrets.KEY }}
           script_stop: true
           script: |
+            . ~/.bashrc
             cd LukeWebsite
             git stash && git pull
             cd src
