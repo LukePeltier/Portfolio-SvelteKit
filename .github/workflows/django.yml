@@ -1,4 +1,4 @@
-name: Django CI
+name: CI Test
 
 on:
   push:
@@ -69,7 +69,16 @@ jobs:
       run: |
         python manage.py collectstatic --noinput --settings=LukeWebsite.settings.testing
         python manage.py migrate --settings=LukeWebsite.settings.testing
+        
     - name: Run Tests
       working-directory: ./src/LukeWebsite
       run: |
         pytest
+
+    - name: Upload Code Coverage
+      uses: codecov/codecov-action@v1.5.0
+      with:
+        directory: ./src/LukeWebsite
+        flags: unittests # optional
+        fail_ci_if_error: true 
+        verbose: true 
