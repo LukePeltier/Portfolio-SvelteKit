@@ -12,7 +12,8 @@
   </div>
   <div id="overallWinrate" class="row">
     <div id="overallWinrateChartContainer" class="col-6">
-      <canvas id="overallWinrateChart" data-url="{% url 'overallWinrateChart' %}"></canvas>
+    <div id="loadingText" class="align-middle text-center" style="font-size:25px"><i class="fas fa-spinner fa-spin"></i></i> Loading</div>
+      <canvas id="overallWinrateChart" data-url="{% url 'overallWinrateChart' %}"</canvas>
     </div>
     <div id="overallWinrateTableContainer" class="col-6">
       <table id="overallWinrateTable" class="table table-hover table-bordered table-sm"

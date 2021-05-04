@@ -132,7 +132,13 @@ $(function () {
             });
 
 
+
+
+        },
+        complete: function (data){
+            $("#loadingText").remove();
         }
     });
+
 
 });
