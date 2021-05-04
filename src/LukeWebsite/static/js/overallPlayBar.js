@@ -104,6 +104,7 @@ $(function () {
                                 labels = Chart.defaults.global.legend.labels.generateLabels(chart);
                                 for (var key in labels) {
                                     labels[key].fillStyle = window.chartColors.blue;
+                                    labels[key].strokeStyle = window.chartColors.blue;
                                 }
                                 return labels;
                             }
