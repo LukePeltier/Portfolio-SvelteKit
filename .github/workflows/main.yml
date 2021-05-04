@@ -26,11 +26,10 @@ jobs:
           key: ${{ secrets.KEY }}
           script_stop: true
           script: |
-            . ~/.bashrc
             cd LukeWebsite
             git stash && git pull
             cd src
-            pyenv activate websiteEnv
+            /home/lukep/.pyenv/bin/pyenv activate websiteEnv
             python -m pip install --upgrade pip
             pip-sync
             cd LukeWebsite
