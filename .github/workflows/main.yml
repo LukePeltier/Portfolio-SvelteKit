@@ -83,7 +83,7 @@ jobs:
         flags: unittests # optional
         fail_ci_if_error: true
         verbose: true
-        
+
     - name: Deploy
       uses: appleboy/ssh-action@v0.1.4
       with:
