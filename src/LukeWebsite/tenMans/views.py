@@ -1,6 +1,5 @@
 import datetime
 import logging
-import time
 
 from django.db import transaction
 from django.db.utils import Error
@@ -10,7 +9,8 @@ from django.views.generic.base import ContextMixin, TemplateView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import FormView
 from django.views.generic.list import ListView
-from django_cassiopeia import cassiopeia as cass
+
+from tenMans.extras.data import GlobalVars
 from tenMans.forms import (CreatePlayer, DuoForm, LaneMatchup, NewGameForm,
                            UpdateAllGamesForm, UpdateGameForm)
 from tenMans.models import (Champion, Game, GameLaner, GameLanerStats, Lane,
@@ -233,7 +233,7 @@ class PlayerChampionCountTable(DetailView):
                 champDict["averageKDA"] = self.object.getAverageKDAChampionString(champ)
                 champDict['championID'] = champ.id
                 champDict['riotChampionName'] = champ.riotName
-                champDict['championVersion'] = cass.get_version()
+                champDict['championVersion'] = GlobalVars.getLoLVersion()
             data.append(champDict)
 
         return JsonResponse(data={
@@ -250,7 +250,7 @@ class PlayerGamesTable(DetailView):
         self.object: Player
         gamesPlayed = GameLaner.objects.filter(player__exact=self.object.id)
         stats = GameLanerStats.objects.filter(gameLaner__in=gamesPlayed)
-        versionNumber = cass.get_version()
+        versionNumber = GlobalVars.getLoLVersion()
         for stat in stats:
             stat: GameLanerStats
             statDict = {}
@@ -475,14 +475,7 @@ class BlueTeamTable(DetailView):
         self.object: Game
         gameLaners = GameLaner.objects.filter(game__exact=self.object.id, blueTeam__exact=True)
         stats = GameLanerStats.objects.filter(gameLaner__in=gameLaners)
-        versionNumber = None
-        for i in range(5):
-            try:
-                versionNumber = cass.get_version()
-            except ValueError:
-                time.sleep(1)
-                continue
-            break
+        versionNumber = GlobalVars.getLoLVersion()
 
         for statLine in stats:
             playerDict = {}
@@ -534,14 +527,7 @@ class RedTeamTable(DetailView):
         self.object: Game
         gameLaners = GameLaner.objects.filter(game__exact=self.object.id, blueTeam__exact=False)
         stats = GameLanerStats.objects.filter(gameLaner__in=gameLaners)
-        versionNumber = None
-        for i in range(5):
-            try:
-                versionNumber = cass.get_version()
-            except ValueError:
-                time.sleep(1)
-                continue
-            break
+        versionNumber = GlobalVars.getLoLVersion()
 
         for statLine in stats:
             playerDict = {}
@@ -589,7 +575,7 @@ class ChampionListView(ListView, BaseTenMansContextMixin):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['naChampVersion'] = cass.get_version()
+        context['naChampVersion'] = GlobalVars.getLoLVersion()
 
         return context
 
@@ -600,7 +586,7 @@ class ChampionDetailView(DetailView, BaseTenMansContextMixin):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['naChampVersion'] = cass.get_version()
+        context['naChampVersion'] = GlobalVars.getLoLVersion()
         context['mostPlayedLane'] = self.object.getMainLaneString()
 
         context['overallWinrate'] = self.object.getWinrate(None)
@@ -824,7 +810,7 @@ class MatchupGamesTable(View):
         gamesPlayedRight = player2.getGameLanerMatchupList(player1, None)
         statsLeft = GameLanerStats.objects.filter(gameLaner__in=gamesPlayedLeft)
         statsRight = GameLanerStats.objects.filter(gameLaner__in=gamesPlayedRight)
-        versionNumber = cass.get_version()
+        versionNumber = GlobalVars.getLoLVersion()
         for i in range(len(statsLeft)):
             statLeft = statsLeft[i]
             statRight = statsRight[i]
@@ -944,7 +930,7 @@ class DuoGamesTable(View):
         gamesPlayedRight = player2.getGameLanerDuoList(player1)
         statsLeft = GameLanerStats.objects.filter(gameLaner__in=gamesPlayedLeft)
         statsRight = GameLanerStats.objects.filter(gameLaner__in=gamesPlayedRight)
-        versionNumber = cass.get_version()
+        versionNumber = GlobalVars.getLoLVersion()
         for i in range(len(statsLeft)):
             statLeft = statsLeft[i]
             statRight = statsRight[i]
