@@ -40,27 +40,29 @@
   {% endblock %}
 </head>
 
-<body>
+<body class="d-flex flex-column min-vh-100">
   {% include "tenMans/navBar.html" %}
   <div class="container-fluid main-container">
-    {% block content %}
-    {% endblock %}
+    <content>
+      {% block content %}
+      {% endblock %}
+    </content>
   </div>
-</body>
-<footer class="footer bg-light" style="padding: 20px">
-  <div class="container-fluid">
-    <div class="row justify-content-between">
-      <div class="col-4">
-        <p>Author: Luke Peltier</p>
-      </div>
-      <div class="col-4">
-        <div class="float-right" id="kofi-button">
-          <a href='https://ko-fi.com/M4M216I02' target='_blank'><img height='36' style='border:0px;height:36px;'
-              src='https://cdn.ko-fi.com/cdn/kofi5.png?v=2' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
+  <footer class="footer bg-light mt-auto" style="padding: 20px">
+    <div class="container-fluid">
+      <div class="row justify-content-between">
+        <div class="col-4">
+          <p>Author: Luke Peltier</p>
+        </div>
+        <div class="col-4">
+          <div class="float-right" id="kofi-button">
+            <a href='https://ko-fi.com/M4M216I02' target='_blank'><img height='36' style='border:0px;height:36px;'
+                src='https://cdn.ko-fi.com/cdn/kofi5.png?v=2' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-</footer>
+  </footer>
+</body>
 
 </html>
