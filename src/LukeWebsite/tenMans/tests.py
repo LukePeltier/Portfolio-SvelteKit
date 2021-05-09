@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.urls import reverse
-from tenMans.factory import ChampionFactory, GameBanFactory, GameFactory, GameLanerFactory, GameLanerNoSupport, GameLanerRandomGameFactory, GameLanerStatsFactory, LaneFactory, PlayerFactory
+from tenMans.factory import ChampionFactory, GameBanFactory, GameFactory, GameLanerFactory, GameLanerNoSupportOrTop, GameLanerRandomGameFactory, GameLanerStatsFactory, LaneFactory, PlayerFactory
 from tenMans.models import Champion, Game, GameLaner, Lane, Player
 
 
@@ -23,7 +23,7 @@ class GameTest(TestCase):
         self.assertEqual(Game.getTotalGames(), 1)
 
 
-class PlayerTest(TestCase):
+class FullDataTest(TestCase):
 
     @classmethod
     def setUpTestData(cls):
@@ -34,25 +34,41 @@ class PlayerTest(TestCase):
         cls.lanes.append(LaneFactory(laneName='Mid'))
         cls.lanes.append(LaneFactory(laneName='Bot'))
         cls.lanes.append(LaneFactory(laneName='Support'))
+        cls.memeGame = GameFactory.create(gameMemeStatus=True)
         cls.games = GameFactory.create_batch(size=50)
         cls.randomGames = GameFactory.create_batch(size=50, gameRandomTeams=True)
         cls.champions = ChampionFactory.create_batch(size=100)
         cls.players = []
 
-        # top only player
+        # top blue only player
         topBluePlayer = PlayerFactory()
         GameLanerFactory.create_batch(size=20, blueTeam=True, lane=Lane.objects.get(laneName__exact="Top"), player=topBluePlayer)
         cls.players.append(topBluePlayer)
 
-        # any lane except support
+        # top red only player
+        topRedPlayer = PlayerFactory()
+        GameLanerFactory.create_batch(size=20, blueTeam=False, lane=Lane.objects.get(laneName__exact="Top"), player=topRedPlayer)
+        cls.players.append(topRedPlayer)
+
+        # any lane except support or top
         flexRedPlayer = PlayerFactory()
-        GameLanerNoSupport.create_batch(size=20, blueTeam=False, player=flexRedPlayer)
+        GameLanerNoSupportOrTop.create_batch(size=20, blueTeam=False, player=flexRedPlayer)
         cls.players.append(flexRedPlayer)
 
-        # random teams guy
+        # bot red player
+        botRedPlayer = PlayerFactory()
+        GameLanerNoSupportOrTop.create_batch(size=20, blueTeam=False, lane=Lane.objects.get(laneName__exact="Bot"), player=botRedPlayer)
+        cls.players.append(botRedPlayer)
+
+        # random teams support
         randomTeamsPlayer = PlayerFactory()
-        GameLanerRandomGameFactory.create_batch(size=20, blueTeam=False, player=randomTeamsPlayer, lane=Lane.objects.get(laneName__exact="Support"))
+        GameLanerFactory.create_batch(size=20, player=randomTeamsPlayer, lane=Lane.objects.get(laneName__exact="Support"))
         cls.players.append(randomTeamsPlayer)
+
+        # random draft guy
+        randomDraftPlayer = PlayerFactory()
+        GameLanerRandomGameFactory.create_batch(size=20, blueTeam=False, player=randomDraftPlayer, lane=Lane.objects.get(laneName__exact="Support"))
+        cls.players.append(randomDraftPlayer)
 
         # zero game andy
         noGames = PlayerFactory()
@@ -94,13 +110,13 @@ class PlayerTest(TestCase):
 
     def test_player_creation(self):
         for player in self.players:
-            self.assertIsInstance(player, Player)
-            self.assertEqual(player.__str__(), player.playerName)
+            with self.subTest(player=player):
+                self.assertIsInstance(player, Player)
+                self.assertEqual(player.__str__(), player.playerName)
 
     def test_player_winrate(self):
         for player in self.players:
             player.getWinrate(None)
-
             for lane in self.lanes:
                 player.getWinrate(lane)
 
@@ -218,3 +234,246 @@ class PlayerTest(TestCase):
             player.getHighestAssistCountGameLaneStats(None)
             for lane in self.lanes:
                 player.getHighestAssistCountGameLaneStats(lane)
+
+    def test_view_playerDetail(self):
+        for player in self.players:
+            with self.subTest(player=player):
+                url = reverse("detailPlayer", kwargs={'pk': player.id})
+                response = self.client.get(url)
+                self.assertEqual(response.status_code, 200)
+
+    def test_view_dashboard(self):
+        url = reverse("tenMansHome")
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, 200)
+
+    def test_view_winrateChart(self):
+        url = reverse("overallWinrateChart")
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, 200)
+
+    def test_view_winrateTable(self):
+        url = reverse("overallWinrateTable")
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, 200)
+
+    def test_view_playtimeChart(self):
+        url = reverse("overallPlaytimeChart")
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, 200)
+
+    def test_view_playtimeTable(self):
+        url = reverse("overallPlaytimeTable")
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, 200)
+
+    def test_view_playerWinrateOverTime(self):
+        for player in self.players:
+            with self.subTest(player=player):
+                url = reverse("playerWinrateOverTime", kwargs={'pk': player.id})
+                response = self.client.get(url)
+                self.assertEqual(response.status_code, 200)
+
+    def test_view_newGameForm(self):
+        url = reverse("newGameFormView")
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, 200)
+
+    def test_view_updateGameForm(self):
+        url = reverse("updateGameFormView")
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, 200)
+
+    def test_view_updateAllGamesForm(self):
+        url = reverse("updateAllGamesFormView")
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, 200)
+
+    def test_view_playerDraftStatsView(self):
+        url = reverse("playerDraftStatsView")
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_view_averageDraftOrderTable(self):
+        url = reverse("averageDraftOrderTable")
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_view_expectedDraftOrderWinrateTable(self):
+        url = reverse("expectedDraftOrderWinrateTable")
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_view_expectedDraftOrderWinrateLaneTable(self):
+        for lane in self.lanes:
+            with self.subTest(lane=lane):
+                url = reverse("expectedDraftOrderWinrateLaneTable", kwargs={'lane': lane.laneName})
+                response = self.client.get(url)
+                self.assertEqual(response.status_code, 200)
+
+    def test_view_playerLaneCountTable(self):
+        for player in self.players:
+            with self.subTest(player=player):
+                url = reverse("playerLaneCountTable", kwargs={'pk': player.id})
+                response = self.client.get(url)
+                self.assertEqual(response.status_code, 200)
+
+    def test_view_playerChampionCountTable(self):
+        for player in self.players:
+            with self.subTest(player=player):
+                url = reverse("playerChampionCountTable", kwargs={'pk': player.id})
+                response = self.client.get(url)
+                self.assertEqual(response.status_code, 200)
+
+    def test_view_playerGamesTable(self):
+        for player in self.players:
+            with self.subTest(player=player):
+                url = reverse("playerGamesTable", kwargs={'pk': player.id})
+                response = self.client.get(url)
+                self.assertEqual(response.status_code, 200)
+
+    def test_view_gameListView(self):
+        url = reverse("gameListView")
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_view_detailGame(self):
+        for game in self.allGames:
+            with self.subTest(game=game):
+                url = reverse("detailGame", kwargs={'pk': game.id})
+                response = self.client.get(url)
+                self.assertEqual(response.status_code, 200)
+
+    def test_view_blueTeamTable(self):
+        for game in self.allGames:
+            with self.subTest(game=game):
+                url = reverse("blueTeamTable", kwargs={'pk': game.id})
+                response = self.client.get(url)
+                self.assertEqual(response.status_code, 200)
+
+    def test_view_redTeamTable(self):
+        for game in self.allGames:
+            with self.subTest(game=game):
+                url = reverse("redTeamTable", kwargs={'pk': game.id})
+                response = self.client.get(url)
+                self.assertEqual(response.status_code, 200)
+
+    def test_view_championListView(self):
+        url = reverse("championListView")
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_view_detailChampion(self):
+        for champion in self.champions:
+            with self.subTest(champion=champion):
+                url = reverse("detailChampion", kwargs={'pk': champion.id})
+                response = self.client.get(url)
+                self.assertEqual(response.status_code, 200)
+
+    def test_view_championPlaytimeChart(self):
+        for champion in self.champions:
+            with self.subTest(champion=champion):
+                url = reverse("championPlaytimeChart", kwargs={'pk': champion.id})
+                response = self.client.get(url)
+                self.assertEqual(response.status_code, 200)
+
+    def test_view_playerChampCountTable(self):
+        for champion in self.champions:
+            with self.subTest(champion=champion):
+                url = reverse("playerChampCountTable", kwargs={'pk': champion.id})
+                response = self.client.get(url)
+                self.assertEqual(response.status_code, 200)
+
+    def test_view_champGamesTable(self):
+        for champion in self.champions:
+            with self.subTest(champion=champion):
+                url = reverse("champGamesTable", kwargs={'pk': champion.id})
+                response = self.client.get(url)
+                self.assertEqual(response.status_code, 200)
+
+    def test_view_newPlayerFormView(self):
+        url = reverse("newPlayerFormView")
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_view_laneMatchupFormView(self):
+        url = reverse("laneMatchupFormView")
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_view_laneMatchupChart(self):
+        for player in self.players:
+            for secondPlayer in self.players:
+                if player == secondPlayer:
+                    continue
+                for lane in self.lanesLists:
+                    with self.subTest():
+                        url = reverse("laneMatchupChart", kwargs={'pk1': player.id, 'pk2': secondPlayer.id})
+                        response = self.client.get(url)
+                        self.assertEqual(response.status_code, 200)
+
+    def test_view_matchupGamesTable(self):
+        for player in self.players:
+            for secondPlayer in self.players:
+                if player == secondPlayer:
+                    continue
+                for lane in self.lanesLists:
+                    with self.subTest():
+                        url = reverse("matchupGamesTable", kwargs={'pk1': player.id, 'pk2': secondPlayer.id})
+                        response = self.client.get(url)
+                        self.assertEqual(response.status_code, 200)
+
+    def test_view_matchupCountTable(self):
+        for player in self.players:
+            for secondPlayer in self.players:
+                if player == secondPlayer:
+                    continue
+                for lane in self.lanesLists:
+                    with self.subTest():
+                        url = reverse("matchupCountTable", kwargs={'pk1': player.id, 'pk2': secondPlayer.id})
+                        response = self.client.get(url)
+                        self.assertEqual(response.status_code, 200)
+
+    def test_view_duoView(self):
+        url = reverse("duoView")
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_view_duoGamesTable(self):
+        for player in self.players:
+            for secondPlayer in self.players:
+                if player == secondPlayer:
+                    continue
+                for lane in self.lanesLists:
+                    with self.subTest():
+                        url = reverse("duoGamesTable", kwargs={'pk1': player.id, 'pk2': secondPlayer.id})
+                        response = self.client.get(url)
+                        self.assertEqual(response.status_code, 200)
+
+    def test_view_leaderboards(self):
+        url = reverse("leaderboards")
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_view_mostKillsGameTable(self):
+        url = reverse("mostKillsGameTable")
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_view_mostDeathsGameTable(self):
+        url = reverse("mostDeathsGameTable")
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_view_mostAssistsGameTable(self):
+        url = reverse("mostAssistsGameTable")
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)

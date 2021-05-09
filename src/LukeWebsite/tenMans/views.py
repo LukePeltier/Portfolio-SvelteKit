@@ -1009,9 +1009,9 @@ class MostKillsGameTable(View):
         data = []
         players = Player.objects.all()
 
-        scores = [player.getHighestKillCountGameLaneStats(None).kills for player in players]
+        scores = [player.getHighestKillCountGameLaneStats(None).kills for player in players if player.getHighestKillCountGameLaneStats(None) is not None]
         names = [player.playerName for player in players]
-        gameIDs = [player.getHighestKillCountGameLaneStats(None).gameLaner.game.id for player in players]
+        gameIDs = [player.getHighestKillCountGameLaneStats(None).gameLaner.game.id for player in players if player.getHighestKillCountGameLaneStats(None) is not None]
         playerIDs = [player.id for player in players]
 
         leaderboard = sorted(zip(scores, names, gameIDs, playerIDs), reverse=True)[:3]
@@ -1034,9 +1034,9 @@ class MostDeathsGameTable(View):
         data = []
         players = Player.objects.all()
 
-        scores = [player.getHighestDeathCountGameLaneStats(None).deaths for player in players]
+        scores = [player.getHighestDeathCountGameLaneStats(None).deaths for player in players if player.getHighestDeathCountGameLaneStats(None) is not None]
         names = [player.playerName for player in players]
-        gameIDs = [player.getHighestDeathCountGameLaneStats(None).gameLaner.game.id for player in players]
+        gameIDs = [player.getHighestDeathCountGameLaneStats(None).gameLaner.game.id for player in players if player.getHighestDeathCountGameLaneStats(None) is not None]
         playerIDs = [player.id for player in players]
 
         leaderboard = sorted(zip(scores, names, gameIDs, playerIDs), reverse=True)[:3]
@@ -1059,9 +1059,9 @@ class MostAssistsGameTable(View):
         data = []
         players = Player.objects.all()
 
-        scores = [player.getHighestAssistCountGameLaneStats(None).assists for player in players]
+        scores = [player.getHighestAssistCountGameLaneStats(None).assists for player in players if player.getHighestAssistCountGameLaneStats(None) is not None]
         names = [player.playerName for player in players]
-        gameIDs = [player.getHighestAssistCountGameLaneStats(None).gameLaner.game.id for player in players]
+        gameIDs = [player.getHighestAssistCountGameLaneStats(None).gameLaner.game.id for player in players if player.getHighestAssistCountGameLaneStats(None) is not None]
         playerIDs = [player.id for player in players]
 
         leaderboard = sorted(zip(scores, names, gameIDs, playerIDs), reverse=True)[:3]
