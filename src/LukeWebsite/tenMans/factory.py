@@ -49,8 +49,8 @@ class GameLanerFactory(factory.django.DjangoModelFactory):
     championSelectOrder = factory.fuzzy.FuzzyChoice([None, 1, 2, 3, 4, 5, 6, 7])
 
 
-class GameLanerNoSupport(GameLanerFactory):
-    lane = factory.Iterator(Lane.objects.exclude(laneName__exact="Support"))
+class GameLanerNoSupportOrTop(GameLanerFactory):
+    lane = factory.Iterator(Lane.objects.exclude(laneName__exact="Support").exclude(laneName__exact="Top"))
 
 
 class GameLanerRandomGameFactory(GameLanerFactory):
