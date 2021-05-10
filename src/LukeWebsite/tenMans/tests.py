@@ -414,33 +414,30 @@ class FullDataTest(TestCase):
             for secondPlayer in self.players:
                 if player == secondPlayer:
                     continue
-                for lane in self.lanesLists:
-                    with self.subTest():
-                        url = reverse("laneMatchupChart", kwargs={'pk1': player.id, 'pk2': secondPlayer.id})
-                        response = self.client.get(url)
-                        self.assertEqual(response.status_code, 200)
+                with self.subTest():
+                    url = reverse("laneMatchupChart", kwargs={'pk1': player.id, 'pk2': secondPlayer.id})
+                    response = self.client.get(url)
+                    self.assertEqual(response.status_code, 200)
 
     def test_view_matchupGamesTable(self):
         for player in self.players:
             for secondPlayer in self.players:
                 if player == secondPlayer:
                     continue
-                for lane in self.lanesLists:
-                    with self.subTest():
-                        url = reverse("matchupGamesTable", kwargs={'pk1': player.id, 'pk2': secondPlayer.id})
-                        response = self.client.get(url)
-                        self.assertEqual(response.status_code, 200)
+                with self.subTest():
+                    url = reverse("matchupGamesTable", kwargs={'pk1': player.id, 'pk2': secondPlayer.id})
+                    response = self.client.get(url)
+                    self.assertEqual(response.status_code, 200)
 
     def test_view_matchupCountTable(self):
         for player in self.players:
             for secondPlayer in self.players:
                 if player == secondPlayer:
                     continue
-                for lane in self.lanesLists:
-                    with self.subTest():
-                        url = reverse("matchupCountTable", kwargs={'pk1': player.id, 'pk2': secondPlayer.id})
-                        response = self.client.get(url)
-                        self.assertEqual(response.status_code, 200)
+                with self.subTest():
+                    url = reverse("matchupCountTable", kwargs={'pk1': player.id, 'pk2': secondPlayer.id})
+                    response = self.client.get(url)
+                    self.assertEqual(response.status_code, 200)
 
     def test_view_duoView(self):
         url = reverse("duoView")
@@ -452,11 +449,10 @@ class FullDataTest(TestCase):
             for secondPlayer in self.players:
                 if player == secondPlayer:
                     continue
-                for lane in self.lanesLists:
-                    with self.subTest():
-                        url = reverse("duoGamesTable", kwargs={'pk1': player.id, 'pk2': secondPlayer.id})
-                        response = self.client.get(url)
-                        self.assertEqual(response.status_code, 200)
+                with self.subTest():
+                    url = reverse("duoGamesTable", kwargs={'pk1': player.id, 'pk2': secondPlayer.id})
+                    response = self.client.get(url)
+                    self.assertEqual(response.status_code, 200)
 
     def test_view_leaderboards(self):
         url = reverse("leaderboards")
