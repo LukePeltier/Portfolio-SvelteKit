@@ -301,6 +301,74 @@ $(function () {
             }
         })
 
+        var blueTeamBansTable = $('#blueTeamBansTable').DataTable({
+            "ajax": $('#blueTeamBansTable').data('url'),
+            "columns": [
+                {
+                    "data": "champion",
+                    "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
+                        if(oData.riotChampionName!=undefined){
+                            $(nTd).html("<a href='/ten_mans/champion/" + oData.championID+"'> <img src='https://ddragon.leagueoflegends.com/cdn/" + oData.championVersion +"/img/champion/"+oData.riotChampionName+".png' style='width:20px; height:20px;'/> "+sData+"</a>");
+                        }
+                    }
+                },
+                {
+                    "data": "playerName",
+                    "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
+                        $(nTd).html("<a href='/ten_mans/player/" + oData.playerID + "'>" + sData + "</a>");
+                    }
+                },
+                {
+                    "data": "playerID"
+                }
+            ],
+            columnDefs: [{
+                targets: [2],
+                visible: false
+            }],
+            paging: false,
+            searching: false,
+            info: false,
+            "order": [
+                [1, "asc"]
+            ],
+            "pageResize": true
+        })
+
+        var redTeamBansTable = $('#redTeamBansTable').DataTable({
+            "ajax": $('#redTeamBansTable').data('url'),
+            "columns": [
+                {
+                    "data": "champion",
+                    "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
+                        if(oData.riotChampionName!=undefined){
+                            $(nTd).html("<a href='/ten_mans/champion/" + oData.championID+"'> <img src='https://ddragon.leagueoflegends.com/cdn/" + oData.championVersion +"/img/champion/"+oData.riotChampionName+".png' style='width:20px; height:20px;'/> "+sData+"</a>");
+                        }
+                    }
+                },
+                {
+                    "data": "playerName",
+                    "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
+                        $(nTd).html("<a href='/ten_mans/player/" + oData.playerID + "'>" + sData + "</a>");
+                    }
+                },
+                {
+                    "data": "playerID"
+                }
+            ],
+            columnDefs: [{
+                targets: [2],
+                visible: false
+            }],
+            paging: false,
+            searching: false,
+            info: false,
+            "order": [
+                [1, "asc"]
+            ],
+            "pageResize": true
+        })
+
     });
 
 

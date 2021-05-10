@@ -13,7 +13,7 @@ from django.views.generic.list import ListView
 from tenMans.extras.data import GlobalVars
 from tenMans.forms import (CreatePlayer, DuoForm, LaneMatchup, NewGameForm,
                            UpdateAllGamesForm, UpdateGameForm)
-from tenMans.models import (Champion, Game, GameLaner, GameLanerStats, Lane,
+from tenMans.models import (Champion, Game, GameBan, GameLaner, GameLanerStats, Lane,
                             Player)
 
 
@@ -570,6 +570,58 @@ class RedTeamTable(DetailView):
         })
 
 
+class BlueTeamBanTable(DetailView):
+    model = Game
+
+    def get(self, request, *args, **kwargs):
+        data = []
+        self.object = self.get_object()
+        self.object: Game
+        enemyList = GameLaner.objects.filter(game__exact=self.object.id, blueTeam__exact=False)
+        gameBans = GameBan.objects.filter(game__exact=self.object.id, targetPlayer__in=[enemy.player for enemy in enemyList])
+        versionNumber = GlobalVars.getLoLVersion()
+
+        for ban in gameBans:
+            playerDict = {}
+            playerDict["playerName"] = ban.targetPlayer.playerName
+            playerDict['champion'] = ban.champion.championName
+            playerDict['playerID'] = ban.targetPlayer.id
+            playerDict['championID'] = ban.champion.id
+            playerDict['riotChampionName'] = ban.champion.riotName
+            playerDict['championVersion'] = versionNumber
+            data.append(playerDict)
+
+        return JsonResponse(data={
+            'data': data
+        })
+
+
+class RedTeamBanTable(DetailView):
+    model = Game
+
+    def get(self, request, *args, **kwargs):
+        data = []
+        self.object = self.get_object()
+        self.object: Game
+        enemyList = GameLaner.objects.filter(game__exact=self.object.id, blueTeam__exact=True)
+        gameBans = GameBan.objects.filter(game__exact=self.object.id, targetPlayer__in=[enemy.player for enemy in enemyList])
+        versionNumber = GlobalVars.getLoLVersion()
+
+        for ban in gameBans:
+            playerDict = {}
+            playerDict["playerName"] = ban.targetPlayer.playerName
+            playerDict['champion'] = ban.champion.championName
+            playerDict['playerID'] = ban.targetPlayer.id
+            playerDict['championID'] = ban.champion.id
+            playerDict['riotChampionName'] = ban.champion.riotName
+            playerDict['championVersion'] = versionNumber
+            data.append(playerDict)
+
+        return JsonResponse(data={
+            'data': data
+        })
+
+
 class ChampionListView(ListView, BaseTenMansContextMixin):
     model = Champion
 
@@ -1058,6 +1110,203 @@ class MostAssistsGameTable(View):
             lineDict['gameID'] = line[2]
             lineDict['playerID'] = line[3]
             lineDict['game'] = Game.objects.get(pk=line[2]).gameNumber
+            data.append(lineDict)
+
+        return JsonResponse(data={
+            'data': data
+        })
+
+
+class MostDamageGameTable(View):
+    def get(self, request, *args, **kwargs):
+        data = []
+        players = Player.objects.all()
+
+        scores = [player.getHighestDamageCountGameLaneStats(None).totalDamageDealtToChampions for player in players if player.getHighestDamageCountGameLaneStats(None) is not None]
+        names = [player.playerName for player in players]
+        gameIDs = [player.getHighestDamageCountGameLaneStats(None).gameLaner.game.id for player in players if player.getHighestDamageCountGameLaneStats(None) is not None]
+        playerIDs = [player.id for player in players]
+
+        leaderboard = sorted(zip(scores, names, gameIDs, playerIDs), reverse=True)[:3]
+        for line in leaderboard:
+            lineDict = {}
+            lineDict['name'] = line[1]
+            lineDict['damage'] = line[0]
+            lineDict['gameID'] = line[2]
+            lineDict['playerID'] = line[3]
+            lineDict['game'] = Game.objects.get(pk=line[2]).gameNumber
+            data.append(lineDict)
+
+        return JsonResponse(data={
+            'data': data
+        })
+
+
+class MostSpreeGameTable(View):
+    def get(self, request, *args, **kwargs):
+        data = []
+        players = Player.objects.all()
+
+        scores = [player.getHighestSpreeCountGameLaneStats(None).largestKillingSpree for player in players if player.getHighestSpreeCountGameLaneStats(None) is not None]
+        names = [player.playerName for player in players]
+        gameIDs = [player.getHighestSpreeCountGameLaneStats(None).gameLaner.game.id for player in players if player.getHighestSpreeCountGameLaneStats(None) is not None]
+        playerIDs = [player.id for player in players]
+
+        leaderboard = sorted(zip(scores, names, gameIDs, playerIDs), reverse=True)[:3]
+        for line in leaderboard:
+            lineDict = {}
+            lineDict['name'] = line[1]
+            lineDict['spree'] = line[0]
+            lineDict['gameID'] = line[2]
+            lineDict['playerID'] = line[3]
+            lineDict['game'] = Game.objects.get(pk=line[2]).gameNumber
+            data.append(lineDict)
+
+        return JsonResponse(data={
+            'data': data
+        })
+
+
+class MostCSGameTable(View):
+    def get(self, request, *args, **kwargs):
+        data = []
+        players = Player.objects.all()
+
+        scores = [player.getHighestCSGameLaneStats(None).getTotalCS() for player in players if player.getHighestCSGameLaneStats(None) is not None]
+        names = [player.playerName for player in players]
+        gameIDs = [player.getHighestCSGameLaneStats(None).gameLaner.game.id for player in players if player.getHighestCSGameLaneStats(None) is not None]
+        playerIDs = [player.id for player in players]
+
+        leaderboard = sorted(zip(scores, names, gameIDs, playerIDs), reverse=True)[:3]
+        for line in leaderboard:
+            lineDict = {}
+            lineDict['name'] = line[1]
+            lineDict['cs'] = line[0]
+            lineDict['gameID'] = line[2]
+            lineDict['playerID'] = line[3]
+            lineDict['game'] = Game.objects.get(pk=line[2]).gameNumber
+            data.append(lineDict)
+
+        return JsonResponse(data={
+            'data': data
+        })
+
+
+class MostCSFirstTwentyGameTable(View):
+    def get(self, request, *args, **kwargs):
+        data = []
+        players = Player.objects.all()
+
+        scores = [player.getHighestCSFirstTwentyGameLaneStats(None).getFirstTwentyCSRate() for player in players if player.getHighestCSFirstTwentyGameLaneStats(None) is not None]
+        names = [player.playerName for player in players]
+        gameIDs = [player.getHighestCSFirstTwentyGameLaneStats(None).gameLaner.game.id for player in players if player.getHighestCSFirstTwentyGameLaneStats(None) is not None]
+        playerIDs = [player.id for player in players]
+
+        leaderboard = sorted(zip(scores, names, gameIDs, playerIDs), reverse=True)[:3]
+        for line in leaderboard:
+            lineDict = {}
+            lineDict['name'] = line[1]
+            lineDict['cs'] = line[0]
+            lineDict['gameID'] = line[2]
+            lineDict['playerID'] = line[3]
+            lineDict['game'] = Game.objects.get(pk=line[2]).gameNumber
+            data.append(lineDict)
+
+        return JsonResponse(data={
+            'data': data
+        })
+
+
+class MostVisionGameTable(View):
+    def get(self, request, *args, **kwargs):
+        data = []
+        players = Player.objects.all()
+
+        scores = [player.getHighestVisionGameLaneStats(None).visionScore for player in players if player.getHighestVisionGameLaneStats(None) is not None]
+        names = [player.playerName for player in players]
+        gameIDs = [player.getHighestVisionGameLaneStats(None).gameLaner.game.id for player in players if player.getHighestVisionGameLaneStats(None) is not None]
+        playerIDs = [player.id for player in players]
+
+        leaderboard = sorted(zip(scores, names, gameIDs, playerIDs), reverse=True)[:3]
+        for line in leaderboard:
+            lineDict = {}
+            lineDict['name'] = line[1]
+            lineDict['vision'] = line[0]
+            lineDict['gameID'] = line[2]
+            lineDict['playerID'] = line[3]
+            lineDict['game'] = Game.objects.get(pk=line[2]).gameNumber
+            data.append(lineDict)
+
+        return JsonResponse(data={
+            'data': data
+        })
+
+
+class MostControlWardGameTable(View):
+    def get(self, request, *args, **kwargs):
+        data = []
+        players = Player.objects.all()
+
+        scores = [player.getHighestControlWardGameLaneStats(None).controlWardsPurchased for player in players if player.getHighestControlWardGameLaneStats(None) is not None]
+        names = [player.playerName for player in players]
+        gameIDs = [player.getHighestControlWardGameLaneStats(None).gameLaner.game.id for player in players if player.getHighestControlWardGameLaneStats(None) is not None]
+        playerIDs = [player.id for player in players]
+
+        leaderboard = sorted(zip(scores, names, gameIDs, playerIDs), reverse=True)[:3]
+        for line in leaderboard:
+            lineDict = {}
+            lineDict['name'] = line[1]
+            lineDict['cw'] = line[0]
+            lineDict['gameID'] = line[2]
+            lineDict['playerID'] = line[3]
+            lineDict['game'] = Game.objects.get(pk=line[2]).gameNumber
+            data.append(lineDict)
+
+        return JsonResponse(data={
+            'data': data
+        })
+
+
+class MostBanGameTable(View):
+    def get(self, request, *args, **kwargs):
+        data = []
+        players = Player.objects.all()
+
+        scores = [player.getHighestBanGame(None)['bans'] for player in players if player.getHighestBanGame(None)['game.id'] is not None]
+        names = [player.playerName for player in players]
+        gameIDs = [player.getHighestBanGame(None)['game.id'] for player in players if player.getHighestBanGame(None)['game.id'] is not None]
+        playerIDs = [player.id for player in players]
+
+        leaderboard = sorted(zip(scores, names, gameIDs, playerIDs), reverse=True)[:3]
+        for line in leaderboard:
+            lineDict = {}
+            lineDict['name'] = line[1]
+            lineDict['ban'] = line[0]
+            lineDict['gameID'] = line[2]
+            lineDict['playerID'] = line[3]
+            lineDict['game'] = Game.objects.get(pk=line[2]).gameNumber
+            data.append(lineDict)
+
+        return JsonResponse(data={
+            'data': data
+        })
+
+
+class MostChampsTable(View):
+    def get(self, request, *args, **kwargs):
+        data = []
+        players = Player.objects.all()
+
+        scores = [player.getUniqueChampionCount() for player in players]
+        names = [player.playerName for player in players]
+        playerIDs = [player.id for player in players]
+
+        leaderboard = sorted(zip(scores, names, playerIDs), reverse=True)[:3]
+        for line in leaderboard:
+            lineDict = {}
+            lineDict['name'] = line[1]
+            lineDict['champions'] = line[0]
+            lineDict['playerID'] = line[2]
             data.append(lineDict)
 
         return JsonResponse(data={

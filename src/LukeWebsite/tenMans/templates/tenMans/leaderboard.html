@@ -5,53 +5,184 @@
 {%block content%}
 <div class="container-fluid">
     <h1>Leaderboards</h1>
-    <div class="row justify-content-md-center">
-        <div id="mostKillsGameTableContainer" class="col-2">
-            <h3>Most Kills (One Game)</h3>
-            <table id="mostKillsGameTable" class="table table-hover table-bordered table-sm"
+    <div class="row linedheader" style="padding-top: 20px;">
+        <div class="col-xl-4 col-md-6">
+            <h2>Single Game</h2>
+        </div>
+    </div>
+    <div class="row justify-content-center" style="padding-top: 10px;">
+        <div id="mostKillsGameTableContainer" class="col-xl-4 col-md-6">
+            <h3 class="leaderboardTitle">Most Kills</h3>
+            <table id="mostKillsGameTable" class="table table-hover table-bordered table-sm" style="width:100%"
                 data-url="{% url 'mostKillsGameTable'%}">
                 <thead>
                     <tr>
-                        <th>Name</th>
-                        <th>Kills</th>
-                        <th>Game</th>
-                        <th>gameID</th>
-                        <th>playerID</th>
+                        <th style="white-space: nowrap;">Name</th>
+                        <th style="white-space: nowrap;">Kills</th>
+                        <th style="white-space: nowrap;">Game</th>
+                        <th style="white-space: nowrap;">gameID</th>
+                        <th style="white-space: nowrap;">playerID</th>
                     </tr>
                 </thead>
             </table>
         </div>
-        <div id="mostDeathsGameTableContainer" class="col-2">
-            <h3>Most Deaths (One Game)</h3>
-            <table id="mostDeathsGameTable" class="table table-hover table-bordered table-sm"
+        <div id="mostDeathsGameTableContainer" class="col-xl-4 col-md-6">
+            <h3 class="leaderboardTitle">Most Deaths</h3>
+            <table id="mostDeathsGameTable" class="table table-hover table-bordered table-sm" style="width:100%"
                 data-url="{% url 'mostDeathsGameTable'%}">
                 <thead>
                     <tr>
-                        <th>Name</th>
-                        <th>Deaths</th>
-                        <th>Game</th>
-                        <th>gameID</th>
-                        <th>playerID</th>
+                        <th style="white-space: nowrap;">Name</th>
+                        <th style="white-space: nowrap;">Deaths</th>
+                        <th style="white-space: nowrap;">Game</th>
+                        <th style="white-space: nowrap;">gameID</th>
+                        <th style="white-space: nowrap;">playerID</th>
                     </tr>
                 </thead>
             </table>
         </div>
-        <div id="mostAssistsGameTableContainer" class="col-2">
-            <h3>Most Assists (One Game)</h3>
-            <table id="mostAssistsGameTable" class="table table-hover table-bordered table-sm"
+        <div id="mostAssistsGameTableContainer" class="col-xl-4 col-md-6">
+            <h3 class="leaderboardTitle">Most Assists</h3>
+            <table id="mostAssistsGameTable" class="table table-hover table-bordered table-sm" style="width:100%"
                 data-url="{% url 'mostAssistsGameTable'%}">
                 <thead>
                     <tr>
-                        <th>Name</th>
-                        <th>Assists</th>
-                        <th>Game</th>
-                        <th>gameID</th>
-                        <th>playerID</th>
+                        <th style="white-space: nowrap;">Name</th>
+                        <th style="white-space: nowrap;">Assists</th>
+                        <th style="white-space: nowrap;">Game</th>
+                        <th style="white-space: nowrap;">gameID</th>
+                        <th style="white-space: nowrap;">playerID</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+        <div id="mostDamageGameTableContainer" class="col-xl-4 col-md-6">
+            <h3 class="leaderboardTitle">Most Damage</h3>
+            <table id="mostDamageGameTable" class="table table-hover table-bordered table-sm" style="width:100%"
+                data-url="{% url 'mostDamageGameTable'%}">
+                <thead>
+                    <tr>
+                        <th style="white-space: nowrap;">Name</th>
+                        <th style="white-space: nowrap;">Damage</th>
+                        <th style="white-space: nowrap;">Game</th>
+                        <th style="white-space: nowrap;">gameID</th>
+                        <th style="white-space: nowrap;">playerID</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+        <div id="mostSpreeGameTableContainer" class="col-xl-4 col-md-6">
+            <h3 class="leaderboardTitle">Largest Killing Spree</h3>
+            <table id="mostSpreeGameTable" class="table table-hover table-bordered table-sm" style="width:100%"
+                data-url="{% url 'mostSpreeGameTable'%}">
+                <thead>
+                    <tr>
+                        <th style="white-space: nowrap;">Name</th>
+                        <th style="white-space: nowrap;">Killing Spree</th>
+                        <th style="white-space: nowrap;">Game</th>
+                        <th style="white-space: nowrap;">gameID</th>
+                        <th style="white-space: nowrap;">playerID</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+        <div id="mostCSGameTableContainer" class="col-xl-4 col-md-6">
+            <h3 class="leaderboardTitle">Most CS</h3>
+            <table id="mostCSGameTable" class="table table-hover table-bordered table-sm" style="width:100%"
+                data-url="{% url 'mostCSGameTable'%}">
+                <thead>
+                    <tr>
+                        <th style="white-space: nowrap;">Name</th>
+                        <th style="white-space: nowrap;">CS</th>
+                        <th style="white-space: nowrap;">Game</th>
+                        <th style="white-space: nowrap;">gameID</th>
+                        <th style="white-space: nowrap;">playerID</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+        <div id="mostCSFirstTwentyGameTableContainer" class="col-xl-4 col-md-6">
+            <h3 class="leaderboardTitle">Most CS/Min in the First 20 Minutes</h3>
+            <table id="mostCSFirstTwentyGameTable" class="table table-hover table-bordered table-sm" style="width:100%"
+                data-url="{% url 'mostCSFirstTwentyGameTable'%}">
+                <thead>
+                    <tr>
+                        <th style="white-space: nowrap;">Name</th>
+                        <th style="white-space: nowrap;">CS</th>
+                        <th style="white-space: nowrap;">Game</th>
+                        <th style="white-space: nowrap;">gameID</th>
+                        <th style="white-space: nowrap;">playerID</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+        <div id="mostVisionGameTableContainer" class="col-xl-4 col-md-6">
+            <h3 class="leaderboardTitle">Most Vision</h3>
+            <table id="mostVisionGameTable" class="table table-hover table-bordered table-sm" style="width:100%"
+                data-url="{% url 'mostVisionGameTable'%}">
+                <thead>
+                    <tr>
+                        <th style="white-space: nowrap;">Name</th>
+                        <th style="white-space: nowrap;">Vision</th>
+                        <th style="white-space: nowrap;">Game</th>
+                        <th style="white-space: nowrap;">gameID</th>
+                        <th style="white-space: nowrap;">playerID</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+        <div id="mostControlWardGameTableContainer" class="col-xl-4 col-md-6">
+            <h3 class="leaderboardTitle">Most Control Wards Purchased</h3>
+            <table id="mostControlWardGameTable" class="table table-hover table-bordered table-sm" style="width:100%"
+                data-url="{% url 'mostControlWardGameTable'%}">
+                <thead>
+                    <tr>
+                        <th style="white-space: nowrap;">Name</th>
+                        <th style="white-space: nowrap;">Control Wards</th>
+                        <th style="white-space: nowrap;">Game</th>
+                        <th style="white-space: nowrap;">gameID</th>
+                        <th style="white-space: nowrap;">playerID</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+        <div id="mostBanGameTableContainer" class="col-xl-4 col-md-6">
+            <h3 class="leaderboardTitle">Most Target Bans</h3>
+            <table id="mostBanGameTable" class="table table-hover table-bordered table-sm" style="width:100%"
+                data-url="{% url 'mostBanGameTable'%}">
+                <thead>
+                    <tr>
+                        <th style="white-space: nowrap;">Name</th>
+                        <th style="white-space: nowrap;">Bans</th>
+                        <th style="white-space: nowrap;">Game</th>
+                        <th style="white-space: nowrap;">gameID</th>
+                        <th style="white-space: nowrap;">playerID</th>
                     </tr>
                 </thead>
             </table>
         </div>
     </div>
+    <div class="row linedheader" style="padding-top: 20px;">
+        <div class="col-xl-4 col-md-6">
+            <h2>Lifetime</h2>
+        </div>
+    </div>
+    <div class="row justify-content-center" style="padding-top: 10px;">
+        <div id="mostChampsTableContainer" class="col-xl-4 col-md-6">
+            <h3 class="leaderboardTitle">Most Played Champions</h3>
+            <table id="mostChampsTable" class="table table-hover table-bordered table-sm" style="width:100%"
+                data-url="{% url 'mostChampsTable'%}">
+                <thead>
+                    <tr>
+                        <th style="white-space: nowrap;">Name</th>
+                        <th style="white-space: nowrap;">Champions</th>
+                        <th style="white-space: nowrap;">playerID</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+
 </div>
 <script src="{%static 'js/leaderboards.js'%}"></script>
 {%endblock%}

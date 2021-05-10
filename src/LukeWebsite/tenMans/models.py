@@ -381,6 +381,7 @@ class Player(models.Model):
         maxKills = -1
         currentBestStats = None
         for stat in stats:
+            stat: GameLanerStats
             if stat.kills > maxKills:
                 currentBestStats = stat
                 maxKills = stat.kills
@@ -397,7 +398,8 @@ class Player(models.Model):
         maxDeaths = -1
         currentBestStats = None
         for stat in stats:
-            if stat.kills > maxDeaths:
+            stat: GameLanerStats
+            if stat.deaths > maxDeaths:
                 currentBestStats = stat
                 maxDeaths = stat.deaths
         return currentBestStats
@@ -413,10 +415,128 @@ class Player(models.Model):
         maxAssists = -1
         currentBestStats = None
         for stat in stats:
-            if stat.kills > maxAssists:
+            stat: GameLanerStats
+            if stat.assists > maxAssists:
                 currentBestStats = stat
                 maxAssists = stat.assists
         return currentBestStats
+
+    def getHighestDamageCountGameLaneStats(self, lane):
+        if lane is None:
+            gamesPlayed = GameLaner.objects.filter(player__exact=self.id)
+        else:
+            gamesPlayed = GameLaner.objects.filter(player__exact=lane.id)
+
+        stats = GameLanerStats.objects.filter(gameLaner__in=gamesPlayed)
+
+        maxDamage = -1
+        currentBestStats = None
+        for stat in stats:
+            stat: GameLanerStats
+            if stat.totalDamageDealtToChampions > maxDamage:
+                currentBestStats = stat
+                maxDamage = stat.totalDamageDealtToChampions
+        return currentBestStats
+
+    def getHighestSpreeCountGameLaneStats(self, lane):
+        if lane is None:
+            gamesPlayed = GameLaner.objects.filter(player__exact=self.id)
+        else:
+            gamesPlayed = GameLaner.objects.filter(player__exact=lane.id)
+
+        stats = GameLanerStats.objects.filter(gameLaner__in=gamesPlayed)
+
+        maxSpree = -1
+        currentBestStats = None
+        for stat in stats:
+            stat: GameLanerStats
+            if stat.largestKillingSpree > maxSpree:
+                currentBestStats = stat
+                maxSpree = stat.largestKillingSpree
+        return currentBestStats
+
+    def getHighestCSGameLaneStats(self, lane):
+        if lane is None:
+            gamesPlayed = GameLaner.objects.filter(player__exact=self.id)
+        else:
+            gamesPlayed = GameLaner.objects.filter(player__exact=lane.id)
+
+        stats = GameLanerStats.objects.filter(gameLaner__in=gamesPlayed)
+
+        maxCS = -1
+        currentBestStats = None
+        for stat in stats:
+            stat: GameLanerStats
+            if stat.getTotalCS() > maxCS:
+                currentBestStats = stat
+                maxCS = stat.getTotalCS()
+        return currentBestStats
+
+    def getHighestCSFirstTwentyGameLaneStats(self, lane):
+        if lane is None:
+            gamesPlayed = GameLaner.objects.filter(player__exact=self.id)
+        else:
+            gamesPlayed = GameLaner.objects.filter(player__exact=lane.id)
+
+        stats = GameLanerStats.objects.filter(gameLaner__in=gamesPlayed)
+
+        maxCS = -1
+        currentBestStats = None
+        for stat in stats:
+            stat: GameLanerStats
+            if stat.getFirstTwentyCSRate() > maxCS:
+                currentBestStats = stat
+                maxCS = stat.getFirstTwentyCSRate()
+        return currentBestStats
+
+    def getHighestVisionGameLaneStats(self, lane):
+        if lane is None:
+            gamesPlayed = GameLaner.objects.filter(player__exact=self.id)
+        else:
+            gamesPlayed = GameLaner.objects.filter(player__exact=lane.id)
+
+        stats = GameLanerStats.objects.filter(gameLaner__in=gamesPlayed)
+
+        maxVision = -1
+        currentBestStats = None
+        for stat in stats:
+            stat: GameLanerStats
+            if stat.visionScore > maxVision:
+                currentBestStats = stat
+                maxVision = stat.visionScore
+        return currentBestStats
+
+    def getHighestControlWardGameLaneStats(self, lane):
+        if lane is None:
+            gamesPlayed = GameLaner.objects.filter(player__exact=self.id)
+        else:
+            gamesPlayed = GameLaner.objects.filter(player__exact=lane.id)
+
+        stats = GameLanerStats.objects.filter(gameLaner__in=gamesPlayed)
+
+        maxCW = -1
+        currentBestStats = None
+        for stat in stats:
+            stat: GameLanerStats
+            if stat.controlWardsPurchased > maxCW:
+                currentBestStats = stat
+                maxCW = stat.controlWardsPurchased
+        return currentBestStats
+
+    def getHighestBanGame(self, lane):
+        if lane is None:
+            gamesPlayed = GameLaner.objects.filter(player__exact=self.id)
+        else:
+            gamesPlayed = GameLaner.objects.filter(player__exact=lane.id)
+
+        maxBans = -1
+        currentBestGameID = None
+        for gameLane in gamesPlayed:
+            numOfBans = GameBan.objects.filter(game__exact=gameLane.game.id, targetPlayer__exact=self.id).count()
+            if numOfBans > maxBans:
+                currentBestGameID = gameLane.game.id
+                maxBans = numOfBans
+        return {"bans": maxBans, "game.id": currentBestGameID}
 
     def __str__(self):
         return self.playerName
@@ -614,6 +734,12 @@ class GameLanerStats(models.Model):
 
     csRateFirstTen = models.FloatField()
     csRateSecondTen = models.FloatField()
+
+    def getTotalCS(self):
+        return self.laneMinionsKilled + self.neutralMinionsKilled
+
+    def getFirstTwentyCSRate(self):
+        return (self.csRateFirstTen + self.csRateSecondTen) / 2
 
     def provideStats(localGame, champMap, match: cass.Match):
         for participant in match.participants:
