@@ -37,18 +37,10 @@ class Player(models.Model):
             # Lane winrate
             gamesPlayed = GameLaner.objects.filter(
                 player__exact=self.id, lane__exact=lane.id)
-        totalGameCount = gamesPlayed.count()
-        if totalGameCount == 0:
+        winrate = Player.getWinrateOnList(gamesPlayed)
+        if winrate is None:
             return "N/A"
-        winningCount = 0
-        for gameLane in gamesPlayed.iterator():
-            gameLane: GameLaner
-            blueTeam = gameLane.blueTeam
-            blueWin = gameLane.game.gameBlueWins
-            if blueTeam == blueWin:
-                winningCount += 1
-
-        return round((winningCount / totalGameCount) * 100, 2)
+        return winrate
 
     def getLaneRate(self, lane):
         players = Player.objects.all()
@@ -72,34 +64,16 @@ class Player(models.Model):
             # Overall winrate
             gamesPlayed = GameLaner.objects.filter(
                 player__exact=self.id, game__gameNumber__lte=maxGame.gameNumber)
-            totalGameCount = gamesPlayed.count()
-            if totalGameCount == 0:
-                return None
-            winningCount = 0
-            for gameLane in gamesPlayed.iterator():
-                gameLane: GameLaner
-                blueTeam = gameLane.blueTeam
-                blueWin = gameLane.game.gameBlueWins
-                if blueTeam == blueWin:
-                    winningCount += 1
-            return round((winningCount / totalGameCount) * 100, 2)
         else:
             # Lane winrate
             gamesPlayed = GameLaner.objects.filter(
                 player__exact=self.id,
                 lane__exact=lane.id,
                 game__gameNumber__lte=maxGame.gameNumber)
-            totalGameCount = gamesPlayed.count()
-            if totalGameCount == 0:
-                return None
-            winningCount = 0
-            for gameLane in gamesPlayed.iterator():
-                gameLane: GameLaner
-                blueTeam = gameLane.blueTeam
-                blueWin = gameLane.game.gameBlueWins
-                if blueTeam == blueWin:
-                    winningCount += 1
-            return round((winningCount / totalGameCount) * 100, 2)
+        winrate = Player.getWinrateOnList(gamesPlayed)
+        if winrate is None:
+            return "N/A"
+        return winrate
 
     def getAverageDraftOrder(self):
         totalDraftSum = 0
@@ -160,18 +134,10 @@ class Player(models.Model):
         # Lane winrate
         gamesPlayed = GameLaner.objects.filter(
             player__exact=self.id, champion__exact=champion.id)
-        totalGameCount = gamesPlayed.count()
-        if totalGameCount == 0:
+        winrate = Player.getWinrateOnList(gamesPlayed)
+        if winrate is None:
             return "N/A"
-        winningCount = 0
-        for gameLane in gamesPlayed.iterator():
-            gameLane: GameLaner
-            blueTeam = gameLane.blueTeam
-            blueWin = gameLane.game.gameBlueWins
-            if blueTeam == blueWin:
-                winningCount += 1
-
-        return round((winningCount / totalGameCount) * 100, 2)
+        return winrate
 
     def getHighestWinrateChampionString(self):
         gamesPlayed = GameLaner.objects.filter(player__exact=self.id)
@@ -234,18 +200,11 @@ class Player(models.Model):
         blueTeamDetermine = side == "Blue"
         gamesPlayed = GameLaner.objects.filter(
             player__exact=self.id, blueTeam__exact=blueTeamDetermine)
-        totalGameCount = gamesPlayed.count()
-        if(totalGameCount == 0):
-            return "N/A"
-        winningCount = 0
-        for gameLane in gamesPlayed.iterator():
-            gameLane: GameLaner
-            blueTeam = gameLane.blueTeam
-            blueWin = gameLane.game.gameBlueWins
-            if blueTeam == blueWin:
-                winningCount += 1
 
-        return round((winningCount / totalGameCount) * 100, 2)
+        winrate = Player.getWinrateOnList(gamesPlayed)
+        if winrate is None:
+            return "N/A"
+        return winrate
 
     def getAverageKDALaneString(self, lane):
         if lane is None:
@@ -374,7 +333,7 @@ class Player(models.Model):
         if lane is None:
             gamesPlayed = GameLaner.objects.filter(player__exact=self.id)
         else:
-            gamesPlayed = GameLaner.objects.filter(player__exact=lane.id)
+            gamesPlayed = GameLaner.objects.filter(player__exact=self.id, lane__exact=lane.id)
 
         stats = GameLanerStats.objects.filter(gameLaner__in=gamesPlayed)
 
@@ -391,7 +350,7 @@ class Player(models.Model):
         if lane is None:
             gamesPlayed = GameLaner.objects.filter(player__exact=self.id)
         else:
-            gamesPlayed = GameLaner.objects.filter(player__exact=lane.id)
+            gamesPlayed = GameLaner.objects.filter(player__exact=self.id, lane__exact=lane.id)
 
         stats = GameLanerStats.objects.filter(gameLaner__in=gamesPlayed)
 
@@ -408,7 +367,7 @@ class Player(models.Model):
         if lane is None:
             gamesPlayed = GameLaner.objects.filter(player__exact=self.id)
         else:
-            gamesPlayed = GameLaner.objects.filter(player__exact=lane.id)
+            gamesPlayed = GameLaner.objects.filter(player__exact=self.id, lane__exact=lane.id)
 
         stats = GameLanerStats.objects.filter(gameLaner__in=gamesPlayed)
 
@@ -425,7 +384,7 @@ class Player(models.Model):
         if lane is None:
             gamesPlayed = GameLaner.objects.filter(player__exact=self.id)
         else:
-            gamesPlayed = GameLaner.objects.filter(player__exact=lane.id)
+            gamesPlayed = GameLaner.objects.filter(player__exact=self.id, lane__exact=lane.id)
 
         stats = GameLanerStats.objects.filter(gameLaner__in=gamesPlayed)
 
@@ -442,7 +401,7 @@ class Player(models.Model):
         if lane is None:
             gamesPlayed = GameLaner.objects.filter(player__exact=self.id)
         else:
-            gamesPlayed = GameLaner.objects.filter(player__exact=lane.id)
+            gamesPlayed = GameLaner.objects.filter(player__exact=self.id, lane__exact=lane.id)
 
         stats = GameLanerStats.objects.filter(gameLaner__in=gamesPlayed)
 
@@ -459,7 +418,7 @@ class Player(models.Model):
         if lane is None:
             gamesPlayed = GameLaner.objects.filter(player__exact=self.id)
         else:
-            gamesPlayed = GameLaner.objects.filter(player__exact=lane.id)
+            gamesPlayed = GameLaner.objects.filter(player__exact=self.id, lane__exact=lane.id)
 
         stats = GameLanerStats.objects.filter(gameLaner__in=gamesPlayed)
 
@@ -476,7 +435,7 @@ class Player(models.Model):
         if lane is None:
             gamesPlayed = GameLaner.objects.filter(player__exact=self.id)
         else:
-            gamesPlayed = GameLaner.objects.filter(player__exact=lane.id)
+            gamesPlayed = GameLaner.objects.filter(player__exact=self.id, lane__exact=lane.id)
 
         stats = GameLanerStats.objects.filter(gameLaner__in=gamesPlayed)
 
@@ -493,7 +452,7 @@ class Player(models.Model):
         if lane is None:
             gamesPlayed = GameLaner.objects.filter(player__exact=self.id)
         else:
-            gamesPlayed = GameLaner.objects.filter(player__exact=lane.id)
+            gamesPlayed = GameLaner.objects.filter(player__exact=self.id, lane__exact=lane.id)
 
         stats = GameLanerStats.objects.filter(gameLaner__in=gamesPlayed)
 
@@ -510,7 +469,7 @@ class Player(models.Model):
         if lane is None:
             gamesPlayed = GameLaner.objects.filter(player__exact=self.id)
         else:
-            gamesPlayed = GameLaner.objects.filter(player__exact=lane.id)
+            gamesPlayed = GameLaner.objects.filter(player__exact=self.id, lane__exact=lane.id)
 
         stats = GameLanerStats.objects.filter(gameLaner__in=gamesPlayed)
 
@@ -527,7 +486,7 @@ class Player(models.Model):
         if lane is None:
             gamesPlayed = GameLaner.objects.filter(player__exact=self.id)
         else:
-            gamesPlayed = GameLaner.objects.filter(player__exact=lane.id)
+            gamesPlayed = GameLaner.objects.filter(player__exact=self.id, lane__exact=lane.id)
 
         maxBans = -1
         currentBestGameID = None
@@ -537,6 +496,42 @@ class Player(models.Model):
                 currentBestGameID = gameLane.game.id
                 maxBans = numOfBans
         return {"bans": maxBans, "game.id": currentBestGameID}
+
+    def getCaptainWinrate(self):
+        gamesPlayed = GameLaner.objects.filter(player__exact=self.id, draftOrder__isnull=True, game__gameRandomTeams__exact=False)
+
+        winrate = Player.getWinrateOnList(gamesPlayed)
+        if winrate is None:
+            return "N/A"
+        return winrate
+
+    def getCaptainGamesPlayed(self):
+        return GameLaner.objects.filter(player__exact=self.id, draftOrder__isnull=True, game__gameRandomTeams__exact=False).count()
+
+    def getRandomsWinrate(self):
+        gamesPlayed = GameLaner.objects.filter(player__exact=self.id, game__gameRandomTeams__exact=True)
+
+        winrate = Player.getWinrateOnList(gamesPlayed)
+        if winrate is None:
+            return "N/A"
+        return winrate
+
+    def getRandomGamesPlayed(self):
+        return GameLaner.objects.filter(player__exact=self.id, game__gameRandomTeams__exact=True).count()
+
+    def getWinrateOnList(gamesPlayed):
+        totalGameCount = gamesPlayed.count()
+        if totalGameCount == 0:
+            return None
+        winningCount = 0
+        for gameLane in gamesPlayed.iterator():
+            gameLane: GameLaner
+            blueTeam = gameLane.blueTeam
+            blueWin = gameLane.game.gameBlueWins
+            if blueTeam == blueWin:
+                winningCount += 1
+
+        return round((winningCount / totalGameCount) * 100, 2)
 
     def __str__(self):
         return self.playerName
@@ -589,35 +584,19 @@ class Champion(models.Model):
             gamesPlayed = GameLaner.objects.filter(
                 champion__exact=self.id, lane__exact=lane.id)
 
-        totalGameCount = gamesPlayed.count()
-        if totalGameCount == 0:
+        winrate = Player.getWinrateOnList(gamesPlayed)
+        if winrate is None:
             return "N/A"
-        winningCount = 0
-        for gameLane in gamesPlayed.iterator():
-            gameLane: GameLaner
-            blueTeam = gameLane.blueTeam
-            blueWin = gameLane.game.gameBlueWins
-            if blueTeam == blueWin:
-                winningCount += 1
-
-        return round((winningCount / totalGameCount) * 100, 2)
+        return winrate
 
     def getSideWinrate(self, side):
         blueTeamDetermine = side == "Blue"
         gamesPlayed = GameLaner.objects.filter(
             champion__exact=self.id, blueTeam__exact=blueTeamDetermine)
-        totalGameCount = gamesPlayed.count()
-        if totalGameCount == 0:
+        winrate = Player.getWinrateOnList(gamesPlayed)
+        if winrate is None:
             return "N/A"
-        winningCount = 0
-        for gameLane in gamesPlayed.iterator():
-            gameLane: GameLaner
-            blueTeam = gameLane.blueTeam
-            blueWin = gameLane.game.gameBlueWins
-            if blueTeam == blueWin:
-                winningCount += 1
-
-        return round((winningCount / totalGameCount) * 100, 2)
+        return winrate
 
     def getPickRate(self):
         totalGameCount = Game.objects.filter(

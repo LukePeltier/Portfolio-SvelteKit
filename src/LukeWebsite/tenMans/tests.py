@@ -473,3 +473,13 @@ class FullDataTest(TestCase):
         url = reverse("mostAssistsGameTable")
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
+
+    def test_view_captainWinrateTable(self):
+        url = reverse("captainWinrateTable")
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_view_captainCountTable(self):
+        url = reverse("captainCountTable")
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)

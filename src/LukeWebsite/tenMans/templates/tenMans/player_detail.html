@@ -14,18 +14,18 @@
                 <div id="smallStatsBox" class="col">
                     <div class="row">
                         <div class="col smallPlayerStat">
-                            Most Played Lane: <b>{{ mostPlayedLane }}</b>
+                            Most Played Lane:<b> {{ mostPlayedLane }}</b>
                         </div>
                         <div class="col smallPlayerStat">
-                            Total Games Played: <b>{{ totalGamesPlayed }}</b>
+                            Total Games Played:<b> {{ totalGamesPlayed }}</b>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-6 smallPlayerStat">
-                            Most Played Champion: <b>{{ mostPlayedChamp }}</b>
+                            Most Played Champion:<b> {{ mostPlayedChamp }}</b>
                         </div>
                         <div class="col-6 smallPlayerStat">
-                            Highest Winrate Champion: <b>{{ highestWinrateChamp }}</b>
+                            Highest Winrate Champion:<b> {{ highestWinrateChamp }}</b>
                         </div>
                     </div>
                     <div class="row">
@@ -38,18 +38,26 @@
                     </div>
                     <div class="row">
                         <div class="col smallPlayerStat">
-                            Average Pulled Bans Per Game: <b> {{averageBansPulled}} </b>
+                            Average Pulled Bans Per Game:<b> {{averageBansPulled}} </b>
                         </div>
                         <div class="col smallPlayerStat">
-                            Most Banned Champion: <b> {{mostBannedChamp}} </b>
+                            Most Banned Champion:<b> {{mostBannedChamp}} </b>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col smallPlayerStat">
-                            Blue Win Rate: <b> {{blueSideWinrate}}%</b>
+                            Blue Win Rate:<b> {{blueSideWinrate}}%</b>
                         </div>
                         <div class="col smallPlayerStat">
                             Red Win Rate:<b> {{redSideWinrate}}%</b>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col smallPlayerStat">
+                            Captain Winrate:<b> {{captainWinrate}}% ({{captainGamesPlayed}})</b>
+                        </div>
+                        <div class="col smallPlayerStat">
+                            Random Winrate:<b> {{randomsWinrate}}% ({{randomsGamesPlayed}})</b>
                         </div>
                     </div>
                 </div>

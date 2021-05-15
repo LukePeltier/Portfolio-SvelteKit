@@ -11,11 +11,11 @@
     </div>
   </div>
   <div id="overallWinrate" class="row">
-    <div id="overallWinrateChartContainer" class="col-6">
+    <div id="overallWinrateChartContainer" class="col-xl-6">
     <div id="loadingText" class="align-middle text-center" style="font-size:25px"><i class="fas fa-spinner fa-spin"></i></i> Loading</div>
       <canvas id="overallWinrateChart" data-url="{% url 'overallWinrateChart' %}"</canvas>
     </div>
-    <div id="overallWinrateTableContainer" class="col-6">
+    <div id="overallWinrateTableContainer" class="col-xl-6">
       <table id="overallWinrateTable" class="table table-hover table-bordered table-sm" style="width:100%"
         data-url="{% url 'overallWinrateTable' %}">
         <thead>
@@ -40,10 +40,10 @@
     </div>
   </div>
   <div id="overallPlaytime" class="row">
-    <div id="overallPlaytimeChartContainer" class="col-6">
+    <div id="overallPlaytimeChartContainer" class="col-xl-6">
       <canvas id="overallPlaytimeChart" data-url="{% url 'overallPlaytimeChart' %}"></canvas>
     </div>
-    <div id="overallPlaytimeTableContainer" class="col-6">
+    <div id="overallPlaytimeTableContainer" class="col-xl-6">
       <table id="overallPlaytimeTable" class="table table-hover table-bordered table-sm" style="width:100%"
         data-url="{% url 'overallPlaytimeTable' %}">
         <thead>
