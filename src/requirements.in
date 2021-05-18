@@ -1,7 +1,5 @@
 appdirs
-atomicwrites
 autopep8
-colorama
 django
 django-bootstrap-datepicker-plus
 django-bootstrap4
