@@ -382,10 +382,8 @@ class NewGameForm(forms.Form):
         if remoteGameID is not None:
             champMap = {champion.id: champion.name for champion in cass.get_champions()}
             match = cass.get_match(remoteGameID)
-            if match is None:
-                raise ValidationError("Match not found")
-            if match.queue != cass.Queue.custom:
-                raise ValidationError("Match not a custom game")
+
+            game.gameRiotID = remoteGameID
 
             game.gameDuration = match.duration.total_seconds()
             game.save()
@@ -566,6 +564,8 @@ class UpdateGameForm(forms.Form):
                 raise ValidationError("Match not found")
             if match.queue != cass.Queue.custom:
                 raise ValidationError("Match not a custom game")
+
+        localGame.gameRiotID = remoteGameID
 
         localGame.gameDuration = match.duration.total_seconds()
         localGame.save()
