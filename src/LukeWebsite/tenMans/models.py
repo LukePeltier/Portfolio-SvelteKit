@@ -764,7 +764,7 @@ class GameLanerStats(models.Model):
                 statsObject.firstBlood = stats.first_blood_kill
                 statsObject.firstTower = stats.first_tower_kill
                 statsObject.csRateFirstTen = timeline.creeps_per_min_deltas['0-10']
-                statsObject.csRateSecondTen = timeline.creeps_per_min_deltas['10-20']
+                statsObject.csRateSecondTen = timeline.creeps_per_min_deltas['10-20'] if '10-20' in timeline.creeps_per_min_deltas else 0
             else:
                 stats = participant.stats
                 timeline = participant.timeline
@@ -794,7 +794,7 @@ class GameLanerStats(models.Model):
                     firstBlood=stats.first_blood_kill,
                     firstTower=stats.first_tower_kill,
                     csRateFirstTen=timeline.creeps_per_min_deltas['0-10'],
-                    csRateSecondTen=timeline.creeps_per_min_deltas['10-20'])
+                    csRateSecondTen=timeline.creeps_per_min_deltas['10-20'] if '10-20' in timeline.creeps_per_min_deltas else 0)
             statsObject.save()
 
 
