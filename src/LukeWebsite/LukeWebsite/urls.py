@@ -20,5 +20,6 @@ urlpatterns = [
     path('', include('homepagePortfolio.urls')),
     path('mergesort/', include('mergesort.urls')),
     path('ten_mans/', include('tenMans.urls')),
+    path('mario_golf/', include('marioGolf.urls')),
     path('admin/', admin.site.urls),
 ]

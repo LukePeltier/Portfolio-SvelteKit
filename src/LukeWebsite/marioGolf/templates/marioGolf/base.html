@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Mario Golf Statistics</title>
+  {# Load the tag library #}
+  {% load bootstrap4 %}
+
+  {# Load CSS and JavaScript #}
+  {% bootstrap_css %}
+  {% bootstrap_javascript jquery='full' %}
+
+
+  {% load static %}
+  <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/tableFonts.css' %}">
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/dataTables.bootstrap4.min.css">
+  <link rel="stylesheet" type="text/css"
+    href="https://cdn.datatables.net/fixedcolumns/3.3.2/css/fixedColumns.bootstrap4.min.css">
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.7/css/responsive.dataTables.min.css">
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+  <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/fixedcolumns/3.3.2/js/dataTables.fixedColumns.min.js"></script>
+  <script src="https://cdn.datatables.net/responsive/2.2.7/js/dataTables.responsive.min.js"></script>
+
+  <script src="https://kit.fontawesome.com/b900549498.js" crossorigin="anonymous"></script>
+
+  {% block header %}
+  {% endblock %}
+</head>
+
+<body class="d-flex flex-column min-vh-100">
+  {% include "marioGolf/navBar.html" %}
+  <div class="container-fluid main-container">
+    <content>
+      {% block content %}
+      {% endblock %}
+    </content>
+  </div>
+  <footer class="footer bg-light mt-auto" style="padding: 20px">
+    <div class="container-fluid">
+      <div class="row justify-content-between">
+        <div class="col-4">
+          <p>Author: Luke Peltier</p>
+        </div>
+        <div class="col-4">
+          <div class="float-right" id="kofi-button">
+            <a href='https://ko-fi.com/M4M216I02' target='_blank'><img height='36' style='border:0px;height:36px;'
+                src='https://cdn.ko-fi.com/cdn/kofi5.png?v=2' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+</body>
+
+</html>
