@@ -16,3 +16,5 @@ class Character(models.Model):
     )
     characterName = models.TextField(unique=True)
     characterType = models.TextField(choices=TYPE_CHOICES)
+    fullImageName = models.TextField(null=True)
+    characterPrimaryColor = models.TextField(default="#ff0001")
