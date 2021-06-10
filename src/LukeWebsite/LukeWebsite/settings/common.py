@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'mergesort',
     'homepagePortfolio',
     'tenMans',
+    'marioGolf',
     'bootstrap4',
     'bootstrap_datepicker_plus',
     'crispy_forms',
