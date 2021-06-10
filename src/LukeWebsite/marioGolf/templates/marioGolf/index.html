@@ -7,7 +7,8 @@
         {%for char in characters%}
             <div id="{{char.characterName}}Block" class="col-xl-3" style="padding:15px;">
             <div class="text-light charDisplay"style="background-color: {{char.characterPrimaryColor}};">
-                <h3 class="leaderboardTitle" style="text-align: center;">{{char.characterName}} - {{char.characterType}}</h3>
+                <h3 class="leaderboardTitle" style="text-align: center;">{{char.characterName}}</h3>
+                <p class="leaderboardTitle" style="text-align: center;">{{char.characterType}}</p>
                 {% with 'img/'|add:char.fullImageName as image_static %}
                     <img src="{% static image_static %}"class="img-fluid" style="display:block;margin-left: auto;margin-right: auto; height:80%; width:80%; object-fit:scale-down;"/>
                 {% endwith %}

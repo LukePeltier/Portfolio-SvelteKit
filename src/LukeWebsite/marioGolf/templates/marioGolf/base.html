@@ -28,11 +28,14 @@
 
   <script src="https://kit.fontawesome.com/b900549498.js" crossorigin="anonymous"></script>
 
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Dosis:wght@700&display=swap" rel="stylesheet">
+
   {% block header %}
   {% endblock %}
 </head>
 
-<body class="d-flex flex-column min-vh-100">
+<body class="d-flex flex-column min-vh-100" style="font-family: 'Dosis', sans-serif;">
   {% include "marioGolf/navBar.html" %}
   <div class="container-fluid main-container">
     <content>
