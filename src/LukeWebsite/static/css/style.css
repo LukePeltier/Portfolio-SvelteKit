@@ -49,3 +49,10 @@ table.dataTable.table-striped.DTFC_Cloned tbody tr:nth-of-type(even) {
 .leaderboardTitle:hover {
   overflow: visible;
 }
+
+.charDisplay {
+  border-radius: 25px;
+  padding: 20px;
+  height:500px;
+  width:100%;
+}
