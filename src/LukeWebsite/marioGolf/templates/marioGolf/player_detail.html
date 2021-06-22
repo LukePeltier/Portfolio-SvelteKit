@@ -1,0 +1,62 @@
+{% extends "marioGolf/base.html" %}
+{% load static %}
+{%block content%}
+<h1>{{ object.playerName }}</h1>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col col-md-6">
+            <div class="row">
+                <div id="smallStatsBox" class="col">
+                    <div class="row">
+                        <div class="col smallPlayerStat">
+                            Most Played Character:<b> {{ mostPlayedCharacter }}</b>
+                        </div>
+                        <div class="col smallPlayerStat">
+                            Best Performing Character:<b> {{ bestPerformingCharacter }}</b>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col smallPlayerStat">
+                            Total Tournaments Played:<b> {{ totalTournamentsPlayed }}</b>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col smallPlayerStat">
+                            Different Characters Played:<b> {{uniqueCharactersPlayed}}</b>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col smallPlayerStat">
+                            Power Ranking:<b> Top {{powerRanking}}% of players on average</b>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% comment %} <div class="col col-md-6">
+            <div class="row">
+                <div class="col">
+                    <div id="playerChampionCountTableContainer">
+                        <table id="playerChampionCountTable" class="table table-hover table-bordered table-sm" style="width:100%"
+                            style="width:100%;" data-url="{% url 'playerChampionCountTable' object.pk %}">
+                            <thead>
+                                <tr>
+                                    <th>Champion</th>
+                                    <th>Play Count</th>
+                                    <th>Winrate</th>
+                                    <th>Average KDA</th>
+                                    <th>championID</th>
+                                    <th>riotChampionName</th>
+                                    <th>championVersion</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div> {% endcomment %}
+    </div>
+</div>
+<script src="{%static 'js/playerWOTGraph.js'%}"></script>
+<script src="{%static 'js/playerDetails.js'%}"></script>
+{%endblock%}

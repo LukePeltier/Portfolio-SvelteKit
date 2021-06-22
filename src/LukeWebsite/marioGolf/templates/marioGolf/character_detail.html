@@ -1,0 +1,37 @@
+{% extends "marioGolf/base.html" %}
+{% load static %}
+{%block content%}
+<div class='container-fluid'>
+    <h1>{{object.characterName}}</h1>
+    <div class="row">
+        <div class="col-xl-6">
+            <div id="{{object.characterName}}Block" style="padding:15px;">
+                    <div class="text-light charDisplay" style="background-color: {{object.characterPrimaryColor}};">
+                        <h3 class="leaderboardTitle" style="text-align: center;">{{object.characterName}}</h3>
+                        {% if object.fullImageName is None %}
+                        {% else %}
+                        {% with 'img/'|add:object.fullImageName as image_static %}
+                        <img src="{% static image_static %}" class="img-fluid"
+                            style="display:block;margin-left: auto;margin-right: auto; height:80%; width:80%; object-fit:scale-down;" />
+                        {% endwith %}
+                        {% endif %}
+                    </div>
+            </div>
+        </div>
+        <div class="col-xl-6">
+            <div class="row">
+                <div id="smallStatsBox" class="col-sm">
+                    <div class="row">
+                        <div class="col smallPlayerStat">
+                            Power:<b> {{power}} yds</b>
+                        </div>
+                        <div class="col smallPlayerStat">
+                            Type: <b> {{charType}}</b>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{%endblock%}
