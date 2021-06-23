@@ -46,7 +46,7 @@ django-bootstrap4==3.0.1
     # via -r requirements.in
 django-cassiopeia==2.1.0
     # via -r requirements.in
-django-coverage-plugin==1.8.0
+django-coverage-plugin==2.0.0
     # via -r requirements.in
 django-crispy-forms==1.11.2
     # via -r requirements.in
