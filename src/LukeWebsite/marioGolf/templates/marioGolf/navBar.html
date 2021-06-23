@@ -15,11 +15,13 @@
                 {% if player_list%}
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                     {% for player in player_list %}
-                    <a class="dropdown-item" href="#">{{ player.playerName}}</a>
+                    <a class="dropdown-item" href="{% url 'detailPlayerMario' player.pk%}">{{ player.playerName}}</a>
                     {% endfor %}
                 </div>
                 {% endif %}
-
+            </li>
+            <li class="nav-item {% navactive request 'characterListViewMario'%}">
+                <a class="nav-link" href="{% url 'characterListViewMario'%}">Characters</a>
             </li>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
