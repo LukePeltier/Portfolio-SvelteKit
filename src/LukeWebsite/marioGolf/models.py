@@ -63,7 +63,7 @@ class Player(models.Model):
 
         totalTournamentCount = tournamentsPlayed.count()
         if totalTournamentCount == 0:
-            return None
+            return 1
         totalRankPercent = 0
         for entry in tournamentsPlayed.iterator():
             entry: TournamentEntry
