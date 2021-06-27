@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Sum
 
 
 # Create your models here.
@@ -33,8 +34,7 @@ class Player(models.Model):
         return charCounts
 
     def getBestPerformingCharacterString(self):
-        tournamentsPlayed = TournamentEntry.objects.filter(
-            player__exact=self.id)
+        tournamentsPlayed = TournamentEntry.objects.filter(player__exact=self.id)
         charsPlayed = []
         for entry in tournamentsPlayed:
             character = entry.character
@@ -67,8 +67,8 @@ class Player(models.Model):
         totalRankPercent = 0
         for entry in tournamentsPlayed.iterator():
             entry: TournamentEntry
-            numOfPlayersInTournament = TournamentPlacement.objects.filter(tournamentEntry__tournament__exact=entry.tournament.id).count()
-            entryRankWeighted = (entry.tournamentplacement.placement) / (numOfPlayersInTournament)
+            numOfPlayersInTournament = TournamentEntry.objects.filter(tournament__exact=entry.tournament.id).count()
+            entryRankWeighted = (entry.getPlacement()[0]) / (numOfPlayersInTournament)
             totalRankPercent += entryRankWeighted
 
         return round((totalRankPercent / totalTournamentCount), 2)
@@ -79,6 +79,13 @@ class Player(models.Model):
     def getUniqueCharacterCount(self):
         charCounts = self.getCharactersPlayed()
         return len(charCounts)
+
+    def getPlacementInTournament(self, tournament):
+        entry = TournamentEntry.objects.filter(tournament__exact=tournament.id, player__exact=self.id).first()
+        if entry is None:
+            return None
+
+        return entry.getPlacement()
 
 
 class Character(models.Model):
@@ -111,7 +118,9 @@ class Hole(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     holeNumber = models.PositiveSmallIntegerField()
     par = models.PositiveSmallIntegerField()
-    distanceFromTee = models.PositiveIntegerField()
+
+    class Meta:
+        unique_together = (('course', 'holeNumber'))
 
 
 class TournamentType(models.Model):
@@ -125,6 +134,28 @@ class Tournament(models.Model):
     tournamentType = models.ForeignKey(TournamentType, on_delete=models.CASCADE)
     numOfHoles = models.PositiveSmallIntegerField()
 
+    def getPlacementDict(self):
+        allEntries = TournamentEntry.objects.filter(tournament__exact=self.id)
+
+        scores = {}
+
+        for entry in allEntries:
+            scores[entry.player.playerName] = (entry.getShotsTotal(), entry.getScore(), entry.character.characterName)
+
+        sortedScores = {k: (v, w, z) for k, (v, w, z) in sorted(scores.items(), key=lambda item: item[1])}
+
+        result = {}
+        prev = None
+        i = 0
+        for name, (shots, score, characterName) in sortedScores.items():
+            if shots != prev:
+                i += 1
+                place, prev = i, shots
+            result[name] = (place, shots, score, characterName)
+
+        print(result)
+        return result
+
 
 class TournamentHole(models.Model):
     tournament = models.ForeignKey(Tournament, on_delete=models.CASCADE)
@@ -137,16 +168,30 @@ class TournamentEntry(models.Model):
     player = models.ForeignKey(Player, on_delete=models.CASCADE)
     character = models.ForeignKey(Character, on_delete=models.CASCADE)
 
+    def getPlacement(self):
+        return self.tournament.getPlacementDict()[self.player.playerName]
+
+    def getShotsTotal(self):
+        return TournamentEntryHole.objects.filter(tournamentEntry__exact=self.id).aggregate(Sum('shotsTaken'))['shotsTaken__sum']
+
+    def getScore(self):
+        holesInTourney = TournamentHole.objects.filter(tournament__exact=self.tournament.id)
+        sumPar = 0
+        for hole in holesInTourney:
+            hole: TournamentHole
+            sumPar += hole.hole.par
+
+        return self.getShotsTotal() - sumPar
+
+    class Meta:
+        unique_together = (('tournament', 'player'))
+
 
 class TournamentEntryHole(models.Model):
     tournamentEntry = models.ForeignKey(TournamentEntry, on_delete=models.CASCADE)
     tournamentHole = models.ForeignKey(TournamentHole, on_delete=models.CASCADE)
     shotsTaken = models.PositiveSmallIntegerField()
-    puttsTaken = models.PositiveSmallIntegerField()
     approved = models.BooleanField(default=False)
 
-
-class TournamentPlacement(models.Model):
-    tournamentEntry = models.OneToOneField(TournamentEntry, on_delete=models.CASCADE)
-    overallScore = models.IntegerField()
-    placement = models.PositiveSmallIntegerField()
+    class Meta:
+        unique_together = (('tournamentHole', 'tournamentEntry'))

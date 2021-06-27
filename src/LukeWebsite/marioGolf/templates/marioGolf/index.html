@@ -2,7 +2,18 @@
 {% load static %}
 {%block content%}
 <div class="container-fluid">
+    {% if 'currentlyRunning' %}
     <div class="row justify-content-center" style="padding-top: 10px;">
+        <h1 class="rainbow rainbow_text_animated">TOURNAMENT IN PROGRESS</h1>
+    </div>
+    {%endif%}
+    <div class="row justify-content-center" style="padding-top: 10px;">
+        <div class="col" style="text-align: center;">
+            <h2>Tournaments Played: <b>{{tournamentsPlayed}}</b></h2>
+        </div>
+        <div class="col" style="text-align: center;">
+            <h2>Registered Members: <b>{{registeredMembers}}</b></h2>
+        </div>
     </div>
 </div>
 {%endblock%}

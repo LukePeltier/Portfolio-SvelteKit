@@ -1,7 +1,9 @@
+from datetime import date
+from django.http.response import JsonResponse
 from django.views.generic.base import ContextMixin, TemplateView
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
-from marioGolf.models import Character, Player
+from marioGolf.models import Character, Player, Tournament
 from django.core.exceptions import ObjectDoesNotExist
 
 
@@ -16,7 +18,11 @@ class Dashboard(TemplateView, BaseMarioGolfContextMixin):
     template_name = "marioGolf/index.html"
 
     def get_context_data(self, **kwargs):
+        today = date.today()
         context = super().get_context_data(**kwargs)
+        context['currentlyRunning'] = Tournament.objects.filter(startDate__lt=today, endDate__gt=today).exists()
+        context['tournamentsPlayed'] = Tournament.objects.count()
+        context['registeredMembers'] = Player.objects.count()
 
         return context
 
@@ -57,3 +63,46 @@ class PlayerDetailView(DetailView, BaseMarioGolfContextMixin):
         context['uniqueCharactersPlayed'] = self.object.getUniqueCharacterCount()
         context['powerRanking'] = self.object.getPowerRankingPercentage() * 100
         return context
+
+
+class TournamentListView(ListView, BaseMarioGolfContextMixin):
+    model = Tournament
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
+
+
+class TournamentDetailView(DetailView, BaseMarioGolfContextMixin):
+    model = Tournament
+    object: Tournament
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
+
+
+class TournamentLeaderboardTable(DetailView):
+    model = Tournament
+
+    def get(self, request, *args, **kwargs):
+        data = []
+        self.object = self.get_object()
+        self.object: Tournament
+
+        rankings = self.object.getPlacementDict()
+
+        for name, (ranking, shotsTaken, score, characterName) in rankings.items():
+            playerDict = {}
+            playerDict['placement'] = ranking
+            playerDict['playerName'] = name
+            playerDict['character'] = characterName
+            playerDict['score'] = score
+            playerDict['shotsTaken'] = shotsTaken
+            playerDict['playerID'] = Player.objects.filter(playerName__exact=name).first().id
+            playerDict['characterID'] = Character.objects.filter(characterName__exact=characterName).first().id
+            data.append(playerDict)
+
+        return JsonResponse(data={
+            'data': data
+        })
