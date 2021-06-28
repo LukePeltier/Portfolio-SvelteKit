@@ -56,3 +56,27 @@ table.dataTable.table-striped.DTFC_Cloned tbody tr:nth-of-type(even) {
   height:500px;
   width:100%;
 }
+
+.rainbow {
+    text-align: center;
+    text-decoration: underline;
+    letter-spacing: 5px;
+}
+.rainbow_text_animated {
+    background: linear-gradient(to right, #00ff00, #0099ff, #6666ff, #ff3399, #f0dc09);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: rainbow_animation 6s ease-in-out infinite;
+    background-size: 400% 100%;
+}
+
+@keyframes rainbow_animation {
+    0%,100% {
+        background-position: 0 0;
+    }
+
+    50% {
+        background-position: 100% 0;
+    }
+}

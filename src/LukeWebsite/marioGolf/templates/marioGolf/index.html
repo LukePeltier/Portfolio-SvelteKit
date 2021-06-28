@@ -2,7 +2,43 @@
 {% load static %}
 {%block content%}
 <div class="container-fluid">
+    {% if 'currentlyRunning' %}
     <div class="row justify-content-center" style="padding-top: 10px;">
+        <h1 class="rainbow rainbow_text_animated">TOURNAMENT IN PROGRESS</h1>
+    </div>
+    {%endif%}
+    <div class="row justify-content-center" style="padding-top: 10px;">
+        <div class="col" style="text-align: center;">
+            <h2>Tournaments Played: <b>{{tournamentsPlayed}}</b></h2>
+        </div>
+        <div class="col" style="text-align: center;">
+            <h2>Registered Members: <b>{{registeredMembers}}</b></h2>
+        </div>
+    </div>
+    <div class="row justify-content-center" style="padding-top: 10px;">
+        <div class="col" style="text-align: center;">
+            <h2>POWER RANKINGS</h2>
+        </div>
+    </div>
+    <div class="row justify-content-center" style="padding-top: 10px;">
+        <div id="powerRankingsTableContainer" class="col-xl-5">
+        <table id="powerRankingsTable" class="table table-hover table-bordered table-sm" style="width:100%"
+            data-url="{% url 'powerRankingsTable' %}">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Tournaments Played</th>
+                <th>Holes Played</th>
+                <th>Top %</th>
+                <th>Alpha</th>
+                <th>playerID</th>
+            </tr>
+            </thead>
+        </table>
+        </div>
     </div>
 </div>
+<script src="{%static 'js/ogNatural.js'%}"></script>
+<script src="{%static 'js/heatmapColor.js'%}"></script>
+<script src="{%static 'js/marioGolfDashboard.js'%}"></script>
 {%endblock%}
