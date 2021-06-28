@@ -98,7 +98,7 @@ class Player(models.Model):
             if(count > topNumber):
                 topNumber = count
         playerNumber = self.getTotalTournamentsPlayed()
-        return round(playerNumber / topNumber, 1)
+        return round(playerNumber / topNumber, 3)
 
 
 class Character(models.Model):
@@ -160,10 +160,15 @@ class Tournament(models.Model):
         result = {}
         prev = None
         i = 0
+        j = 0
         for name, (shots, score, characterName) in sortedScores.items():
+            i += 1
             if shots != prev:
-                i += 1
+                j = i
                 place, prev = i, shots
+            else:
+                place, prev = j, shots
+
             result[name] = (place, shots, score, characterName)
         return result
 

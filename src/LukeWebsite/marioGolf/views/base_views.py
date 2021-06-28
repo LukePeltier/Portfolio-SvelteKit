@@ -122,7 +122,7 @@ class PowerRankingsTable(View):
             playerDict["name"] = player.playerName
             playerDict["tournamentsPlayed"] = player.getTotalTournamentsPlayed()
             playerDict["holesPlayed"] = player.getTotalHolesPlayed()
-            playerDict["topPercent"] = ("N/A" if (player.getPowerRankingPercentage() is None) else player.getPowerRankingPercentage(None) * 100)
+            playerDict["topPercent"] = ("N/A" if (player.getPowerRankingPercentage() is None) else round(player.getPowerRankingPercentage(None) * 100, 3))
             playerDict["topPercentAlpha"] = player.getTournamentRate()
             playerDict["playerID"] = player.id
             data.append(playerDict)
