@@ -63,7 +63,7 @@ class Player(models.Model):
 
         totalTournamentCount = tournamentsPlayed.count()
         if totalTournamentCount == 0:
-            return 1
+            return None
         totalRankPercent = 0
         for entry in tournamentsPlayed.iterator():
             entry: TournamentEntry
@@ -71,10 +71,13 @@ class Player(models.Model):
             entryRankWeighted = (entry.getPlacement()[0]) / (numOfPlayersInTournament)
             totalRankPercent += entryRankWeighted
 
-        return round((totalRankPercent / totalTournamentCount), 2)
+        return round(totalRankPercent / totalTournamentCount, 5)
 
     def getTotalTournamentsPlayed(self):
         return TournamentEntry.objects.filter(player__exact=self.id).count()
+
+    def getTotalHolesPlayed(self):
+        return TournamentEntryHole.objects.filter(tournamentEntry__player__exact=self.id).count()
 
     def getUniqueCharacterCount(self):
         charCounts = self.getCharactersPlayed()
@@ -86,6 +89,16 @@ class Player(models.Model):
             return None
 
         return entry.getPlacement()
+
+    def getTournamentRate(self):
+        players = Player.objects.all()
+        topNumber = 0
+        for player in players:
+            count = player.getTotalTournamentsPlayed()
+            if(count > topNumber):
+                topNumber = count
+        playerNumber = self.getTotalTournamentsPlayed()
+        return round(playerNumber / topNumber, 1)
 
 
 class Character(models.Model):
@@ -152,8 +165,6 @@ class Tournament(models.Model):
                 i += 1
                 place, prev = i, shots
             result[name] = (place, shots, score, characterName)
-
-        print(result)
         return result
 
 

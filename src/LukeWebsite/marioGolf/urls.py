@@ -9,4 +9,5 @@ urlpatterns = [
     path('tournaments/', views.base_views.TournamentListView.as_view(), name='tournamentListViewMario'),
     path('tournaments/<int:pk>/', views.base_views.TournamentDetailView.as_view(), name='detailTournamentMario'),
     path('tournaments/<int:pk>/leaderboard', views.base_views.TournamentLeaderboardTable.as_view(), name='tournamentLeaderboardMario'),
+    path('powerRankingsTable/', views.base_views.PowerRankingsTable.as_view(), name='powerRankingsTable'),
 ]

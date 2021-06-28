@@ -1,6 +1,6 @@
 from datetime import date
 from django.http.response import JsonResponse
-from django.views.generic.base import ContextMixin, TemplateView
+from django.views.generic.base import ContextMixin, TemplateView, View
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 from marioGolf.models import Character, Player, Tournament
@@ -101,6 +101,30 @@ class TournamentLeaderboardTable(DetailView):
             playerDict['shotsTaken'] = shotsTaken
             playerDict['playerID'] = Player.objects.filter(playerName__exact=name).first().id
             playerDict['characterID'] = Character.objects.filter(characterName__exact=characterName).first().id
+            data.append(playerDict)
+
+        return JsonResponse(data={
+            'data': data
+        })
+
+
+class PowerRankingsTable(View):
+
+    def get(self, request, *args, **kwargs):
+        data = []
+        queryset = Player.objects.order_by('playerName')
+
+        for player in queryset:
+            # if(player.getTotalTournamentsPlayed() <= 0):
+            #     continue
+            player: Player
+            playerDict = {}
+            playerDict["name"] = player.playerName
+            playerDict["tournamentsPlayed"] = player.getTotalTournamentsPlayed()
+            playerDict["holesPlayed"] = player.getTotalHolesPlayed()
+            playerDict["topPercent"] = ("N/A" if (player.getPowerRankingPercentage() is None) else player.getPowerRankingPercentage(None) * 100)
+            playerDict["topPercentAlpha"] = player.getTournamentRate()
+            playerDict["playerID"] = player.id
             data.append(playerDict)
 
         return JsonResponse(data={
