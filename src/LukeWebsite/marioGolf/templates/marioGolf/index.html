@@ -2,7 +2,7 @@
 {% load static %}
 {%block content%}
 <div class="container-fluid">
-    {% if 'currentlyRunning' %}
+    {% if 'currentlyRunning' is True %}
     <div class="row justify-content-center" style="padding-top: 10px;">
         <h1 class="rainbow rainbow_text_animated">TOURNAMENT IN PROGRESS</h1>
     </div>
