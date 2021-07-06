@@ -161,6 +161,8 @@ requests==2.25.1
     #   django-cassiopeia
 scipy==1.7.0
     # via -r requirements.in
+selenium==3.141.0
+    # via -r requirements.in
 six==1.16.0
     # via
     #   django-coverage-plugin
@@ -188,7 +190,9 @@ typed-ast==1.4.3
 typing-extensions==3.10.0.0
     # via -r requirements.in
 urllib3==1.26.6
-    # via requests
+    # via
+    #   requests
+    #   selenium
 wheel==0.36.2
     # via
     #   django-cassiopeia
