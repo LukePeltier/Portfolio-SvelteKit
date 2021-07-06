@@ -15,8 +15,10 @@ pathspec
 pip-tools
 pipdeptree
 plotly
+pylint
 pylint-django
 PyMySQL
+pytest
 pytest-cov
 pytest-django
 regex
