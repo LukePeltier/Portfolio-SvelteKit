@@ -1,6 +1,5 @@
 appdirs
 autopep8
-atomicwrites
 django
 django-bootstrap-datepicker-plus
 django-bootstrap4
@@ -22,7 +21,6 @@ pytest-cov
 pytest-django
 regex
 requests
-riotwatcher
 scipy
 setuptools
 typed-ast
