@@ -29,3 +29,4 @@ typed-ast
 typing-extensions
 whitenoise
 factory-boy
+selenium
