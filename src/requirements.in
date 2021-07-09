@@ -2,7 +2,7 @@ appdirs
 autopep8
 django
 django-bootstrap-datepicker-plus
-django-bootstrap4
+django-bootstrap5
 django-cassiopeia
 django-coverage-plugin
 django-crispy-forms
@@ -30,3 +30,4 @@ typing-extensions
 whitenoise
 factory-boy
 selenium
+crispy-bootstrap5

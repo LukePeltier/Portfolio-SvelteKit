@@ -5,11 +5,13 @@
   <meta charset="utf-8">
   <title>Portfolio</title>
   {# Load the tag library #}
-    {% load bootstrap4 %}
+  {% load django_bootstrap5 %}
 
   {# Load CSS and JavaScript #}
   {% bootstrap_css %}
-  {% bootstrap_javascript jquery='full' %}
+  {% bootstrap_javascript %}
+
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 
   {% load static %}

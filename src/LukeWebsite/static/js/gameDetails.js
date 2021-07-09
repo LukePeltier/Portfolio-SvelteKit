@@ -146,7 +146,7 @@ $(function () {
             "fixedColumns": {
                 leftColumns: 3
             }
-        })
+        });
 
         var redTeamTable = $('#redTeamTable').DataTable({
             "ajax": $('#redTeamTable').data('url'),
@@ -299,7 +299,7 @@ $(function () {
             "fixedColumns": {
                 leftColumns: 3
             }
-        })
+        });
 
         var blueTeamBansTable = $('#blueTeamBansTable').DataTable({
             "ajax": $('#blueTeamBansTable').data('url'),
@@ -333,7 +333,7 @@ $(function () {
                 [1, "asc"]
             ],
             "pageResize": true
-        })
+        });
 
         var redTeamBansTable = $('#redTeamBansTable').DataTable({
             "ajax": $('#redTeamBansTable').data('url'),
@@ -367,7 +367,7 @@ $(function () {
                 [1, "asc"]
             ],
             "pageResize": true
-        })
+        });
 
     });
 

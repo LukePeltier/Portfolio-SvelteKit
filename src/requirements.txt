@@ -21,7 +21,7 @@ attrs==21.2.0
 autopep8==1.5.7
     # via -r requirements.in
 beautifulsoup4==4.9.3
-    # via django-bootstrap4
+    # via django-bootstrap5
 cassiopeia==4.0.18
     # via django-cassiopeia
 certifi==2021.5.30
@@ -39,6 +39,8 @@ coverage==5.5
     # via
     #   django-coverage-plugin
     #   pytest-cov
+crispy-bootstrap5==0.4
+    # via -r requirements.in
 datapipelines==1.0.7
     # via
     #   cassiopeia
@@ -48,19 +50,22 @@ decorator==4.4.2
 django==3.2.5
     # via
     #   -r requirements.in
+    #   crispy-bootstrap5
     #   django-bootstrap-datepicker-plus
-    #   django-bootstrap4
+    #   django-bootstrap5
     #   django-cassiopeia
 django-bootstrap-datepicker-plus==3.0.5
     # via -r requirements.in
-django-bootstrap4==3.0.1
+django-bootstrap5==2.0.1
     # via -r requirements.in
 django-cassiopeia==2.1.0
     # via -r requirements.in
 django-coverage-plugin==2.0.0
     # via -r requirements.in
 django-crispy-forms==1.12.0
-    # via -r requirements.in
+    # via
+    #   -r requirements.in
+    #   crispy-bootstrap5
 django-nose==1.4.7
     # via -r requirements.in
 factory-boy==3.2.0

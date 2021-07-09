@@ -6,25 +6,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <title>Ten Man Statistics</title>
   {# Load the tag library #}
-  {% load bootstrap4 %}
+  {% load django_bootstrap5 %}
 
   {# Load CSS and JavaScript #}
   {% bootstrap_css %}
-  {% bootstrap_javascript jquery='full' %}
+  {% bootstrap_javascript %}
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 
   {% load static %}
   <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
   <link rel="stylesheet" type="text/css" href="{% static 'css/tableFonts.css' %}">
-  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/dataTables.bootstrap4.min.css">
-  <link rel="stylesheet" type="text/css"
-    href="https://cdn.datatables.net/fixedcolumns/3.3.2/css/fixedColumns.bootstrap4.min.css">
-  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.7/css/responsive.dataTables.min.css">
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
-  <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
-  <script src="https://cdn.datatables.net/fixedcolumns/3.3.2/js/dataTables.fixedColumns.min.js"></script>
-  <script src="https://cdn.datatables.net/responsive/2.2.7/js/dataTables.responsive.min.js"></script>
+
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs5/dt-1.10.25/fc-3.3.3/r-2.2.9/datatables.min.css"/>
+
+  <script type="text/javascript" src="https://cdn.datatables.net/v/bs5/dt-1.10.25/fc-3.3.3/r-2.2.9/datatables.min.js"></script>
 
   <script src="https://kit.fontawesome.com/b900549498.js" crossorigin="anonymous"></script>
 
@@ -57,7 +55,7 @@
           <p>Author: Luke Peltier</p>
         </div>
         <div class="col-4">
-          <div class="float-right" id="kofi-button">
+          <div class="float-end" id="kofi-button">
             <a href='https://ko-fi.com/M4M216I02' target='_blank'><img height='36' style='border:0px;height:36px;'
                 src='https://cdn.ko-fi.com/cdn/kofi5.png?v=2' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
           </div>

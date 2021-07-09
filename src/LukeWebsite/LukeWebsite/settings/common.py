@@ -36,9 +36,10 @@ INSTALLED_APPS = [
     'homepagePortfolio',
     'tenMans',
     'marioGolf',
-    'bootstrap4',
+    'django_bootstrap5',
     'bootstrap_datepicker_plus',
     'crispy_forms',
+    'crispy_bootstrap5',
     'django_cassiopeia'
 ]
 
@@ -127,7 +128,8 @@ STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Custom
-CRISPY_TEMPLATE_PACK = 'bootstrap4'
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_TEMPLATE_PACK = 'bootstrap5'
 
 
 config_object = ConfigParser()
