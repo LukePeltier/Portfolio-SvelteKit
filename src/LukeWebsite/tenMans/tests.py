@@ -1,8 +1,6 @@
 from django.test import TestCase
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
-from selenium.webdriver.firefox.webdriver import WebDriver
 from django.urls import reverse
-from selenium.webdriver.remote.webelement import WebElement
 from tenMans.factory import ChampionFactory, GameBanFactory, GameFactory, GameLanerFactory, GameLanerNoSupportOrTop, GameLanerRandomGameFactory, GameLanerStatsFactory, LaneFactory, PlayerFactory
 from tenMans.models import Champion, Game, GameLaner, Lane, Player
 
@@ -572,21 +570,3 @@ class WebTest(StaticLiveServerTestCase):
         cls.lanesLists.append([Lane.objects.get(laneName__exact="Jungle")])
         cls.lanesLists.append([Lane.objects.get(laneName__exact="Mid")])
         cls.lanesLists.append([Lane.objects.get(laneName__exact="Bot"), Lane.objects.get(laneName__exact="Support")])
-
-    @classmethod
-    def setUpClass(cls):
-        super().setUpClass()
-        cls.selenium = WebDriver()
-        cls.selenium.implicitly_wait(10)
-
-    @classmethod
-    def tearDownClass(cls):
-        cls.selenium.quit()
-        super().tearDownClass()
-
-    def test_newGame_Form(self):
-        self.selenium.get('%s%s' % (self.live_server_url, '/ten_mans/newgame/'))
-        password_input = self.selenium.find_element_by_name("password")
-        password_input: WebElement
-        password_input.send_keys('bustaSubmit')
-        self.selenium.find_element_by_xpath('//input[@value="Submit"]').click()
