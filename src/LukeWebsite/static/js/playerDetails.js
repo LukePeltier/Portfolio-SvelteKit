@@ -224,7 +224,7 @@ $(function () {
             {
                 leftColumns: 4
             }
-        })
+        });
 
     });
 

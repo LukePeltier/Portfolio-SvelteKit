@@ -3,7 +3,7 @@ from django.http.response import JsonResponse
 from django.views.generic.base import ContextMixin, TemplateView, View
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
-from marioGolf.models import Character, Player, Tournament
+from marioGolf.models import Character, Player, Tournament, TournamentEntry, TournamentEntryHole, TournamentHole
 from django.core.exceptions import ObjectDoesNotExist
 
 
@@ -79,6 +79,7 @@ class TournamentDetailView(DetailView, BaseMarioGolfContextMixin):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['holes'] = TournamentHole.objects.filter(tournament__exact=self.object)
         return context
 
 
@@ -125,6 +126,44 @@ class PowerRankingsTable(View):
             playerDict["topPercent"] = ("N/A" if (player.getPowerRankingPercentage() is None) else round(player.getPowerRankingPercentage(None) * 100, 3))
             playerDict["topPercentAlpha"] = player.getTournamentRate()
             playerDict["playerID"] = player.id
+            data.append(playerDict)
+
+        return JsonResponse(data={
+            'data': data
+        })
+
+
+class TournamentScorecardTable(DetailView):
+    model = Tournament
+
+    def get(self, request, *args, **kwargs):
+        data = []
+        self.object = self.get_object()
+        self.object: Tournament
+
+        playerEntries = TournamentEntry.objects.filter(tournament__exact=self.object.id)
+
+        for entry in playerEntries:
+            entry: TournamentEntry
+            playerDict = {}
+            playerDict['playerName'] = entry.player.playerName
+            playerDict['character'] = entry.character.characterName
+            holesPlayed = TournamentHole.objects.filter(tournament__exact=self.object.id)
+            for hole in holesPlayed:
+                hole: TournamentHole
+                holeEntry = TournamentEntryHole.objects.filter(tournamentHole__exact=hole.id, tournamentEntry__exact=entry.id).first()
+                holeEntry: TournamentEntryHole
+                if holeEntry is not None and holeEntry.approved:
+                    playerDict['hole{}'.format(hole.order + 1)] = holeEntry.shotsTaken
+                    playerDict['hole{}ParScore'.format(hole.order + 1)] = holeEntry.shotsTaken - holeEntry.tournamentHole.hole.par
+                else:
+                    playerDict['hole{}'.format(hole.order + 1)] = None
+                    playerDict['hole{}ParScore'.format(hole.order + 1)] = None
+
+                playerDict['hole{}Par'.format(hole.order + 1)] = holeEntry.tournamentHole.hole.par
+
+            playerDict['playerID'] = entry.player.id
+            playerDict['characterID'] = entry.character.id
             data.append(playerDict)
 
         return JsonResponse(data={
