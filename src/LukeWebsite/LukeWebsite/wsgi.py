@@ -9,10 +9,10 @@ https://docs.djangoproject.com/en/3.1/howto/deployment/wsgi/
 
 import os
 
-#python_home = '/home/lukep/.virtualenvs/websiteEnv'
+# python_home = '/home/lukep/.virtualenvs/websiteEnv'
 
-#activate_this = python_home + '/bin/activate_this.py'
-#execfile(activate_this, dict(__file__=activate_this))
+# activate_this = python_home + '/bin/activate_this.py'
+# execfile(activate_this, dict(__file__=activate_this))
 
 
 from django.core.wsgi import get_wsgi_application

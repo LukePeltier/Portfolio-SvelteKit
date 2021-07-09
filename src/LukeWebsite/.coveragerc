@@ -1,8 +1,9 @@
 [run]
-source =
-    tenMans/
-    marioGolf/
-    homepagePortfolio/
+
+include =
+    ./tenMans/*
+    ./marioGolf/*
+    ./homepagePortfolio/*
 
 branch = True
 
