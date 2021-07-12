@@ -603,11 +603,15 @@ class Player(models.Model):
             blueWin = gameLane.game.gameBlueWins
             if blueTeam == blueWin:
                 currentWinstreak += 1
-            else:
                 if maxWinstreak < currentWinstreak:
                     maxWinstreak = currentWinstreak
+            else:
                 currentWinstreak = 0
-        return maxWinstreak
+        if(maxWinstreak == currentWinstreak):
+            onStreak = True
+        else:
+            onStreak = False
+        return (maxWinstreak, onStreak)
 
     def getHighestLossstreak(self, lane):
         if lane is None:
@@ -627,11 +631,15 @@ class Player(models.Model):
             blueWin = gameLane.game.gameBlueWins
             if blueTeam != blueWin:
                 currentLossstreak += 1
-            else:
                 if maxLossstreak < currentLossstreak:
                     maxLossstreak = currentLossstreak
+            else:
                 currentLossstreak = 0
-        return maxLossstreak
+        if(maxLossstreak == currentLossstreak):
+            onStreak = True
+        else:
+            onStreak = False
+        return (maxLossstreak, onStreak)
 
     def getWinrateOnList(gamesPlayed):
         totalGameCount = gamesPlayed.count()

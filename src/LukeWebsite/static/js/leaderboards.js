@@ -504,15 +504,24 @@ $(function () {
                 },
 
                 {
-                    "data": "count"
+                    "data": "count",
+                    "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
+                        if(oData.isCurrent){
+                            $(nTd).html("<p>" + sData + " <span class=\"badge rounded-pill bg-success\">Current</span></p>");
+                        }
+                    }
+
                 },
                 {
                     "data": "playerID"
+                },
+                {
+                    "data": "isCurrent"
                 }
             ],
             columnDefs: [
                 {
-                    targets: [2],
+                    targets: [2,3],
                     visible: false
                 }
             ],
@@ -535,15 +544,23 @@ $(function () {
                 },
 
                 {
-                    "data": "count"
+                    "data": "count",
+                    "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
+                        if(oData.isCurrent){
+                            $(nTd).html("<p>" + sData + " <span class=\"badge rounded-pill bg-danger\">Current</span></p>");
+                        }
+                    }
                 },
                 {
                     "data": "playerID"
+                },
+                {
+                    "data": "isCurrent"
                 }
             ],
             columnDefs: [
                 {
-                    targets: [2],
+                    targets: [2,3],
                     visible: false
                 }
             ],

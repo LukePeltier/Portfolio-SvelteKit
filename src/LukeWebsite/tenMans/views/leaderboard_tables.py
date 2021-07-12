@@ -352,7 +352,7 @@ class WinstreakTable(View):
         players = Player.objects.all()
 
         player: Player
-        scores = [player.getHighestWinstreak(None) for player in players]
+        scores = [player.getHighestWinstreak(None)[0] for player in players]
         names = [player.playerName for player in players]
         playerIDs = [player.id for player in players]
 
@@ -362,6 +362,7 @@ class WinstreakTable(View):
             lineDict['name'] = line[1]
             lineDict['count'] = line[0]
             lineDict['playerID'] = line[2]
+            lineDict['isCurrent'] = Player.objects.get(pk=line[2]).getHighestWinstreak(None)[1]
             data.append(lineDict)
 
         return JsonResponse(data={
@@ -375,7 +376,7 @@ class LossstreakTable(View):
         players = Player.objects.all()
 
         player: Player
-        scores = [player.getHighestLossstreak(None) for player in players]
+        scores = [player.getHighestLossstreak(None)[0] for player in players]
         names = [player.playerName for player in players]
         playerIDs = [player.id for player in players]
 
@@ -385,6 +386,7 @@ class LossstreakTable(View):
             lineDict['name'] = line[1]
             lineDict['count'] = line[0]
             lineDict['playerID'] = line[2]
+            lineDict['isCurrent'] = Player.objects.get(pk=line[2]).getHighestLossstreak(None)[1]
             data.append(lineDict)
 
         return JsonResponse(data={
