@@ -5,6 +5,28 @@ from django.views import View
 from tenMans.models import (Game, Player)
 
 
+class LeaderboardSorter():
+
+    def getLineDict(scores, names, playerIDs, gameIDs=None):
+
+        unique_top_scores = sorted((list(set(scores))), reverse=True)[:3]
+
+        if gameIDs is None:
+            fullList = zip(scores, names, playerIDs)
+        else:
+            fullList = zip(scores, names, gameIDs, playerIDs)
+
+        leaderboardList = []
+
+        for item in fullList:
+            if item[0] in unique_top_scores:
+                leaderboardList.append(item)
+
+        leaderboard = sorted(leaderboardList, reverse=True)
+
+        return leaderboard
+
+
 class MostKillsGameTable(View):
     def get(self, request, *args, **kwargs):
         data = []
@@ -15,7 +37,8 @@ class MostKillsGameTable(View):
         gameIDs = [player.getHighestKillCountGameLaneStats(None).gameLaner.game.id for player in players if player.getHighestKillCountGameLaneStats(None) is not None]
         playerIDs = [player.id for player in players if player.getHighestKillCountGameLaneStats(None) is not None]
 
-        leaderboard = sorted(zip(scores, names, gameIDs, playerIDs), reverse=True)[:3]
+        leaderboard = LeaderboardSorter.getLineDict(scores, names, playerIDs, gameIDs)
+
         for line in leaderboard:
             lineDict = {}
             lineDict['name'] = line[1]
@@ -40,7 +63,7 @@ class MostDeathsGameTable(View):
         gameIDs = [player.getHighestDeathCountGameLaneStats(None).gameLaner.game.id for player in players if player.getHighestDeathCountGameLaneStats(None) is not None]
         playerIDs = [player.id for player in players if player.getHighestDeathCountGameLaneStats(None) is not None]
 
-        leaderboard = sorted(zip(scores, names, gameIDs, playerIDs), reverse=True)[:3]
+        leaderboard = LeaderboardSorter.getLineDict(scores, names, playerIDs, gameIDs)
         for line in leaderboard:
             lineDict = {}
             lineDict['name'] = line[1]
@@ -65,7 +88,7 @@ class MostAssistsGameTable(View):
         gameIDs = [player.getHighestAssistCountGameLaneStats(None).gameLaner.game.id for player in players if player.getHighestAssistCountGameLaneStats(None) is not None]
         playerIDs = [player.id for player in players if player.getHighestAssistCountGameLaneStats(None) is not None]
 
-        leaderboard = sorted(zip(scores, names, gameIDs, playerIDs), reverse=True)[:3]
+        leaderboard = LeaderboardSorter.getLineDict(scores, names, playerIDs, gameIDs)
         for line in leaderboard:
             lineDict = {}
             lineDict['name'] = line[1]
@@ -90,7 +113,7 @@ class MostDamageGameTable(View):
         gameIDs = [player.getHighestDamageCountGameLaneStats(None).gameLaner.game.id for player in players if player.getHighestDamageCountGameLaneStats(None) is not None]
         playerIDs = [player.id for player in players if player.getHighestDamageCountGameLaneStats(None) is not None]
 
-        leaderboard = sorted(zip(scores, names, gameIDs, playerIDs), reverse=True)[:3]
+        leaderboard = LeaderboardSorter.getLineDict(scores, names, playerIDs, gameIDs)
         for line in leaderboard:
             lineDict = {}
             lineDict['name'] = line[1]
@@ -115,7 +138,7 @@ class MostSpreeGameTable(View):
         gameIDs = [player.getHighestSpreeCountGameLaneStats(None).gameLaner.game.id for player in players if player.getHighestSpreeCountGameLaneStats(None) is not None]
         playerIDs = [player.id for player in players if player.getHighestSpreeCountGameLaneStats(None) is not None]
 
-        leaderboard = sorted(zip(scores, names, gameIDs, playerIDs), reverse=True)[:3]
+        leaderboard = LeaderboardSorter.getLineDict(scores, names, playerIDs, gameIDs)
         for line in leaderboard:
             lineDict = {}
             lineDict['name'] = line[1]
@@ -140,7 +163,7 @@ class MostCSGameTable(View):
         gameIDs = [player.getHighestCSGameLaneStats(None).gameLaner.game.id for player in players if player.getHighestCSGameLaneStats(None) is not None]
         playerIDs = [player.id for player in players if player.getHighestCSGameLaneStats(None) is not None]
 
-        leaderboard = sorted(zip(scores, names, gameIDs, playerIDs), reverse=True)[:3]
+        leaderboard = LeaderboardSorter.getLineDict(scores, names, playerIDs, gameIDs)
         for line in leaderboard:
             lineDict = {}
             lineDict['name'] = line[1]
@@ -165,7 +188,7 @@ class MostCSFirstTwentyGameTable(View):
         gameIDs = [player.getHighestCSFirstTwentyGameLaneStats(None).gameLaner.game.id for player in players if player.getHighestCSFirstTwentyGameLaneStats(None) is not None]
         playerIDs = [player.id for player in players if player.getHighestCSFirstTwentyGameLaneStats(None) is not None]
 
-        leaderboard = sorted(zip(scores, names, gameIDs, playerIDs), reverse=True)[:3]
+        leaderboard = LeaderboardSorter.getLineDict(scores, names, playerIDs, gameIDs)
         for line in leaderboard:
             lineDict = {}
             lineDict['name'] = line[1]
@@ -190,7 +213,7 @@ class MostVisionGameTable(View):
         gameIDs = [player.getHighestVisionGameLaneStats(None).gameLaner.game.id for player in players if player.getHighestVisionGameLaneStats(None) is not None]
         playerIDs = [player.id for player in players if player.getHighestVisionGameLaneStats(None) is not None]
 
-        leaderboard = sorted(zip(scores, names, gameIDs, playerIDs), reverse=True)[:3]
+        leaderboard = LeaderboardSorter.getLineDict(scores, names, playerIDs, gameIDs)
         for line in leaderboard:
             lineDict = {}
             lineDict['name'] = line[1]
@@ -215,7 +238,7 @@ class MostControlWardGameTable(View):
         gameIDs = [player.getHighestControlWardGameLaneStats(None).gameLaner.game.id for player in players if player.getHighestControlWardGameLaneStats(None) is not None]
         playerIDs = [player.id for player in players if player.getHighestControlWardGameLaneStats(None) is not None]
 
-        leaderboard = sorted(zip(scores, names, gameIDs, playerIDs), reverse=True)[:3]
+        leaderboard = LeaderboardSorter.getLineDict(scores, names, playerIDs, gameIDs)
         for line in leaderboard:
             lineDict = {}
             lineDict['name'] = line[1]
@@ -240,7 +263,7 @@ class MostBanGameTable(View):
         gameIDs = [player.getHighestBanGame(None)['game.id'] for player in players if player.getHighestBanGame(None)['game.id'] is not None]
         playerIDs = [player.id for player in players if player.getHighestBanGame(None)['game.id'] is not None]
 
-        leaderboard = sorted(zip(scores, names, gameIDs, playerIDs), reverse=True)[:3]
+        leaderboard = LeaderboardSorter.getLineDict(scores, names, playerIDs, gameIDs)
         for line in leaderboard:
             lineDict = {}
             lineDict['name'] = line[1]
@@ -264,7 +287,7 @@ class MostChampsTable(View):
         names = [player.playerName for player in players]
         playerIDs = [player.id for player in players]
 
-        leaderboard = sorted(zip(scores, names, playerIDs), reverse=True)[:3]
+        leaderboard = LeaderboardSorter.getLineDict(scores, names, playerIDs)
         for line in leaderboard:
             lineDict = {}
             lineDict['name'] = line[1]
@@ -287,7 +310,7 @@ class CaptainWinrateTable(View):
         names = [player.playerName for player in players if player.getCaptainWinrate() != "N/A" and player.getCaptainGamesPlayed() >= 3]
         playerIDs = [player.id for player in players if player.getCaptainWinrate() != "N/A" and player.getCaptainGamesPlayed() >= 3]
 
-        leaderboard = sorted(zip(scores, names, playerIDs), reverse=True)[:3]
+        leaderboard = LeaderboardSorter.getLineDict(scores, names, playerIDs)
         for line in leaderboard:
             lineDict = {}
             lineDict['name'] = line[1]
@@ -310,7 +333,53 @@ class CaptainCountTable(View):
         names = [player.playerName for player in players]
         playerIDs = [player.id for player in players]
 
-        leaderboard = sorted(zip(scores, names, playerIDs), reverse=True)[:3]
+        leaderboard = LeaderboardSorter.getLineDict(scores, names, playerIDs)
+        for line in leaderboard:
+            lineDict = {}
+            lineDict['name'] = line[1]
+            lineDict['count'] = line[0]
+            lineDict['playerID'] = line[2]
+            data.append(lineDict)
+
+        return JsonResponse(data={
+            'data': data
+        })
+
+
+class WinstreakTable(View):
+    def get(self, request, *args, **kwargs):
+        data = []
+        players = Player.objects.all()
+
+        player: Player
+        scores = [player.getHighestWinstreak(None) for player in players]
+        names = [player.playerName for player in players]
+        playerIDs = [player.id for player in players]
+
+        leaderboard = LeaderboardSorter.getLineDict(scores, names, playerIDs)
+        for line in leaderboard:
+            lineDict = {}
+            lineDict['name'] = line[1]
+            lineDict['count'] = line[0]
+            lineDict['playerID'] = line[2]
+            data.append(lineDict)
+
+        return JsonResponse(data={
+            'data': data
+        })
+
+
+class PentakillsTable(View):
+    def get(self, request, *args, **kwargs):
+        data = []
+        players = Player.objects.all()
+
+        player: Player
+        scores = [player.getHighestWinstreak(None) for player in players]
+        names = [player.playerName for player in players]
+        playerIDs = [player.id for player in players]
+
+        leaderboard = LeaderboardSorter.getLineDict(scores, names, playerIDs)
         for line in leaderboard:
             lineDict = {}
             lineDict['name'] = line[1]
