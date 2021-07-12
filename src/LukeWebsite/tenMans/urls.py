@@ -15,6 +15,7 @@ urlpatterns = [
     path('playerDraftStats/', views.base_views.PlayerDraftStats.as_view(), name='playerDraftStatsView'),
     path('averagePlayerDraftOrderTable/', views.base_views.AverageDraftOrderTable.as_view(), name='averageDraftOrderTable'),
     path('expectedPlayerDraftOrderWinrateTable/', views.base_views.ExpectedDraftOrderWinrateTable.as_view(), name='expectedDraftOrderWinrateTable'),
+    path('expectedDraftOrderWinrateCaptainTable/', views.base_views.ExpectedDraftOrderWinrateCaptainTable.as_view(), name='expectedDraftOrderWinrateCaptainTable'),
     path('expectedPlayerDraftOrderWinrateTable/<str:lane>/', views.base_views.ExpectedDraftOrderWinrateLaneTable.as_view(), name='expectedDraftOrderWinrateLaneTable'),
     path('player/<int:pk>/laneCountData/', views.base_views.PlayerLaneCountTable.as_view(), name='playerLaneCountTable'),
     path('player/<int:pk>/championCountData/', views.base_views.PlayerChampionCountTable.as_view(), name='playerChampionCountTable'),
