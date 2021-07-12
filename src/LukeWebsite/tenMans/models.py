@@ -525,6 +525,66 @@ class Player(models.Model):
     def getRandomGamesPlayed(self):
         return GameLaner.objects.filter(player__exact=self.id, game__gameRandomTeams__exact=True).count()
 
+    def getPentakills(self, lane):
+        if lane is None:
+            gamesPlayed = GameLaner.objects.filter(player__exact=self.id)
+        else:
+            gamesPlayed = GameLaner.objects.filter(player__exact=self.id, lane__exact=lane.id)
+
+        stats = GameLanerStats.objects.filter(gameLaner__in=gamesPlayed)
+
+        totalPentas = 0
+        for stat in stats:
+            stat: GameLanerStats
+            totalPentas += stat.pentaKills
+
+        return totalPentas
+
+    def getQuadrakills(self, lane):
+        if lane is None:
+            gamesPlayed = GameLaner.objects.filter(player__exact=self.id)
+        else:
+            gamesPlayed = GameLaner.objects.filter(player__exact=self.id, lane__exact=lane.id)
+
+        stats = GameLanerStats.objects.filter(gameLaner__in=gamesPlayed)
+
+        totalQuadras = 0
+        for stat in stats:
+            stat: GameLanerStats
+            totalQuadras += stat.quadraKills
+
+        return totalQuadras
+
+    def getTriplekills(self, lane):
+        if lane is None:
+            gamesPlayed = GameLaner.objects.filter(player__exact=self.id)
+        else:
+            gamesPlayed = GameLaner.objects.filter(player__exact=self.id, lane__exact=lane.id)
+
+        stats = GameLanerStats.objects.filter(gameLaner__in=gamesPlayed)
+
+        totalTriples = 0
+        for stat in stats:
+            stat: GameLanerStats
+            totalTriples += stat.tripleKills
+
+        return totalTriples
+
+    def getDoublekills(self, lane):
+        if lane is None:
+            gamesPlayed = GameLaner.objects.filter(player__exact=self.id)
+        else:
+            gamesPlayed = GameLaner.objects.filter(player__exact=self.id, lane__exact=lane.id)
+
+        stats = GameLanerStats.objects.filter(gameLaner__in=gamesPlayed)
+
+        totalDoubles = 0
+        for stat in stats:
+            stat: GameLanerStats
+            totalDoubles += stat.doubleKills
+
+        return totalDoubles
+
     def getHighestWinstreak(self, lane):
         if lane is None:
             gamesPlayed = GameLaner.objects.filter(player__exact=self.id)

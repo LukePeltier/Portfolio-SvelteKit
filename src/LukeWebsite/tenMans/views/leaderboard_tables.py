@@ -19,7 +19,7 @@ class LeaderboardSorter():
         leaderboardList = []
 
         for item in fullList:
-            if item[0] in unique_top_scores:
+            if item[0] in unique_top_scores and item[0] != 0:
                 leaderboardList.append(item)
 
         leaderboard = sorted(leaderboardList, reverse=True)
@@ -375,7 +375,76 @@ class PentakillsTable(View):
         players = Player.objects.all()
 
         player: Player
-        scores = [player.getHighestWinstreak(None) for player in players]
+        scores = [player.getPentakills(None) for player in players]
+        names = [player.playerName for player in players]
+        playerIDs = [player.id for player in players]
+
+        leaderboard = LeaderboardSorter.getLineDict(scores, names, playerIDs)
+        for line in leaderboard:
+            lineDict = {}
+            lineDict['name'] = line[1]
+            lineDict['count'] = line[0]
+            lineDict['playerID'] = line[2]
+            data.append(lineDict)
+
+        return JsonResponse(data={
+            'data': data
+        })
+
+
+class QuadrakillsTable(View):
+    def get(self, request, *args, **kwargs):
+        data = []
+        players = Player.objects.all()
+
+        player: Player
+        scores = [player.getQuadrakills(None) for player in players]
+        names = [player.playerName for player in players]
+        playerIDs = [player.id for player in players]
+
+        leaderboard = LeaderboardSorter.getLineDict(scores, names, playerIDs)
+        for line in leaderboard:
+            lineDict = {}
+            lineDict['name'] = line[1]
+            lineDict['count'] = line[0]
+            lineDict['playerID'] = line[2]
+            data.append(lineDict)
+
+        return JsonResponse(data={
+            'data': data
+        })
+
+
+class TriplekillsTable(View):
+    def get(self, request, *args, **kwargs):
+        data = []
+        players = Player.objects.all()
+
+        player: Player
+        scores = [player.getTriplekills(None) for player in players]
+        names = [player.playerName for player in players]
+        playerIDs = [player.id for player in players]
+
+        leaderboard = LeaderboardSorter.getLineDict(scores, names, playerIDs)
+        for line in leaderboard:
+            lineDict = {}
+            lineDict['name'] = line[1]
+            lineDict['count'] = line[0]
+            lineDict['playerID'] = line[2]
+            data.append(lineDict)
+
+        return JsonResponse(data={
+            'data': data
+        })
+
+
+class DoublekillsTable(View):
+    def get(self, request, *args, **kwargs):
+        data = []
+        players = Player.objects.all()
+
+        player: Player
+        scores = [player.getDoublekills(None) for player in players]
         names = [player.playerName for player in players]
         playerIDs = [player.id for player in players]
 
