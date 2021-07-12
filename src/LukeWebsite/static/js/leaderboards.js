@@ -523,6 +523,38 @@ $(function () {
                 [1, "desc"]
             ]
         });
+
+        var lossstreakTable = $('#lossstreakTable').DataTable({
+            "ajax": $('#lossstreakTable').data('url'),
+            "columns": [
+                {
+                    "data": "name",
+                    "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
+                        $(nTd).html("<a href='/ten_mans/player/" + oData.playerID + "'>" + sData + "</a>");
+                    }
+                },
+
+                {
+                    "data": "count"
+                },
+                {
+                    "data": "playerID"
+                }
+            ],
+            columnDefs: [
+                {
+                    targets: [2],
+                    visible: false
+                }
+            ],
+            paging: false,
+            searching: false,
+            info: false,
+            "order": [
+                [1, "desc"]
+            ]
+        });
+
         var pentakillsTable = $('#pentakillsTable').DataTable({
             "ajax": $('#pentakillsTable').data('url'),
             "columns": [

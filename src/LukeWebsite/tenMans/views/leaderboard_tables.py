@@ -369,6 +369,29 @@ class WinstreakTable(View):
         })
 
 
+class LossstreakTable(View):
+    def get(self, request, *args, **kwargs):
+        data = []
+        players = Player.objects.all()
+
+        player: Player
+        scores = [player.getHighestLossstreak(None) for player in players]
+        names = [player.playerName for player in players]
+        playerIDs = [player.id for player in players]
+
+        leaderboard = LeaderboardSorter.getLineDict(scores, names, playerIDs)
+        for line in leaderboard:
+            lineDict = {}
+            lineDict['name'] = line[1]
+            lineDict['count'] = line[0]
+            lineDict['playerID'] = line[2]
+            data.append(lineDict)
+
+        return JsonResponse(data={
+            'data': data
+        })
+
+
 class PentakillsTable(View):
     def get(self, request, *args, **kwargs):
         data = []

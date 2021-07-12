@@ -587,9 +587,9 @@ class Player(models.Model):
 
     def getHighestWinstreak(self, lane):
         if lane is None:
-            gamesPlayed = GameLaner.objects.filter(player__exact=self.id)
+            gamesPlayed = GameLaner.objects.filter(player__exact=self.id).order_by('game__gameDate')
         else:
-            gamesPlayed = GameLaner.objects.filter(player__exact=self.id, lane__exact=lane.id)
+            gamesPlayed = GameLaner.objects.filter(player__exact=self.id, lane__exact=lane.id).order_by('game__gameDate')
 
         totalGameCount = gamesPlayed.count()
         if totalGameCount == 0:
@@ -608,6 +608,30 @@ class Player(models.Model):
                     maxWinstreak = currentWinstreak
                 currentWinstreak = 0
         return maxWinstreak
+
+    def getHighestLossstreak(self, lane):
+        if lane is None:
+            gamesPlayed = GameLaner.objects.filter(player__exact=self.id).order_by('game__gameDate')
+        else:
+            gamesPlayed = GameLaner.objects.filter(player__exact=self.id, lane__exact=lane.id).order_by('game__gameDate')
+
+        totalGameCount = gamesPlayed.count()
+        if totalGameCount == 0:
+            return None
+
+        currentLossstreak = 0
+        maxLossstreak = 0
+        for gameLane in gamesPlayed.iterator():
+            gameLane: GameLaner
+            blueTeam = gameLane.blueTeam
+            blueWin = gameLane.game.gameBlueWins
+            if blueTeam != blueWin:
+                currentLossstreak += 1
+            else:
+                if maxLossstreak < currentLossstreak:
+                    maxLossstreak = currentLossstreak
+                currentLossstreak = 0
+        return maxLossstreak
 
     def getWinrateOnList(gamesPlayed):
         totalGameCount = gamesPlayed.count()

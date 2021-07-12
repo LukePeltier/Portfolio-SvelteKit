@@ -53,6 +53,7 @@ urlpatterns = [
     path('captainWinrateTable/', views.leaderboard_tables.CaptainWinrateTable.as_view(), name='captainWinrateTable'),
     path('captainCountTable/', views.leaderboard_tables.CaptainCountTable.as_view(), name='captainCountTable'),
     path('winstreakTable/', views.leaderboard_tables.WinstreakTable.as_view(), name='winstreakTable'),
+    path('lossstreakTable/', views.leaderboard_tables.LossstreakTable.as_view(), name='lossstreakTable'),
     path('pentakillsTable/', views.leaderboard_tables.PentakillsTable.as_view(), name='pentakillsTable'),
     path('quadrakillsTable/', views.leaderboard_tables.QuadrakillsTable.as_view(), name='quadrakillsTable'),
     path('triplekillsTable/', views.leaderboard_tables.TriplekillsTable.as_view(), name='triplekillsTable'),
