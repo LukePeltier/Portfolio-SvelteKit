@@ -208,7 +208,7 @@
             </table>
         </div>
         <div id="winstreakTableContainer" class="col-xl-4 col-md-6">
-            <h3 class="leaderboardTitle">Highest Winstreak</h3>
+            <h3 class="leaderboardTitle">Highest Win Streak</h3>
             <table id="winstreakTable" class="table table-hover table-bordered table-sm" style="width:100%"
                 data-url="{% url 'winstreakTable'%}">
                 <thead>
@@ -216,6 +216,21 @@
                         <th style="white-space: nowrap;">Name</th>
                         <th style="white-space: nowrap;">Count</th>
                         <th style="white-space: nowrap;">playerID</th>
+                        <th style="white-space: nowrap;">isCurrent</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+        <div id="lossstreakTableContainer" class="col-xl-4 col-md-6">
+            <h3 class="leaderboardTitle">Highest Loss Streak</h3>
+            <table id="lossstreakTable" class="table table-hover table-bordered table-sm" style="width:100%"
+                data-url="{% url 'lossstreakTable'%}">
+                <thead>
+                    <tr>
+                        <th style="white-space: nowrap;">Name</th>
+                        <th style="white-space: nowrap;">Count</th>
+                        <th style="white-space: nowrap;">playerID</th>
+                        <th style="white-space: nowrap;">isCurrent</th>
                     </tr>
                 </thead>
             </table>

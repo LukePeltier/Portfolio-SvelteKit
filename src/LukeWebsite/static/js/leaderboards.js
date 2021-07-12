@@ -504,15 +504,24 @@ $(function () {
                 },
 
                 {
-                    "data": "count"
+                    "data": "count",
+                    "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
+                        if(oData.isCurrent){
+                            $(nTd).html("<p>" + sData + " <span class=\"badge rounded-pill bg-success\">Current</span></p>");
+                        }
+                    }
+
                 },
                 {
                     "data": "playerID"
+                },
+                {
+                    "data": "isCurrent"
                 }
             ],
             columnDefs: [
                 {
-                    targets: [2],
+                    targets: [2,3],
                     visible: false
                 }
             ],
@@ -523,6 +532,46 @@ $(function () {
                 [1, "desc"]
             ]
         });
+
+        var lossstreakTable = $('#lossstreakTable').DataTable({
+            "ajax": $('#lossstreakTable').data('url'),
+            "columns": [
+                {
+                    "data": "name",
+                    "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
+                        $(nTd).html("<a href='/ten_mans/player/" + oData.playerID + "'>" + sData + "</a>");
+                    }
+                },
+
+                {
+                    "data": "count",
+                    "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
+                        if(oData.isCurrent){
+                            $(nTd).html("<p>" + sData + " <span class=\"badge rounded-pill bg-danger\">Current</span></p>");
+                        }
+                    }
+                },
+                {
+                    "data": "playerID"
+                },
+                {
+                    "data": "isCurrent"
+                }
+            ],
+            columnDefs: [
+                {
+                    targets: [2,3],
+                    visible: false
+                }
+            ],
+            paging: false,
+            searching: false,
+            info: false,
+            "order": [
+                [1, "desc"]
+            ]
+        });
+
         var pentakillsTable = $('#pentakillsTable').DataTable({
             "ajax": $('#pentakillsTable').data('url'),
             "columns": [
