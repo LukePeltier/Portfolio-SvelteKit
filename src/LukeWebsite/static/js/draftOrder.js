@@ -195,6 +195,34 @@ $(function () {
             info: false
         });
 
+        var expectedDraftOrderCaptainTable = $('#expectedDraftOrderWinrateCaptainTable').DataTable({
+            "ajax": $('#expectedDraftOrderWinrateCaptainTable').data('url'),
+            "columns": [{
+                    "data": "name",
+                    "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
+                        $(nTd).html("<a href='/ten_mans/player/" + oData.playerID + "'>" + sData + "</a>");
+                    }
+                },
+                {
+                    "data": "minWinrate",
+                    "render": $.fn.dataTable.render.number(',', '.', 0, '', '%')
+                },
+                {
+                    "data": "playerID"
+                }
+            ],
+            columnDefs: [{
+                targets: [2],
+                visible: false
+            }],
+            "order": [
+                [1, "desc"]
+            ],
+            paging: false,
+            searching: false,
+            info: false
+        });
+
     });
 
 });

@@ -97,6 +97,12 @@ class Player(models.Model):
             lane) / 100, (0.5 / np.sqrt(self.getLaneCount(lane))))
         return round(max(conf_int[0], 0) * 100, 2)
 
+    def getMinConfidenceCaptainWinrate(self):
+        if self.getCaptainGamesPlayed() < 3:
+            return None
+        conf_int = stats.norm.interval(0.5, self.getCaptainWinrate() / 100, (0.5 / np.sqrt(self.getCaptainGamesPlayed())))
+        return round(max(conf_int[0], 0) * 100, 2)
+
     def getMostPlayedLaneString(self):
         gamesPlayed = GameLaner.objects.filter(player__exact=self.id)
         laneCounts = {"Top": 0, "Jungle": 0, "Mid": 0, "Bot": 0, "Support": 0}

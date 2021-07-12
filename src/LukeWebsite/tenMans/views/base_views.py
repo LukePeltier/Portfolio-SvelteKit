@@ -381,6 +381,27 @@ class ExpectedDraftOrderWinrateLaneTable(View):
         })
 
 
+class ExpectedDraftOrderWinrateCaptainTable(View):
+
+    def get(self, request, *args, **kwargs):
+        data = []
+        queryset = Player.objects.all()
+
+        for player in queryset:
+            playerDict = {}
+            playerDict["name"] = player.playerName
+            player: Player
+            playerDict["minWinrate"] = player.getMinConfidenceCaptainWinrate()
+            if playerDict["minWinrate"] is None:
+                continue
+            playerDict["playerID"] = player.id
+            data.append(playerDict)
+
+        return JsonResponse(data={
+            'data': data
+        })
+
+
 class NewGameView(FormView, BaseTenMansContextMixin):
     template_name = 'tenMans/new_game.html'
     form_class = NewGameForm
