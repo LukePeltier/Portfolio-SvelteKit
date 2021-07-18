@@ -152,6 +152,7 @@ class PlayerDetailView(DetailView, BaseTenMansContextMixin):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['trophyCaseHTML'] = self.object.getTrophyCaseHTML()
         context['mostPlayedLane'] = self.object.getMostPlayedLaneString()
         context['mostPlayedChamp'] = self.object.getMostPlayedChampionString()
         context['highestWinrateChamp'] = self.object.getHighestWinrateChampionString()
