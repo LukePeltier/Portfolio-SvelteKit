@@ -64,9 +64,10 @@ $(function () {
         });
 
         powerRankings.on('draw', function () {
+            var numOfRows = powerRankings.page.info().recordsTotal
             powerRankings.cells().every(function () {
                 if ($(this.node()).parent().children().index($(this.node()))===3) {
-                    $(this.node()).css('background-color', getRGBHeatmapColor(100-this.data(), window.chartColors.red, window.chartColors.green, window.chartColors.yellow, $(this.node()).data('alpha'), true, 0, 50, 100));
+                    $(this.node()).css('background-color', getRGBHeatmapColor((numOfRows-this.data())+1, window.chartColors.red, window.chartColors.green, window.chartColors.yellow, $(this.node()).data('alpha'), true, 1, numOfRows/2, numOfRows));
                 } else if (this.data() === "N/A") {
                     $(this.node()).css('color', window.chartColors.grey);
                 }

@@ -113,8 +113,9 @@ class PowerRankingsTable(View):
 
     def get(self, request, *args, **kwargs):
         data = []
-        queryset = Player.objects.order_by('playerName')
+        queryset = Player.getPowerRankings()
 
+        i = 1
         for player in queryset:
             # if(player.getTotalTournamentsPlayed() <= 0):
             #     continue
@@ -123,10 +124,11 @@ class PowerRankingsTable(View):
             playerDict["name"] = player.playerName
             playerDict["tournamentsPlayed"] = player.getTotalTournamentsPlayed()
             playerDict["holesPlayed"] = player.getTotalHolesPlayed()
-            playerDict["topPercent"] = ("N/A" if (player.getPowerRankingPercentage() is None) else round(player.getPowerRankingPercentage(None) * 100, 3))
+            playerDict["topPercent"] = (i)
             playerDict["topPercentAlpha"] = player.getTournamentRate()
             playerDict["playerID"] = player.id
             data.append(playerDict)
+            i += 1
 
         return JsonResponse(data={
             'data': data
