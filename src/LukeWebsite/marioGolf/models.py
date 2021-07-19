@@ -1,5 +1,6 @@
 from django.db import models
 from django.db.models import Sum
+from random import shuffle
 
 
 # Create your models here.
@@ -87,7 +88,7 @@ class Player(models.Model):
         entry = TournamentEntry.objects.filter(tournament__exact=tournament.id, player__exact=self.id).first()
         if entry is None:
             return None
-
+        entry: TournamentEntry
         return entry.getPlacement()
 
     def getTournamentRate(self):
@@ -99,6 +100,77 @@ class Player(models.Model):
                 topNumber = count
         playerNumber = self.getTotalTournamentsPlayed()
         return round(playerNumber / topNumber, 3)
+
+    def getPowerRankings():
+        players = list(Player.objects.all())
+        shuffle(players)
+        Player.quickSort(players, 0, len(players) - 1)
+        return players
+
+    def partition(arr, low, high):
+        i = (low - 1)         # index of smaller element
+        pivot = arr[high]     # pivot
+
+        for j in range(low, high):
+
+            # If current element is smaller than or
+            # equal to pivot
+            if Player.comparePlayers(arr[j], pivot) <= 0:
+
+                # increment index of smaller element
+                i = i + 1
+                arr[i], arr[j] = arr[j], arr[i]
+
+        arr[i + 1], arr[high] = arr[high], arr[i + 1]
+        return (i + 1)
+
+    # The main function that implements QuickSort
+    # arr[] --> Array to be sorted,
+    # low  --> Starting index,
+    # high  --> Ending index
+
+    # Function to do Quick sort
+    def quickSort(arr, low, high):
+        if len(arr) == 1:
+            return arr
+        if low < high:
+
+            # pi is partitioning index, arr[p] is now
+            # at right place
+            pi = Player.partition(arr, low, high)
+
+            # Separately sort elements before
+            # partition and after partition
+            Player.quickSort(arr, low, pi - 1)
+            Player.quickSort(arr, pi + 1, high)
+
+    def comparePlayers(playerOne: 'Player', playerTwo: 'Player'):
+        tournaments = Tournament.objects.all()
+
+        totalScore = 0
+
+        for tournament in tournaments:
+            playerOnePlacement = playerOne.getPlacementInTournament(tournament)
+            playerTwoPlacement = playerTwo.getPlacementInTournament(tournament)
+            numOfHoles = tournament.numOfHoles
+            lastPlaceScore = tournament.getLastPlaceDict()[2] + (1 * (numOfHoles / 18))
+
+            if playerOnePlacement is None and playerTwoPlacement is None:
+                continue
+
+            elif playerOnePlacement is None and playerTwoPlacement is not None:
+                totalScore += (lastPlaceScore - playerTwoPlacement[2]) / (numOfHoles / 18)
+
+            elif playerOnePlacement is not None and playerTwoPlacement is None:
+                totalScore += (playerOnePlacement[2] - lastPlaceScore) / (numOfHoles / 18)
+
+            else:
+                totalScore += (playerOnePlacement[2] - playerTwoPlacement[2]) / (numOfHoles / 18)
+
+        if totalScore == 0:
+            return playerTwo.getTotalHolesPlayed() - playerOne.getTotalHolesPlayed()
+
+        return totalScore
 
 
 class Character(models.Model):
@@ -171,6 +243,17 @@ class Tournament(models.Model):
 
             result[name] = (place, shots, score, characterName)
         return result
+
+    def getLastPlaceDict(self):
+        placementDict = self.getPlacementDict()
+
+        lastPlace = 0
+        lastPlaceDict = None
+        for name, (ranking, shotsTaken, score, characterName) in placementDict.items():
+            if ranking > lastPlace:
+                lastPlace = ranking
+                lastPlaceDict = (ranking, shotsTaken, score, characterName)
+        return lastPlaceDict
 
 
 class TournamentHole(models.Model):
