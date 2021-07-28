@@ -42,7 +42,7 @@ class MostKillsGameTable(View):
         for line in leaderboard:
             lineDict = {}
             lineDict['name'] = line[1]
-            lineDict['kills'] = line[0]
+            lineDict['data'] = line[0]
             lineDict['gameID'] = line[2]
             lineDict['playerID'] = line[3]
             lineDict['game'] = Game.objects.get(pk=line[2]).gameNumber
@@ -67,7 +67,7 @@ class MostDeathsGameTable(View):
         for line in leaderboard:
             lineDict = {}
             lineDict['name'] = line[1]
-            lineDict['deaths'] = line[0]
+            lineDict['data'] = line[0]
             lineDict['gameID'] = line[2]
             lineDict['playerID'] = line[3]
             lineDict['game'] = Game.objects.get(pk=line[2]).gameNumber
@@ -92,7 +92,7 @@ class MostAssistsGameTable(View):
         for line in leaderboard:
             lineDict = {}
             lineDict['name'] = line[1]
-            lineDict['assists'] = line[0]
+            lineDict['data'] = line[0]
             lineDict['gameID'] = line[2]
             lineDict['playerID'] = line[3]
             lineDict['game'] = Game.objects.get(pk=line[2]).gameNumber
@@ -117,7 +117,7 @@ class MostDamageGameTable(View):
         for line in leaderboard:
             lineDict = {}
             lineDict['name'] = line[1]
-            lineDict['damage'] = line[0]
+            lineDict['data'] = line[0]
             lineDict['gameID'] = line[2]
             lineDict['playerID'] = line[3]
             lineDict['game'] = Game.objects.get(pk=line[2]).gameNumber
@@ -142,7 +142,7 @@ class MostSpreeGameTable(View):
         for line in leaderboard:
             lineDict = {}
             lineDict['name'] = line[1]
-            lineDict['spree'] = line[0]
+            lineDict['data'] = line[0]
             lineDict['gameID'] = line[2]
             lineDict['playerID'] = line[3]
             lineDict['game'] = Game.objects.get(pk=line[2]).gameNumber
@@ -167,7 +167,7 @@ class MostCSGameTable(View):
         for line in leaderboard:
             lineDict = {}
             lineDict['name'] = line[1]
-            lineDict['cs'] = line[0]
+            lineDict['data'] = line[0]
             lineDict['gameID'] = line[2]
             lineDict['playerID'] = line[3]
             lineDict['game'] = Game.objects.get(pk=line[2]).gameNumber
@@ -192,7 +192,7 @@ class MostCSFirstTwentyGameTable(View):
         for line in leaderboard:
             lineDict = {}
             lineDict['name'] = line[1]
-            lineDict['cs'] = line[0]
+            lineDict['data'] = line[0]
             lineDict['gameID'] = line[2]
             lineDict['playerID'] = line[3]
             lineDict['game'] = Game.objects.get(pk=line[2]).gameNumber
@@ -217,7 +217,7 @@ class MostVisionGameTable(View):
         for line in leaderboard:
             lineDict = {}
             lineDict['name'] = line[1]
-            lineDict['vision'] = line[0]
+            lineDict['data'] = line[0]
             lineDict['gameID'] = line[2]
             lineDict['playerID'] = line[3]
             lineDict['game'] = Game.objects.get(pk=line[2]).gameNumber
@@ -242,7 +242,7 @@ class MostControlWardGameTable(View):
         for line in leaderboard:
             lineDict = {}
             lineDict['name'] = line[1]
-            lineDict['cw'] = line[0]
+            lineDict['data'] = line[0]
             lineDict['gameID'] = line[2]
             lineDict['playerID'] = line[3]
             lineDict['game'] = Game.objects.get(pk=line[2]).gameNumber
@@ -267,7 +267,7 @@ class MostBanGameTable(View):
         for line in leaderboard:
             lineDict = {}
             lineDict['name'] = line[1]
-            lineDict['ban'] = line[0]
+            lineDict['data'] = line[0]
             lineDict['gameID'] = line[2]
             lineDict['playerID'] = line[3]
             lineDict['game'] = Game.objects.get(pk=line[2]).gameNumber
@@ -291,7 +291,7 @@ class MostChampsTable(View):
         for line in leaderboard:
             lineDict = {}
             lineDict['name'] = line[1]
-            lineDict['champions'] = line[0]
+            lineDict['data'] = line[0]
             lineDict['playerID'] = line[2]
             data.append(lineDict)
 
@@ -314,7 +314,7 @@ class CaptainWinrateTable(View):
         for line in leaderboard:
             lineDict = {}
             lineDict['name'] = line[1]
-            lineDict['winrate'] = line[0]
+            lineDict['data'] = line[0]
             lineDict['playerID'] = line[2]
             data.append(lineDict)
 
@@ -337,7 +337,7 @@ class CaptainCountTable(View):
         for line in leaderboard:
             lineDict = {}
             lineDict['name'] = line[1]
-            lineDict['count'] = line[0]
+            lineDict['data'] = line[0]
             lineDict['playerID'] = line[2]
             data.append(lineDict)
 
@@ -360,7 +360,7 @@ class WinstreakTable(View):
         for line in leaderboard:
             lineDict = {}
             lineDict['name'] = line[1]
-            lineDict['count'] = line[0]
+            lineDict['data'] = line[0]
             lineDict['playerID'] = line[2]
             lineDict['isCurrent'] = Player.objects.get(pk=line[2]).getHighestWinstreak(None)[1]
             data.append(lineDict)
@@ -384,7 +384,7 @@ class LossstreakTable(View):
         for line in leaderboard:
             lineDict = {}
             lineDict['name'] = line[1]
-            lineDict['count'] = line[0]
+            lineDict['data'] = line[0]
             lineDict['playerID'] = line[2]
             lineDict['isCurrent'] = Player.objects.get(pk=line[2]).getHighestLossstreak(None)[1]
             data.append(lineDict)
@@ -408,7 +408,7 @@ class PentakillsTable(View):
         for line in leaderboard:
             lineDict = {}
             lineDict['name'] = line[1]
-            lineDict['count'] = line[0]
+            lineDict['data'] = line[0]
             lineDict['playerID'] = line[2]
             data.append(lineDict)
 
@@ -431,7 +431,7 @@ class QuadrakillsTable(View):
         for line in leaderboard:
             lineDict = {}
             lineDict['name'] = line[1]
-            lineDict['count'] = line[0]
+            lineDict['data'] = line[0]
             lineDict['playerID'] = line[2]
             data.append(lineDict)
 
@@ -454,7 +454,7 @@ class TriplekillsTable(View):
         for line in leaderboard:
             lineDict = {}
             lineDict['name'] = line[1]
-            lineDict['count'] = line[0]
+            lineDict['data'] = line[0]
             lineDict['playerID'] = line[2]
             data.append(lineDict)
 
@@ -477,7 +477,7 @@ class DoublekillsTable(View):
         for line in leaderboard:
             lineDict = {}
             lineDict['name'] = line[1]
-            lineDict['count'] = line[0]
+            lineDict['data'] = line[0]
             lineDict['playerID'] = line[2]
             data.append(lineDict)
 

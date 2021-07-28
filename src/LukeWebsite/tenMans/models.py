@@ -922,3 +922,11 @@ class GameBan(models.Model):
     champion = models.ForeignKey(Champion, on_delete=models.CASCADE)
     targetPlayer = models.ForeignKey(
         Player, on_delete=models.CASCADE, null=True)
+
+
+class Leaderboard(models.Model):
+    leaderboardName = models.TextField(unique=True)
+    leaderboardValueName = models.TextField()
+    leaderboardEmoji = models.TextField()
+    leaderboardIsLifetime = models.BooleanField()
+    leaderboardURLName = models.TextField(default='')

@@ -13,7 +13,7 @@ from django.views.generic.list import ListView
 from tenMans.extras.data import GlobalVars
 from tenMans.forms import (CreatePlayer, DuoForm, LaneMatchup, NewGameForm,
                            UpdateAllGamesForm, UpdateGameForm)
-from tenMans.models import (Champion, Game, GameBan, GameLaner, GameLanerStats, Lane,
+from tenMans.models import (Champion, Game, GameBan, GameLaner, GameLanerStats, Lane, Leaderboard,
                             Player)
 
 
@@ -1063,4 +1063,6 @@ class Leaderboards(TemplateView, BaseTenMansContextMixin):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['NonLifeTimeTables'] = Leaderboard.objects.filter(leaderboardIsLifetime__exact=0)
+        context['LifeTimeTables'] = Leaderboard.objects.filter(leaderboardIsLifetime__exact=1)
         return context
