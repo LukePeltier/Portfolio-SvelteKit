@@ -649,7 +649,8 @@ class Player(models.Model):
 
         return round((winningCount / totalGameCount) * 100, 2)
 
-    def getTrophyCaseHTML(self):
+    def getTrophyCase(self):
+
         pass
 
     def __str__(self):
