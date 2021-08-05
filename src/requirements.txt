@@ -12,7 +12,7 @@ arrow==0.17.0
     #   django-cassiopeia
 asgiref==3.4.1
     # via django
-astroid==2.6.2
+astroid==2.6.6
     # via pylint
 atomicwrites==1.4.0
     # via pytest
@@ -26,7 +26,7 @@ cassiopeia==4.0.18
     # via django-cassiopeia
 certifi==2021.5.30
     # via requests
-chardet==4.0.0
+charset-normalizer==2.0.4
     # via requests
 click==8.0.1
     # via pip-tools
@@ -45,9 +45,7 @@ datapipelines==1.0.7
     # via
     #   cassiopeia
     #   django-cassiopeia
-decorator==4.4.2
-    # via networkx
-django==3.2.5
+django==3.2.6
     # via
     #   -r requirements.in
     #   crispy-bootstrap5
@@ -56,7 +54,7 @@ django==3.2.5
     #   django-cassiopeia
 django-bootstrap-datepicker-plus==3.0.5
     # via -r requirements.in
-django-bootstrap5==2.0.1
+django-bootstrap5==2.1.1
     # via -r requirements.in
 django-cassiopeia==2.1.0
     # via -r requirements.in
@@ -70,17 +68,17 @@ django-nose==1.4.7
     # via -r requirements.in
 factory-boy==3.2.0
     # via -r requirements.in
-faker==8.9.1
+faker==8.11.0
     # via factory-boy
 flake8==3.9.2
     # via -r requirements.in
 gviz-api==1.9.0
     # via -r requirements.in
-idna==2.10
+idna==3.2
     # via requests
 iniconfig==1.1.1
     # via pytest
-isort==5.9.1
+isort==5.9.3
     # via pylint
 lazy-object-proxy==1.6.0
     # via astroid
@@ -97,25 +95,25 @@ mypy-extensions==0.4.3
     # via -r requirements.in
 mysqlclient==2.0.3
     # via -r requirements.in
-networkx==2.5.1
+networkx==2.6.2
     # via datapipelines
 nose==1.3.7
     # via django-nose
-numpy==1.21.0
+numpy==1.21.1
     # via scipy
 packaging==21.0
     # via pytest
-pathspec==0.8.1
+pathspec==0.9.0
     # via -r requirements.in
-pep517==0.10.0
+pep517==0.11.0
     # via pip-tools
-pillow==8.3.0
+pillow==8.3.1
     # via
     #   cassiopeia
     #   django-cassiopeia
 pip-tools==6.2.0
     # via -r requirements.in
-pipdeptree==2.0.0
+pipdeptree==2.1.0
     # via -r requirements.in
 plotly==5.1.0
     # via -r requirements.in
@@ -129,7 +127,7 @@ pycodestyle==2.7.0
     #   flake8
 pyflakes==2.3.1
     # via flake8
-pylint==2.9.3
+pylint==2.9.6
     # via
     #   -r requirements.in
     #   pylint-django
@@ -151,20 +149,20 @@ pytest-cov==2.12.1
     # via -r requirements.in
 pytest-django==4.4.0
     # via -r requirements.in
-python-dateutil==2.8.1
+python-dateutil==2.8.2
     # via
     #   arrow
     #   faker
 pytz==2021.1
     # via django
-regex==2021.7.6
+regex==2021.8.3
     # via -r requirements.in
-requests==2.25.1
+requests==2.26.0
     # via
     #   -r requirements.in
     #   cassiopeia
     #   django-cassiopeia
-scipy==1.7.0
+scipy==1.7.1 ; sys_platform != "darwin"
     # via -r requirements.in
 selenium==3.141.0
     # via -r requirements.in
@@ -174,22 +172,22 @@ six==1.16.0
     #   gviz-api
     #   plotly
     #   python-dateutil
-    #   tenacity
 soupsieve==2.2.1
     # via beautifulsoup4
 sqlparse==0.4.1
     # via django
-tenacity==7.0.0
+tenacity==8.0.1
     # via plotly
 text-unidecode==1.3
     # via faker
 toml==0.10.2
     # via
     #   autopep8
-    #   pep517
     #   pylint
     #   pytest
     #   pytest-cov
+tomli==1.2.0
+    # via pep517
 typed-ast==1.4.3
     # via -r requirements.in
 typing-extensions==3.10.0.0
@@ -202,7 +200,7 @@ wheel==0.36.2
     # via
     #   django-cassiopeia
     #   pip-tools
-whitenoise==5.2.0
+whitenoise==5.3.0
     # via -r requirements.in
 wrapt==1.12.1
     # via astroid

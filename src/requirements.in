@@ -23,7 +23,7 @@ pytest-cov
 pytest-django
 regex
 requests
-scipy
+scipy ; sys_platform != "darwin"
 setuptools
 typed-ast
 typing-extensions
