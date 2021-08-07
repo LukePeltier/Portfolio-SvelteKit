@@ -1,6 +1,6 @@
 import datetime
 import factory
-from tenMans.models import Champion, Game, GameBan, GameLaner, GameLanerStats, Lane, Player
+from tenMans.models import Champion, Game, GameBan, GameLaner, GameLanerStats, Lane, Leaderboard, Player
 import factory.fuzzy
 from dateutil import tz
 
@@ -107,3 +107,8 @@ class GameLanerStatsFactory(factory.django.DjangoModelFactory):
 
     csRateFirstTen = factory.fuzzy.FuzzyFloat(0, 10, 2)
     csRateSecondTen = factory.fuzzy.FuzzyFloat(0, 10, 2)
+
+
+class LeaderboardFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = Leaderboard

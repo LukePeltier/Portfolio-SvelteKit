@@ -2,7 +2,7 @@ from django.db import models
 from scipy import stats
 import numpy as np
 from django_cassiopeia import cassiopeia as cass
-
+import importlib
 # Create your models here.
 
 
@@ -11,7 +11,7 @@ class Game(models.Model):
     gameBlueWins = models.BooleanField()
     gameRandomTeams = models.BooleanField()
     gameMemeStatus = models.BooleanField(default=0)
-    gameDate = models.DateTimeField(default='current_timestamp()')
+    gameDate = models.DateTimeField(auto_now_add=True)
     gameDuration = models.PositiveIntegerField()
     gameRiotID = models.PositiveBigIntegerField(null=True)
 
@@ -593,7 +593,7 @@ class Player(models.Model):
 
         totalGameCount = gamesPlayed.count()
         if totalGameCount == 0:
-            return None
+            return (0, True)
 
         currentWinstreak = 0
         maxWinstreak = 0
@@ -618,7 +618,7 @@ class Player(models.Model):
 
         totalGameCount = gamesPlayed.count()
         if totalGameCount == 0:
-            return None
+            return (0, True)
 
         currentLossstreak = 0
         maxLossstreak = 0
@@ -650,8 +650,13 @@ class Player(models.Model):
         return round((winningCount / totalGameCount) * 100, 2)
 
     def getTrophyCase(self):
+        leaderboards = Leaderboard.objects.all()
+        trophyArray = []
+        for leaderboard in leaderboards:
+            if leaderboard.getTrophyHolder() == self.id:
+                trophyArray.append(leaderboard)
 
-        pass
+        return trophyArray
 
     def __str__(self):
         return self.playerName
@@ -931,3 +936,15 @@ class Leaderboard(models.Model):
     leaderboardEmoji = models.TextField()
     leaderboardIsLifetime = models.BooleanField()
     leaderboardURLName = models.TextField(default='')
+    leaderboardViewClassName = models.TextField(null=False)
+
+    def getTrophyHolder(self):
+        # from  import (MostKillsGameTable)  # noqa: F401
+        mod = importlib.import_module('tenMans.views.leaderboard_tables')
+        leaderboardclass_ = getattr(mod, self.leaderboardViewClassName)
+        instance = leaderboardclass_()
+        results = instance.get(None, objectReturn=True)
+        if not results:
+            return None
+        playerID = results[0]['playerID']
+        return playerID

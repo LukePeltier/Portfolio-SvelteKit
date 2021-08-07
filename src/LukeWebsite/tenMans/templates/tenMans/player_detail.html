@@ -68,9 +68,9 @@
                 <div class="col">
                     <div class="border text-center" id="playerTrophyCabinetContainer">
                         <h4>Trophy Case</h4>
-                        {% for emoji in case %}
-                            {{emoji}}
-                        {% endfor %}
+                        <div id="trophyCase" style="display: inline">
+                            <i style="font-size: 30px;" class="fas fa-spinner fa-spin"></i>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -158,6 +158,21 @@
         </div>
     </div>
 </div>
+<script type="text/javascript">
+    $(function () {
+        $(document).ready(function () {
+            $.ajax({
+                type: "GET",
+                url: "{% url 'playerTrophyCaseString' object.pk %}",
+
+                dataType: "html",
+                success: function(msg) {
+                    $("#trophyCase").html(msg);
+                }
+            });
+        });
+    });
+</script>
 <script src="{%static 'js/playerWOTGraph.js'%}"></script>
 <script src="{%static 'js/playerDetails.js'%}"></script>
 {%endblock%}

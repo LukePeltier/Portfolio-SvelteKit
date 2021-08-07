@@ -48,6 +48,9 @@ class MostKillsGameTable(View):
             lineDict['game'] = Game.objects.get(pk=line[2]).gameNumber
             data.append(lineDict)
 
+        if('objectReturn' in kwargs and kwargs['objectReturn'] is True):
+            return data
+
         return JsonResponse(data={
             'data': data
         })
@@ -72,6 +75,9 @@ class MostDeathsGameTable(View):
             lineDict['playerID'] = line[3]
             lineDict['game'] = Game.objects.get(pk=line[2]).gameNumber
             data.append(lineDict)
+
+        if('objectReturn' in kwargs and kwargs['objectReturn'] is True):
+            return data
 
         return JsonResponse(data={
             'data': data
@@ -98,6 +104,9 @@ class MostAssistsGameTable(View):
             lineDict['game'] = Game.objects.get(pk=line[2]).gameNumber
             data.append(lineDict)
 
+        if('objectReturn' in kwargs and kwargs['objectReturn'] is True):
+            return data
+
         return JsonResponse(data={
             'data': data
         })
@@ -122,6 +131,9 @@ class MostDamageGameTable(View):
             lineDict['playerID'] = line[3]
             lineDict['game'] = Game.objects.get(pk=line[2]).gameNumber
             data.append(lineDict)
+
+        if('objectReturn' in kwargs and kwargs['objectReturn'] is True):
+            return data
 
         return JsonResponse(data={
             'data': data
@@ -148,6 +160,9 @@ class MostSpreeGameTable(View):
             lineDict['game'] = Game.objects.get(pk=line[2]).gameNumber
             data.append(lineDict)
 
+        if('objectReturn' in kwargs and kwargs['objectReturn'] is True):
+            return data
+
         return JsonResponse(data={
             'data': data
         })
@@ -172,6 +187,9 @@ class MostCSGameTable(View):
             lineDict['playerID'] = line[3]
             lineDict['game'] = Game.objects.get(pk=line[2]).gameNumber
             data.append(lineDict)
+
+        if('objectReturn' in kwargs and kwargs['objectReturn'] is True):
+            return data
 
         return JsonResponse(data={
             'data': data
@@ -198,6 +216,9 @@ class MostCSFirstTwentyGameTable(View):
             lineDict['game'] = Game.objects.get(pk=line[2]).gameNumber
             data.append(lineDict)
 
+        if('objectReturn' in kwargs and kwargs['objectReturn'] is True):
+            return data
+
         return JsonResponse(data={
             'data': data
         })
@@ -222,6 +243,9 @@ class MostVisionGameTable(View):
             lineDict['playerID'] = line[3]
             lineDict['game'] = Game.objects.get(pk=line[2]).gameNumber
             data.append(lineDict)
+
+        if('objectReturn' in kwargs and kwargs['objectReturn'] is True):
+            return data
 
         return JsonResponse(data={
             'data': data
@@ -248,6 +272,9 @@ class MostControlWardGameTable(View):
             lineDict['game'] = Game.objects.get(pk=line[2]).gameNumber
             data.append(lineDict)
 
+        if('objectReturn' in kwargs and kwargs['objectReturn'] is True):
+            return data
+
         return JsonResponse(data={
             'data': data
         })
@@ -273,6 +300,9 @@ class MostBanGameTable(View):
             lineDict['game'] = Game.objects.get(pk=line[2]).gameNumber
             data.append(lineDict)
 
+        if('objectReturn' in kwargs and kwargs['objectReturn'] is True):
+            return data
+
         return JsonResponse(data={
             'data': data
         })
@@ -294,6 +324,9 @@ class MostChampsTable(View):
             lineDict['data'] = line[0]
             lineDict['playerID'] = line[2]
             data.append(lineDict)
+
+        if('objectReturn' in kwargs and kwargs['objectReturn'] is True):
+            return data
 
         return JsonResponse(data={
             'data': data
@@ -318,6 +351,9 @@ class CaptainWinrateTable(View):
             lineDict['playerID'] = line[2]
             data.append(lineDict)
 
+        if('objectReturn' in kwargs and kwargs['objectReturn'] is True):
+            return data
+
         return JsonResponse(data={
             'data': data
         })
@@ -340,6 +376,9 @@ class CaptainCountTable(View):
             lineDict['data'] = line[0]
             lineDict['playerID'] = line[2]
             data.append(lineDict)
+
+        if('objectReturn' in kwargs and kwargs['objectReturn'] is True):
+            return data
 
         return JsonResponse(data={
             'data': data
@@ -365,6 +404,9 @@ class WinstreakTable(View):
             lineDict['isCurrent'] = Player.objects.get(pk=line[2]).getHighestWinstreak(None)[1]
             data.append(lineDict)
 
+        if('objectReturn' in kwargs and kwargs['objectReturn'] is True):
+            return data
+
         return JsonResponse(data={
             'data': data
         })
@@ -389,6 +431,9 @@ class LossstreakTable(View):
             lineDict['isCurrent'] = Player.objects.get(pk=line[2]).getHighestLossstreak(None)[1]
             data.append(lineDict)
 
+        if('objectReturn' in kwargs and kwargs['objectReturn'] is True):
+            return data
+
         return JsonResponse(data={
             'data': data
         })
@@ -411,6 +456,9 @@ class PentakillsTable(View):
             lineDict['data'] = line[0]
             lineDict['playerID'] = line[2]
             data.append(lineDict)
+
+        if('objectReturn' in kwargs and kwargs['objectReturn'] is True):
+            return data
 
         return JsonResponse(data={
             'data': data
@@ -435,6 +483,9 @@ class QuadrakillsTable(View):
             lineDict['playerID'] = line[2]
             data.append(lineDict)
 
+        if('objectReturn' in kwargs and kwargs['objectReturn'] is True):
+            return data
+
         return JsonResponse(data={
             'data': data
         })
@@ -458,6 +509,9 @@ class TriplekillsTable(View):
             lineDict['playerID'] = line[2]
             data.append(lineDict)
 
+        if('objectReturn' in kwargs and kwargs['objectReturn'] is True):
+            return data
+
         return JsonResponse(data={
             'data': data
         })
@@ -480,6 +534,9 @@ class DoublekillsTable(View):
             lineDict['data'] = line[0]
             lineDict['playerID'] = line[2]
             data.append(lineDict)
+
+        if('objectReturn' in kwargs and kwargs['objectReturn'] is True):
+            return data
 
         return JsonResponse(data={
             'data': data

@@ -214,7 +214,7 @@ class TournamentType(models.Model):
 
 class Tournament(models.Model):
     name = models.TextField(unique=True)
-    startDate = models.DateTimeField(default='current_timestamp()')
+    startDate = models.DateTimeField(auto_now_add=True)
     endDate = models.DateTimeField(null=True)
     tournamentType = models.ForeignKey(TournamentType, on_delete=models.CASCADE)
     numOfHoles = models.PositiveSmallIntegerField()
