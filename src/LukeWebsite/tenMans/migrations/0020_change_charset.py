@@ -12,8 +12,8 @@ class Migration(migrations.Migration):
     operations = [
         migrations.RunSQL([
             "ALTER DATABASE tenmansstatistics CHARACTER SET = utf8mb4 COLLATE utf8mb4_unicode_ci",
-            "ALTER TABLE tenmans_leaderboard CONVERT TO CHARACTER SET utf8mb4 COLLATE UTF8MB4_UNICODE_CI",
-            "ALTER TABLE tenmans_leaderboard CHANGE leaderboardEmoji leaderboardEmoji LONGTEXT CHARACTER SET utf8mb4 COLLATE UTF8MB4_UNICODE_CI"
+            "ALTER TABLE tenMans_leaderboard CONVERT TO CHARACTER SET utf8mb4 COLLATE UTF8MB4_UNICODE_CI",
+            "ALTER TABLE tenMans_leaderboard CHANGE leaderboardEmoji leaderboardEmoji LONGTEXT CHARACTER SET utf8mb4 COLLATE UTF8MB4_UNICODE_CI"
         ]
         )
     ]
