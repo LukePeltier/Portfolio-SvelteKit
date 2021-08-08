@@ -1,10 +1,10 @@
-from datetime import date
 from django.http.response import JsonResponse
 from django.views.generic.base import ContextMixin, TemplateView, View
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 from marioGolf.models import Character, Player, Tournament, TournamentEntry, TournamentEntryHole, TournamentHole
 from django.core.exceptions import ObjectDoesNotExist
+from django.utils.timezone import now
 
 
 class BaseMarioGolfContextMixin(ContextMixin):
@@ -18,7 +18,7 @@ class Dashboard(TemplateView, BaseMarioGolfContextMixin):
     template_name = "marioGolf/index.html"
 
     def get_context_data(self, **kwargs):
-        today = date.today()
+        today = now()
         context = super().get_context_data(**kwargs)
         context['currentlyRunning'] = Tournament.objects.filter(startDate__lt=today, endDate__gt=today).exists()
         context['tournamentsPlayed'] = Tournament.objects.count()

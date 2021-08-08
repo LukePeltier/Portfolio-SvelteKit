@@ -66,6 +66,16 @@
         <div class="col col-md-6">
             <div class="row">
                 <div class="col">
+                    <div class="border text-center" id="playerTrophyCabinetContainer">
+                        <h4>Trophy Case</h4>
+                        <div id="trophyCase" style="display: inline">
+                            <i style="font-size: 30px;" class="fas fa-spinner fa-spin"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
                     <div id="playerLaneCountTableContainer">
                         <table id="playerLaneCountTable" class="table table-hover table-bordered table-sm" style="width:100%"
                             style="width:100%;" data-url="{% url 'playerLaneCountTable' object.pk %}">
@@ -148,6 +158,21 @@
         </div>
     </div>
 </div>
+<script type="text/javascript">
+    $(function () {
+        $(document).ready(function () {
+            $.ajax({
+                type: "GET",
+                url: "{% url 'playerTrophyCaseString' object.pk %}",
+
+                dataType: "html",
+                success: function(msg) {
+                    $("#trophyCase").html(msg);
+                }
+            });
+        });
+    });
+</script>
 <script src="{%static 'js/playerWOTGraph.js'%}"></script>
 <script src="{%static 'js/playerDetails.js'%}"></script>
 {%endblock%}

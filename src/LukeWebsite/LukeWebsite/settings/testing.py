@@ -14,6 +14,7 @@ DATABASES = {
         'HOST': '127.0.0.1',
         'PORT': '3306',
         'OPTIONS': {
+            'charset': 'utf8mb4',
             'read_default_file': os.path.join(BASE_DIR, 'privateSettings', 'db.cnf')
         }
     }

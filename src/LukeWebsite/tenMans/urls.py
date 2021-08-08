@@ -17,6 +17,7 @@ urlpatterns = [
     path('expectedPlayerDraftOrderWinrateTable/', views.base_views.ExpectedDraftOrderWinrateTable.as_view(), name='expectedDraftOrderWinrateTable'),
     path('expectedDraftOrderWinrateCaptainTable/', views.base_views.ExpectedDraftOrderWinrateCaptainTable.as_view(), name='expectedDraftOrderWinrateCaptainTable'),
     path('expectedPlayerDraftOrderWinrateTable/<str:lane>/', views.base_views.ExpectedDraftOrderWinrateLaneTable.as_view(), name='expectedDraftOrderWinrateLaneTable'),
+    path('player/<int:pk>/trophyCaseString/', views.base_views.PlayerTrophyCaseString.as_view(), name='playerTrophyCaseString'),
     path('player/<int:pk>/laneCountData/', views.base_views.PlayerLaneCountTable.as_view(), name='playerLaneCountTable'),
     path('player/<int:pk>/championCountData/', views.base_views.PlayerChampionCountTable.as_view(), name='playerChampionCountTable'),
     path('player/<int:pk>/gamesPlayedData/', views.base_views.PlayerGamesTable.as_view(), name='playerGamesTable'),

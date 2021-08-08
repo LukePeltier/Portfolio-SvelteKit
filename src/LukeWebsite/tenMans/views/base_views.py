@@ -3,18 +3,17 @@ import logging
 
 from django.db import transaction
 from django.db.utils import Error
-from django.http.response import JsonResponse
+from django.http.response import HttpResponse, JsonResponse
 from django.views import View
 from django.views.generic.base import ContextMixin, TemplateView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import FormView
 from django.views.generic.list import ListView
-
 from tenMans.extras.data import GlobalVars
 from tenMans.forms import (CreatePlayer, DuoForm, LaneMatchup, NewGameForm,
                            UpdateAllGamesForm, UpdateGameForm)
-from tenMans.models import (Champion, Game, GameBan, GameLaner, GameLanerStats, Lane,
-                            Player)
+from tenMans.models import (Champion, Game, GameBan, GameLaner, GameLanerStats,
+                            Lane, Leaderboard, Player)
 
 
 class BaseTenMansContextMixin(ContextMixin):
@@ -167,6 +166,19 @@ class PlayerDetailView(DetailView, BaseTenMansContextMixin):
         context['randomsWinrate'] = self.object.getRandomsWinrate()
         context['randomsGamesPlayed'] = self.object.getRandomGamesPlayed()
         return context
+
+
+class PlayerTrophyCaseString(DetailView):
+    model = Player
+    object: Player
+
+    def get(self, request, *args, **kwargs):
+        case = self.get_object().getTrophyCase()
+        returnString = "<p style=\"font-size: 30px;\">"
+        for trophy in case:
+            trophy: Leaderboard
+            returnString = returnString + "<span data-bs-toggle=\"tooltip\" title=\"{}\">{}</span> ".format(trophy.leaderboardName, trophy.leaderboardEmoji)
+        return HttpResponse(returnString.strip() + "</p>")
 
 
 class PlayerWinrateOverTimeView(DetailView):
@@ -1062,4 +1074,6 @@ class Leaderboards(TemplateView, BaseTenMansContextMixin):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['NonLifeTimeTables'] = Leaderboard.objects.filter(leaderboardIsLifetime__exact=0)
+        context['LifeTimeTables'] = Leaderboard.objects.filter(leaderboardIsLifetime__exact=1)
         return context

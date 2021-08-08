@@ -42,11 +42,14 @@ class MostKillsGameTable(View):
         for line in leaderboard:
             lineDict = {}
             lineDict['name'] = line[1]
-            lineDict['kills'] = line[0]
+            lineDict['data'] = line[0]
             lineDict['gameID'] = line[2]
             lineDict['playerID'] = line[3]
             lineDict['game'] = Game.objects.get(pk=line[2]).gameNumber
             data.append(lineDict)
+
+        if('objectReturn' in kwargs and kwargs['objectReturn'] is True):
+            return data
 
         return JsonResponse(data={
             'data': data
@@ -67,11 +70,14 @@ class MostDeathsGameTable(View):
         for line in leaderboard:
             lineDict = {}
             lineDict['name'] = line[1]
-            lineDict['deaths'] = line[0]
+            lineDict['data'] = line[0]
             lineDict['gameID'] = line[2]
             lineDict['playerID'] = line[3]
             lineDict['game'] = Game.objects.get(pk=line[2]).gameNumber
             data.append(lineDict)
+
+        if('objectReturn' in kwargs and kwargs['objectReturn'] is True):
+            return data
 
         return JsonResponse(data={
             'data': data
@@ -92,11 +98,14 @@ class MostAssistsGameTable(View):
         for line in leaderboard:
             lineDict = {}
             lineDict['name'] = line[1]
-            lineDict['assists'] = line[0]
+            lineDict['data'] = line[0]
             lineDict['gameID'] = line[2]
             lineDict['playerID'] = line[3]
             lineDict['game'] = Game.objects.get(pk=line[2]).gameNumber
             data.append(lineDict)
+
+        if('objectReturn' in kwargs and kwargs['objectReturn'] is True):
+            return data
 
         return JsonResponse(data={
             'data': data
@@ -117,11 +126,14 @@ class MostDamageGameTable(View):
         for line in leaderboard:
             lineDict = {}
             lineDict['name'] = line[1]
-            lineDict['damage'] = line[0]
+            lineDict['data'] = line[0]
             lineDict['gameID'] = line[2]
             lineDict['playerID'] = line[3]
             lineDict['game'] = Game.objects.get(pk=line[2]).gameNumber
             data.append(lineDict)
+
+        if('objectReturn' in kwargs and kwargs['objectReturn'] is True):
+            return data
 
         return JsonResponse(data={
             'data': data
@@ -142,11 +154,14 @@ class MostSpreeGameTable(View):
         for line in leaderboard:
             lineDict = {}
             lineDict['name'] = line[1]
-            lineDict['spree'] = line[0]
+            lineDict['data'] = line[0]
             lineDict['gameID'] = line[2]
             lineDict['playerID'] = line[3]
             lineDict['game'] = Game.objects.get(pk=line[2]).gameNumber
             data.append(lineDict)
+
+        if('objectReturn' in kwargs and kwargs['objectReturn'] is True):
+            return data
 
         return JsonResponse(data={
             'data': data
@@ -167,11 +182,14 @@ class MostCSGameTable(View):
         for line in leaderboard:
             lineDict = {}
             lineDict['name'] = line[1]
-            lineDict['cs'] = line[0]
+            lineDict['data'] = line[0]
             lineDict['gameID'] = line[2]
             lineDict['playerID'] = line[3]
             lineDict['game'] = Game.objects.get(pk=line[2]).gameNumber
             data.append(lineDict)
+
+        if('objectReturn' in kwargs and kwargs['objectReturn'] is True):
+            return data
 
         return JsonResponse(data={
             'data': data
@@ -192,11 +210,14 @@ class MostCSFirstTwentyGameTable(View):
         for line in leaderboard:
             lineDict = {}
             lineDict['name'] = line[1]
-            lineDict['cs'] = line[0]
+            lineDict['data'] = line[0]
             lineDict['gameID'] = line[2]
             lineDict['playerID'] = line[3]
             lineDict['game'] = Game.objects.get(pk=line[2]).gameNumber
             data.append(lineDict)
+
+        if('objectReturn' in kwargs and kwargs['objectReturn'] is True):
+            return data
 
         return JsonResponse(data={
             'data': data
@@ -217,11 +238,14 @@ class MostVisionGameTable(View):
         for line in leaderboard:
             lineDict = {}
             lineDict['name'] = line[1]
-            lineDict['vision'] = line[0]
+            lineDict['data'] = line[0]
             lineDict['gameID'] = line[2]
             lineDict['playerID'] = line[3]
             lineDict['game'] = Game.objects.get(pk=line[2]).gameNumber
             data.append(lineDict)
+
+        if('objectReturn' in kwargs and kwargs['objectReturn'] is True):
+            return data
 
         return JsonResponse(data={
             'data': data
@@ -242,11 +266,14 @@ class MostControlWardGameTable(View):
         for line in leaderboard:
             lineDict = {}
             lineDict['name'] = line[1]
-            lineDict['cw'] = line[0]
+            lineDict['data'] = line[0]
             lineDict['gameID'] = line[2]
             lineDict['playerID'] = line[3]
             lineDict['game'] = Game.objects.get(pk=line[2]).gameNumber
             data.append(lineDict)
+
+        if('objectReturn' in kwargs and kwargs['objectReturn'] is True):
+            return data
 
         return JsonResponse(data={
             'data': data
@@ -267,11 +294,14 @@ class MostBanGameTable(View):
         for line in leaderboard:
             lineDict = {}
             lineDict['name'] = line[1]
-            lineDict['ban'] = line[0]
+            lineDict['data'] = line[0]
             lineDict['gameID'] = line[2]
             lineDict['playerID'] = line[3]
             lineDict['game'] = Game.objects.get(pk=line[2]).gameNumber
             data.append(lineDict)
+
+        if('objectReturn' in kwargs and kwargs['objectReturn'] is True):
+            return data
 
         return JsonResponse(data={
             'data': data
@@ -291,9 +321,12 @@ class MostChampsTable(View):
         for line in leaderboard:
             lineDict = {}
             lineDict['name'] = line[1]
-            lineDict['champions'] = line[0]
+            lineDict['data'] = line[0]
             lineDict['playerID'] = line[2]
             data.append(lineDict)
+
+        if('objectReturn' in kwargs and kwargs['objectReturn'] is True):
+            return data
 
         return JsonResponse(data={
             'data': data
@@ -314,9 +347,12 @@ class CaptainWinrateTable(View):
         for line in leaderboard:
             lineDict = {}
             lineDict['name'] = line[1]
-            lineDict['winrate'] = line[0]
+            lineDict['data'] = line[0]
             lineDict['playerID'] = line[2]
             data.append(lineDict)
+
+        if('objectReturn' in kwargs and kwargs['objectReturn'] is True):
+            return data
 
         return JsonResponse(data={
             'data': data
@@ -337,9 +373,12 @@ class CaptainCountTable(View):
         for line in leaderboard:
             lineDict = {}
             lineDict['name'] = line[1]
-            lineDict['count'] = line[0]
+            lineDict['data'] = line[0]
             lineDict['playerID'] = line[2]
             data.append(lineDict)
+
+        if('objectReturn' in kwargs and kwargs['objectReturn'] is True):
+            return data
 
         return JsonResponse(data={
             'data': data
@@ -360,10 +399,13 @@ class WinstreakTable(View):
         for line in leaderboard:
             lineDict = {}
             lineDict['name'] = line[1]
-            lineDict['count'] = line[0]
+            lineDict['data'] = line[0]
             lineDict['playerID'] = line[2]
             lineDict['isCurrent'] = Player.objects.get(pk=line[2]).getHighestWinstreak(None)[1]
             data.append(lineDict)
+
+        if('objectReturn' in kwargs and kwargs['objectReturn'] is True):
+            return data
 
         return JsonResponse(data={
             'data': data
@@ -384,10 +426,13 @@ class LossstreakTable(View):
         for line in leaderboard:
             lineDict = {}
             lineDict['name'] = line[1]
-            lineDict['count'] = line[0]
+            lineDict['data'] = line[0]
             lineDict['playerID'] = line[2]
             lineDict['isCurrent'] = Player.objects.get(pk=line[2]).getHighestLossstreak(None)[1]
             data.append(lineDict)
+
+        if('objectReturn' in kwargs and kwargs['objectReturn'] is True):
+            return data
 
         return JsonResponse(data={
             'data': data
@@ -408,9 +453,12 @@ class PentakillsTable(View):
         for line in leaderboard:
             lineDict = {}
             lineDict['name'] = line[1]
-            lineDict['count'] = line[0]
+            lineDict['data'] = line[0]
             lineDict['playerID'] = line[2]
             data.append(lineDict)
+
+        if('objectReturn' in kwargs and kwargs['objectReturn'] is True):
+            return data
 
         return JsonResponse(data={
             'data': data
@@ -431,9 +479,12 @@ class QuadrakillsTable(View):
         for line in leaderboard:
             lineDict = {}
             lineDict['name'] = line[1]
-            lineDict['count'] = line[0]
+            lineDict['data'] = line[0]
             lineDict['playerID'] = line[2]
             data.append(lineDict)
+
+        if('objectReturn' in kwargs and kwargs['objectReturn'] is True):
+            return data
 
         return JsonResponse(data={
             'data': data
@@ -454,9 +505,12 @@ class TriplekillsTable(View):
         for line in leaderboard:
             lineDict = {}
             lineDict['name'] = line[1]
-            lineDict['count'] = line[0]
+            lineDict['data'] = line[0]
             lineDict['playerID'] = line[2]
             data.append(lineDict)
+
+        if('objectReturn' in kwargs and kwargs['objectReturn'] is True):
+            return data
 
         return JsonResponse(data={
             'data': data
@@ -477,9 +531,12 @@ class DoublekillsTable(View):
         for line in leaderboard:
             lineDict = {}
             lineDict['name'] = line[1]
-            lineDict['count'] = line[0]
+            lineDict['data'] = line[0]
             lineDict['playerID'] = line[2]
             data.append(lineDict)
+
+        if('objectReturn' in kwargs and kwargs['objectReturn'] is True):
+            return data
 
         return JsonResponse(data={
             'data': data

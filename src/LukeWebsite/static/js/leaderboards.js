@@ -11,7 +11,7 @@ $(function () {
                 },
 
                 {
-                    "data": "kills"
+                    "data": "data"
                 },
                 {
                     "data": "game",
@@ -51,7 +51,7 @@ $(function () {
                 },
 
                 {
-                    "data": "deaths"
+                    "data": "data"
                 },
                 {
                     "data": "game",
@@ -91,7 +91,7 @@ $(function () {
                 },
 
                 {
-                    "data": "assists"
+                    "data": "data"
                 },
                 {
                     "data": "game",
@@ -131,7 +131,7 @@ $(function () {
                 },
 
                 {
-                    "data": "damage",
+                    "data": "data",
                     "render": $.fn.dataTable.render.number(',', '.')
                 },
                 {
@@ -172,7 +172,7 @@ $(function () {
                 },
 
                 {
-                    "data": "spree"
+                    "data": "data"
                 },
                 {
                     "data": "game",
@@ -212,7 +212,7 @@ $(function () {
                 },
 
                 {
-                    "data": "cs"
+                    "data": "data"
                 },
                 {
                     "data": "game",
@@ -252,7 +252,7 @@ $(function () {
                 },
 
                 {
-                    "data": "cs"
+                    "data": "data"
                 },
                 {
                     "data": "game",
@@ -292,7 +292,7 @@ $(function () {
                 },
 
                 {
-                    "data": "vision"
+                    "data": "data"
                 },
                 {
                     "data": "game",
@@ -332,7 +332,7 @@ $(function () {
                 },
 
                 {
-                    "data": "cw"
+                    "data": "data"
                 },
                 {
                     "data": "game",
@@ -372,7 +372,7 @@ $(function () {
                 },
 
                 {
-                    "data": "ban"
+                    "data": "data"
                 },
                 {
                     "data": "game",
@@ -412,7 +412,7 @@ $(function () {
                 },
 
                 {
-                    "data": "champions"
+                    "data": "data"
                 },
                 {
                     "data": "playerID"
@@ -443,7 +443,7 @@ $(function () {
                 },
 
                 {
-                    "data": "winrate"
+                    "data": "data"
                 },
                 {
                     "data": "playerID"
@@ -474,7 +474,7 @@ $(function () {
                 },
 
                 {
-                    "data": "count"
+                    "data": "data"
                 },
                 {
                     "data": "playerID"
@@ -504,7 +504,7 @@ $(function () {
                 },
 
                 {
-                    "data": "count",
+                    "data": "data",
                     "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
                         if(oData.isCurrent){
                             $(nTd).html("<p>" + sData + " <span class=\"badge rounded-pill bg-success\">Current</span></p>");
@@ -544,7 +544,7 @@ $(function () {
                 },
 
                 {
-                    "data": "count",
+                    "data": "data",
                     "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
                         if(oData.isCurrent){
                             $(nTd).html("<p>" + sData + " <span class=\"badge rounded-pill bg-danger\">Current</span></p>");
@@ -583,7 +583,7 @@ $(function () {
                 },
 
                 {
-                    "data": "count"
+                    "data": "data"
                 },
                 {
                     "data": "playerID"
@@ -613,7 +613,7 @@ $(function () {
                 },
 
                 {
-                    "data": "count"
+                    "data": "data"
                 },
                 {
                     "data": "playerID"
@@ -643,7 +643,7 @@ $(function () {
                 },
 
                 {
-                    "data": "count"
+                    "data": "data"
                 },
                 {
                     "data": "playerID"
@@ -674,7 +674,7 @@ $(function () {
                 },
 
                 {
-                    "data": "count"
+                    "data": "data"
                 },
                 {
                     "data": "playerID"

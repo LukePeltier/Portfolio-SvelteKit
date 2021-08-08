@@ -1,7 +1,6 @@
 from django.test import TestCase
-from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.urls import reverse
-from tenMans.factory import ChampionFactory, GameBanFactory, GameFactory, GameLanerFactory, GameLanerNoSupportOrTop, GameLanerRandomGameFactory, GameLanerStatsFactory, LaneFactory, PlayerFactory
+from tenMans.factory import ChampionFactory, GameBanFactory, GameFactory, GameLanerFactory, GameLanerNoSupportOrTop, GameLanerRandomGameFactory, GameLanerStatsFactory, LaneFactory, LeaderboardFactory, PlayerFactory
 from tenMans.models import Champion, Game, GameLaner, Lane, Player
 
 
@@ -108,6 +107,175 @@ class FullDataTest(TestCase):
         cls.lanesLists.append([Lane.objects.get(laneName__exact="Jungle")])
         cls.lanesLists.append([Lane.objects.get(laneName__exact="Mid")])
         cls.lanesLists.append([Lane.objects.get(laneName__exact="Bot"), Lane.objects.get(laneName__exact="Support")])
+
+        cls.leaderboards = []
+        cls.leaderboards.append(LeaderboardFactory(
+            leaderboardName='Most Kills',
+            leaderboardValueName='Kills',
+            leaderboardEmoji='⚔️',
+            leaderboardIsLifetime=False,
+            leaderboardURLName='mostKillsGameTable',
+            leaderboardViewClassName='MostKillsGameTable'
+        ))
+
+        cls.leaderboards.append(LeaderboardFactory(
+            leaderboardName='Most Deaths',
+            leaderboardValueName='Deaths',
+            leaderboardEmoji='🗑️',
+            leaderboardIsLifetime=False,
+            leaderboardURLName='mostDeathsGameTable',
+            leaderboardViewClassName='MostDeathsGameTable'
+        ))
+
+        cls.leaderboards.append(LeaderboardFactory(
+            leaderboardName='Most Assists',
+            leaderboardValueName='Assists',
+            leaderboardEmoji='👬',
+            leaderboardIsLifetime=False,
+            leaderboardURLName='mostAssistsGameTable',
+            leaderboardViewClassName='MostAssistsGameTable'
+        ))
+
+        cls.leaderboards.append(LeaderboardFactory(
+            leaderboardName='Most Damage',
+            leaderboardValueName='Damage',
+            leaderboardEmoji='🩸',
+            leaderboardIsLifetime=False,
+            leaderboardURLName='mostDamageGameTable',
+            leaderboardViewClassName='MostDamageGameTable'
+        ))
+
+        cls.leaderboards.append(LeaderboardFactory(
+            leaderboardName='Largest Killing Spree',
+            leaderboardValueName='Killing Spree',
+            leaderboardEmoji='🥷',
+            leaderboardIsLifetime=False,
+            leaderboardURLName='mostSpreeGameTable',
+            leaderboardViewClassName='MostSpreeGameTable'
+        ))
+
+        cls.leaderboards.append(LeaderboardFactory(
+            leaderboardName='Most CS',
+            leaderboardValueName='CS',
+            leaderboardEmoji='💰',
+            leaderboardIsLifetime=False,
+            leaderboardURLName='mostCSGameTable',
+            leaderboardViewClassName='MostCSGameTable'
+        ))
+
+        cls.leaderboards.append(LeaderboardFactory(
+            leaderboardName='Most CS/Min in the First 20 Minutes',
+            leaderboardValueName='CS',
+            leaderboardEmoji='🧮',
+            leaderboardIsLifetime=False,
+            leaderboardURLName='mostCSFirstTwentyGameTable',
+            leaderboardViewClassName='MostCSFirstTwentyGameTable'
+        ))
+
+        cls.leaderboards.append(LeaderboardFactory(
+            leaderboardName='Most Vision',
+            leaderboardValueName='Vision',
+            leaderboardEmoji='👁️',
+            leaderboardIsLifetime=False,
+            leaderboardURLName='mostVisionGameTable',
+            leaderboardViewClassName='MostVisionGameTable'
+        ))
+
+        cls.leaderboards.append(LeaderboardFactory(
+            leaderboardName='Most Control Wards Purchased',
+            leaderboardValueName='Control Wards',
+            leaderboardEmoji='🍄',
+            leaderboardIsLifetime=False,
+            leaderboardURLName='mostControlWardGameTable',
+            leaderboardViewClassName='MostControlWardGameTable'
+        ))
+
+        cls.leaderboards.append(LeaderboardFactory(
+            leaderboardName='Most Target Bans',
+            leaderboardValueName='Bans',
+            leaderboardEmoji='🙅',
+            leaderboardIsLifetime=False,
+            leaderboardURLName='mostBanGameTable',
+            leaderboardViewClassName='MostBanGameTable'
+        ))
+
+        cls.leaderboards.append(LeaderboardFactory(
+            leaderboardName='Most Played Champions',
+            leaderboardValueName='Champions',
+            leaderboardEmoji='🧺',
+            leaderboardIsLifetime=True,
+            leaderboardURLName='mostChampsTable',
+            leaderboardViewClassName='MostChampsTable'
+        ))
+
+        cls.leaderboards.append(LeaderboardFactory(
+            leaderboardName='Highest Captain Winrate',
+            leaderboardValueName='Winrate',
+            leaderboardEmoji='🎖️',
+            leaderboardIsLifetime=True,
+            leaderboardURLName='captainWinrateTable',
+            leaderboardViewClassName='CaptainWinrateTable'
+        ))
+
+        cls.leaderboards.append(LeaderboardFactory(
+            leaderboardName='Most Captain Games',
+            leaderboardValueName='Count',
+            leaderboardEmoji='🪖',
+            leaderboardIsLifetime=True,
+            leaderboardURLName='captainCountTable',
+            leaderboardViewClassName='CaptainCountTable'
+        ))
+
+        cls.leaderboards.append(LeaderboardFactory(
+            leaderboardName='Highest Win Streak',
+            leaderboardValueName='Streak',
+            leaderboardEmoji='🔥',
+            leaderboardIsLifetime=True,
+            leaderboardURLName='winstreakTable',
+            leaderboardViewClassName='WinstreakTable'
+        ))
+
+        cls.leaderboards.append(LeaderboardFactory(
+            leaderboardName='Highest Loss Streak',
+            leaderboardValueName='Streak',
+            leaderboardEmoji='🚽',
+            leaderboardIsLifetime=True,
+            leaderboardURLName='lossstreakTable',
+            leaderboardViewClassName='LossstreakTable'
+        ))
+
+        cls.leaderboards.append(LeaderboardFactory(
+            leaderboardName='Most Double Kills',
+            leaderboardValueName='Count',
+            leaderboardEmoji='2️',
+            leaderboardIsLifetime=True,
+            leaderboardURLName='doublekillsTable',
+            leaderboardViewClassName='DoublekillsTable'
+        ))
+        cls.leaderboards.append(LeaderboardFactory(
+            leaderboardName='Most Triple Kills',
+            leaderboardValueName='Count',
+            leaderboardEmoji='3️',
+            leaderboardIsLifetime=True,
+            leaderboardURLName='triplekillsTable',
+            leaderboardViewClassName='TriplekillsTable'
+        ))
+        cls.leaderboards.append(LeaderboardFactory(
+            leaderboardName='Most Quadra Kills',
+            leaderboardValueName='Count',
+            leaderboardEmoji='4️',
+            leaderboardIsLifetime=True,
+            leaderboardURLName='quadrakillsTable',
+            leaderboardViewClassName='QuadrakillsTable'
+        ))
+        cls.leaderboards.append(LeaderboardFactory(
+            leaderboardName='Most Penta Kills',
+            leaderboardValueName='Count',
+            leaderboardEmoji='5️',
+            leaderboardIsLifetime=True,
+            leaderboardURLName='pentakillsTable',
+            leaderboardViewClassName='PentakillsTable'
+        ))
 
     def test_player_creation(self):
         for player in self.players:
@@ -313,6 +481,11 @@ class FullDataTest(TestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
 
+    def test_view_expectedDraftOrderWinrateCaptainTable(self):
+        url = reverse("expectedDraftOrderWinrateCaptainTable")
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
     def test_view_expectedDraftOrderWinrateLaneTable(self):
         for lane in self.lanes:
             with self.subTest(lane=lane):
@@ -324,6 +497,13 @@ class FullDataTest(TestCase):
         for player in self.players:
             with self.subTest(player=player):
                 url = reverse("playerLaneCountTable", kwargs={'pk': player.id})
+                response = self.client.get(url)
+                self.assertEqual(response.status_code, 200)
+
+    def test_view_playerTrophyCaseString(self):
+        for player in self.players:
+            with self.subTest(player=player):
+                url = reverse("playerTrophyCaseString", kwargs={'pk': player.id})
                 response = self.client.get(url)
                 self.assertEqual(response.status_code, 200)
 
@@ -485,88 +665,32 @@ class FullDataTest(TestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
 
+    def test_view_winstreakTable(self):
+        url = reverse("winstreakTable")
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
 
-class WebTest(StaticLiveServerTestCase):
+    def test_view_lossstreakTable(self):
+        url = reverse("lossstreakTable")
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
 
-    @classmethod
-    def setUpTestData(cls):
+    def test_view_pentakillsTable(self):
+        url = reverse("pentakillsTable")
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
 
-        cls.lanes = []
-        cls.lanes.append(LaneFactory(laneName='Top'))
-        cls.lanes.append(LaneFactory(laneName='Jungle'))
-        cls.lanes.append(LaneFactory(laneName='Mid'))
-        cls.lanes.append(LaneFactory(laneName='Bot'))
-        cls.lanes.append(LaneFactory(laneName='Support'))
-        cls.memeGame = GameFactory.create(gameMemeStatus=True)
-        cls.games = GameFactory.create_batch(size=50)
-        cls.randomGames = GameFactory.create_batch(size=50, gameRandomTeams=True)
-        cls.champions = ChampionFactory.create_batch(size=100)
-        cls.players = []
+    def test_view_quadrakillsTable(self):
+        url = reverse("quadrakillsTable")
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
 
-        # top blue only player
-        topBluePlayer = PlayerFactory()
-        GameLanerFactory.create_batch(size=20, blueTeam=True, lane=Lane.objects.get(laneName__exact="Top"), player=topBluePlayer)
-        cls.players.append(topBluePlayer)
+    def test_view_triplekillsTable(self):
+        url = reverse("triplekillsTable")
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
 
-        # top red only player
-        topRedPlayer = PlayerFactory()
-        GameLanerFactory.create_batch(size=20, blueTeam=False, lane=Lane.objects.get(laneName__exact="Top"), player=topRedPlayer)
-        cls.players.append(topRedPlayer)
-
-        # any lane except support or top
-        flexRedPlayer = PlayerFactory()
-        GameLanerNoSupportOrTop.create_batch(size=20, blueTeam=False, player=flexRedPlayer)
-        cls.players.append(flexRedPlayer)
-
-        # bot red player
-        botRedPlayer = PlayerFactory()
-        GameLanerNoSupportOrTop.create_batch(size=20, blueTeam=False, lane=Lane.objects.get(laneName__exact="Bot"), player=botRedPlayer)
-        cls.players.append(botRedPlayer)
-
-        # random teams support
-        randomTeamsPlayer = PlayerFactory()
-        GameLanerFactory.create_batch(size=20, player=randomTeamsPlayer, lane=Lane.objects.get(laneName__exact="Support"))
-        cls.players.append(randomTeamsPlayer)
-
-        # random draft guy
-        randomDraftPlayer = PlayerFactory()
-        GameLanerRandomGameFactory.create_batch(size=20, blueTeam=False, player=randomDraftPlayer, lane=Lane.objects.get(laneName__exact="Support"))
-        cls.players.append(randomDraftPlayer)
-
-        # zero game andy
-        noGames = PlayerFactory()
-        cls.players.append(noGames)
-
-        # champion one trick
-        oneChampion = PlayerFactory()
-        GameLanerFactory.create(blueTeam=True, lane=Lane.objects.get(laneName__exact="Mid"), champion=Champion.objects.all()[2], player=oneChampion)
-        GameLanerFactory.create_batch(size=20, blueTeam=True, lane=Lane.objects.get(laneName__exact="Mid"), champion=Champion.objects.all().first(), player=oneChampion)
-        GameLanerFactory.create(blueTeam=True, lane=Lane.objects.get(laneName__exact="Mid"), champion=Champion.objects.all()[1], player=oneChampion)
-        cls.players.append(oneChampion)
-
-        # target banned ommegies
-        alwaysBanned = PlayerFactory()
-        GameLanerFactory.create_batch(size=20, blueTeam=True, lane=Lane.objects.get(laneName__exact="Bot"), player=alwaysBanned)
-        GameBanFactory.create_batch(size=20, targetPlayer=alwaysBanned)
-        cls.players.append(alwaysBanned)
-
-        # target banned for one champ ommegies
-        alwaysBanned = PlayerFactory()
-        GameLanerFactory.create_batch(size=20, blueTeam=True, lane=Lane.objects.get(laneName__exact="Bot"), player=alwaysBanned)
-        GameBanFactory.create(targetPlayer=alwaysBanned, champion=Champion.objects.all()[2])
-        GameBanFactory.create_batch(size=20, targetPlayer=alwaysBanned, champion=Champion.objects.all().first())
-        GameBanFactory.create(targetPlayer=alwaysBanned, champion=Champion.objects.all()[1])
-        cls.players.append(alwaysBanned)
-
-        cls.gameLaners = GameLaner.objects.all()
-        for gl in cls.gameLaners:
-            GameLanerStatsFactory(gameLaner=gl)
-
-        cls.allGames = Game.objects.all()
-
-        cls.lanesLists = []
-        cls.lanesLists.append(None)
-        cls.lanesLists.append([Lane.objects.get(laneName__exact="Top")])
-        cls.lanesLists.append([Lane.objects.get(laneName__exact="Jungle")])
-        cls.lanesLists.append([Lane.objects.get(laneName__exact="Mid")])
-        cls.lanesLists.append([Lane.objects.get(laneName__exact="Bot"), Lane.objects.get(laneName__exact="Support")])
+    def test_view_doublekillsTable(self):
+        url = reverse("doublekillsTable")
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
