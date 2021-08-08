@@ -106,11 +106,11 @@ $(function () {
                 },
                 {
                     targets: [1, 2, 3, 4],
-                    className: 'text-right'
+                    className: 'text-end'
                 },
                 {
                     targets: 5,
-                    className: 'text-right rightBorder leftBorder'
+                    className: 'text-end rightBorder leftBorder'
                 },
                 {
                     targets: [0],
