@@ -33,41 +33,41 @@ class NewGameForm(forms.Form):
     redBotLaner = forms.ModelChoiceField(label="Red Bot Laner", queryset=Player.objects.all().order_by('playerName'))
     redSuppLaner = forms.ModelChoiceField(label="Red Support", queryset=Player.objects.all().order_by('playerName'))
 
-    bluePlayerPickTop = forms.CharField(label="Blue Top Player Pick Order", max_length=1, required=False)
-    bluePlayerPickJung = forms.CharField(label="Blue Jungle Player Pick Order", max_length=1, required=False)
-    bluePlayerPickMid = forms.CharField(label="Blue Mid Player Pick Order", max_length=1, required=False)
-    bluePlayerPickBot = forms.CharField(label="Blue Bot Player Pick Order", max_length=1, required=False)
-    bluePlayerPickSupp = forms.CharField(label="Blue Support Player Pick Order", max_length=1, required=False)
+    bluePlayerPickTop = forms.CharField(label="Player Pick", max_length=1, required=False)
+    bluePlayerPickJung = forms.CharField(label="Player Pick", max_length=1, required=False)
+    bluePlayerPickMid = forms.CharField(label="Player Pick", max_length=1, required=False)
+    bluePlayerPickBot = forms.CharField(label="Player Pick", max_length=1, required=False)
+    bluePlayerPickSupp = forms.CharField(label="Player Pick", max_length=1, required=False)
 
-    redPlayerPickTop = forms.CharField(label="Red Top Player Pick Order", max_length=1, required=False)
-    redPlayerPickJung = forms.CharField(label="Red Jungle Player Pick Order", max_length=1, required=False)
-    redPlayerPickMid = forms.CharField(label="Red Mid Player Pick Order", max_length=1, required=False)
-    redPlayerPickBot = forms.CharField(label="Red Bot Player Pick Order", max_length=1, required=False)
-    redPlayerPickSupp = forms.CharField(label="Red Support Player Pick Order", max_length=1, required=False)
+    redPlayerPickTop = forms.CharField(label="Player Pick", max_length=1, required=False)
+    redPlayerPickJung = forms.CharField(label="Player Pick", max_length=1, required=False)
+    redPlayerPickMid = forms.CharField(label="Player Pick", max_length=1, required=False)
+    redPlayerPickBot = forms.CharField(label="Player Pick", max_length=1, required=False)
+    redPlayerPickSupp = forms.CharField(label="Player Pick", max_length=1, required=False)
 
-    blueTopChamp = forms.ModelChoiceField(label="Blue Top Champion", queryset=Champion.objects.all().order_by('championName'))
-    blueJungChamp = forms.ModelChoiceField(label="Blue Jungle Champion", queryset=Champion.objects.all().order_by('championName'))
-    blueMidChamp = forms.ModelChoiceField(label="Blue Middle Champion", queryset=Champion.objects.all().order_by('championName'))
-    blueBotChamp = forms.ModelChoiceField(label="Blue Bottom Champion", queryset=Champion.objects.all().order_by('championName'))
-    blueSuppChamp = forms.ModelChoiceField(label="Blue Support Champion", queryset=Champion.objects.all().order_by('championName'))
+    blueTopChamp = forms.ModelChoiceField(label="Champion", queryset=Champion.objects.all().order_by('championName'))
+    blueJungChamp = forms.ModelChoiceField(label="Champion", queryset=Champion.objects.all().order_by('championName'))
+    blueMidChamp = forms.ModelChoiceField(label="Champion", queryset=Champion.objects.all().order_by('championName'))
+    blueBotChamp = forms.ModelChoiceField(label="Champion", queryset=Champion.objects.all().order_by('championName'))
+    blueSuppChamp = forms.ModelChoiceField(label="Champion", queryset=Champion.objects.all().order_by('championName'))
 
-    redTopChamp = forms.ModelChoiceField(label="Red Top Champion", queryset=Champion.objects.all().order_by('championName'))
-    redJungChamp = forms.ModelChoiceField(label="Red Jungle Champion", queryset=Champion.objects.all().order_by('championName'))
-    redMidChamp = forms.ModelChoiceField(label="Red Middle Champion", queryset=Champion.objects.all().order_by('championName'))
-    redBotChamp = forms.ModelChoiceField(label="Red Bottom Champion", queryset=Champion.objects.all().order_by('championName'))
-    redSuppChamp = forms.ModelChoiceField(label="Red Support Champion", queryset=Champion.objects.all().order_by('championName'))
+    redTopChamp = forms.ModelChoiceField(label="Champion", queryset=Champion.objects.all().order_by('championName'))
+    redJungChamp = forms.ModelChoiceField(label="Champion", queryset=Champion.objects.all().order_by('championName'))
+    redMidChamp = forms.ModelChoiceField(label="Champion", queryset=Champion.objects.all().order_by('championName'))
+    redBotChamp = forms.ModelChoiceField(label="Champion", queryset=Champion.objects.all().order_by('championName'))
+    redSuppChamp = forms.ModelChoiceField(label="Champion", queryset=Champion.objects.all().order_by('championName'))
 
-    blueChampPickTop = forms.CharField(label="Blue Top Champ Pick Order", max_length=1)
-    blueChampPickJung = forms.CharField(label="Blue Jungle Champ Pick Order", max_length=1)
-    blueChampPickMid = forms.CharField(label="Blue Mid Champ Pick Order", max_length=1)
-    blueChampPickBot = forms.CharField(label="Blue Bot Champ Pick Order", max_length=1)
-    blueChampPickSupp = forms.CharField(label="Blue Support Champ Pick Order", max_length=1)
+    blueChampPickTop = forms.CharField(label="Champ Pick", max_length=1)
+    blueChampPickJung = forms.CharField(label="Champ Pick", max_length=1)
+    blueChampPickMid = forms.CharField(label="Champ Pick", max_length=1)
+    blueChampPickBot = forms.CharField(label="Champ Pick", max_length=1)
+    blueChampPickSupp = forms.CharField(label="Champ Pick", max_length=1)
 
-    redChampPickTop = forms.CharField(label="Red Top Champ Pick Order", max_length=1)
-    redChampPickJung = forms.CharField(label="Red Jungle Champ Pick Order", max_length=1)
-    redChampPickMid = forms.CharField(label="Red Mid Champ Pick Order", max_length=1)
-    redChampPickBot = forms.CharField(label="Red Bot Champ Pick Order", max_length=1)
-    redChampPickSupp = forms.CharField(label="Red Support Champ Pick Order", max_length=1)
+    redChampPickTop = forms.CharField(label="Champ Pick", max_length=1)
+    redChampPickJung = forms.CharField(label="Champ Pick", max_length=1)
+    redChampPickMid = forms.CharField(label="Champ Pick", max_length=1)
+    redChampPickBot = forms.CharField(label="Champ Pick", max_length=1)
+    redChampPickSupp = forms.CharField(label="Champ Pick", max_length=1)
 
     blueBan1 = forms.ModelChoiceField(label="Blue Ban 1", queryset=Champion.objects.all().order_by('championName'))
     blueBan2 = forms.ModelChoiceField(label="Blue Ban 2", queryset=Champion.objects.all().order_by('championName'))
@@ -122,140 +122,106 @@ class NewGameForm(forms.Form):
                 ),
             ),
             Fieldset(
-                'Players',
+                'Players/Champions<br><small><i>C for Captain, blank for random teams</i></small>',
                 Row(
-                    Column('blueTopLaner', css_class='col-3'),
-                    Column('redTopLaner', css_class='col-3'),
-                ),
-                Row(
-                    Column('blueJungLaner', css_class='col-3'),
-                    Column('redJungLaner', css_class='col-3'),
-                ),
-                Row(
-                    Column('blueMidLaner', css_class='col-3'),
-                    Column('redMidLaner', css_class='col-3'),
-                ),
-                Row(
-                    Column('blueBotLaner', css_class='col-3'),
-                    Column('redBotLaner', css_class='col-3'),
-                ),
-                Row(
-                    Column('blueSuppLaner', css_class='col-3'),
-                    Column('redSuppLaner', css_class='col-3'),
-                )
-            ),
-            Fieldset(
-                'Player Pick Order<br><small>C for Captain, blank for random teams</small>',
-                Row(
-                    Column('bluePlayerPickTop', css_class='col-3'),
-                    Column('redPlayerPickTop', css_class='col-3'),
-                ),
-                Row(
-                    Column('bluePlayerPickJung', css_class='col-3'),
-                    Column('redPlayerPickJung', css_class='col-3'),
-                ),
-                Row(
-                    Column('bluePlayerPickMid', css_class='col-3'),
-                    Column('redPlayerPickMid', css_class='col-3'),
-                ),
-                Row(
-                    Column('bluePlayerPickBot', css_class='col-3'),
-                    Column('redPlayerPickBot', css_class='col-3'),
-                ),
-                Row(
-                    Column('bluePlayerPickSupp', css_class='col-3'),
-                    Column('redPlayerPickSupp', css_class='col-3'),
-                )
-            ),
-            Fieldset(
-                'Champions',
-                Row(
-                    Column('blueTopChamp', css_class='col-3'),
-                    Column('redTopChamp', css_class='col-3'),
-                ),
-                Row(
-                    Column('blueJungChamp', css_class='col-3'),
-                    Column('redJungChamp', css_class='col-3'),
-                ),
-                Row(
-                    Column('blueMidChamp', css_class='col-3'),
-                    Column('redMidChamp', css_class='col-3'),
-                ),
-                Row(
-                    Column('blueBotChamp', css_class='col-3'),
-                    Column('redBotChamp', css_class='col-3'),
-                ),
-                Row(
-                    Column('blueSuppChamp', css_class='col-3'),
-                    Column('redSuppChamp', css_class='col-3'),
-                )
-            ),
-            Fieldset(
-                'Champion Pick Order',
-                Row(
-                    Column('blueChampPickTop', css_class='col-3'),
-                    Column('redChampPickTop', css_class='col-3'),
-                ),
-                Row(
-                    Column('blueChampPickJung', css_class='col-3'),
-                    Column('redChampPickJung', css_class='col-3'),
-                ),
-                Row(
-                    Column('blueChampPickMid', css_class='col-3'),
-                    Column('redChampPickMid', css_class='col-3'),
-                ),
-                Row(
-                    Column('blueChampPickBot', css_class='col-3'),
-                    Column('redChampPickBot', css_class='col-3'),
-                ),
-                Row(
-                    Column('blueChampPickSupp', css_class='col-3'),
-                    Column('redChampPickSupp', css_class='col-3'),
+                    Column(
+                        Row(
+                            Column('blueTopLaner', css_class='col-3'),
+                            Column('bluePlayerPickTop', css_class='col-3'),
+                            Column('blueTopChamp', css_class='col-3'),
+                            Column('blueChampPickTop', css_class='col-3'),
+                        ),
+                        Row(
+                            Column('blueJungLaner', css_class='col-3'),
+                            Column('bluePlayerPickJung', css_class='col-3'),
+                            Column('blueJungChamp', css_class='col-3'),
+                            Column('blueChampPickJung', css_class='col-3'),
+                        ),
+                        Row(
+                            Column('blueMidLaner', css_class='col-3'),
+                            Column('bluePlayerPickMid', css_class='col-3'),
+                            Column('blueMidChamp', css_class='col-3'),
+                            Column('blueChampPickMid', css_class='col-3'),
+                        ),
+                        Row(
+                            Column('blueBotLaner', css_class='col-3'),
+                            Column('bluePlayerPickBot', css_class='col-3'),
+                            Column('blueBotChamp', css_class='col-3'),
+                            Column('blueChampPickBot', css_class='col-3'),
+                        ),
+                        Row(
+                            Column('blueSuppLaner', css_class='col-3'),
+                            Column('bluePlayerPickSupp', css_class='col-3'),
+                            Column('blueSuppChamp', css_class='col-3'),
+                            Column('blueChampPickSupp', css_class='col-3'),
+                        ),
+                        css_class='col-xl-6 border-end border-5'
+                    ),
+                    Column(
+                        Row(
+                            Column('redTopLaner', css_class='col-3'),
+                            Column('redPlayerPickTop', css_class='col-3'),
+                            Column('redTopChamp', css_class='col-3'),
+                            Column('redChampPickTop', css_class='col-3'),
+                        ),
+                        Row(
+                            Column('redJungLaner', css_class='col-3'),
+                            Column('redPlayerPickJung', css_class='col-3'),
+                            Column('redJungChamp', css_class='col-3'),
+                            Column('redChampPickJung', css_class='col-3'),
+                        ),
+                        Row(
+                            Column('redMidLaner', css_class='col-3'),
+                            Column('redPlayerPickMid', css_class='col-3'),
+                            Column('redMidChamp', css_class='col-3'),
+                            Column('redChampPickMid', css_class='col-3'),
+                        ),
+                        Row(
+                            Column('redBotLaner', css_class='col-3'),
+                            Column('redPlayerPickBot', css_class='col-3'),
+                            Column('redBotChamp', css_class='col-3'),
+                            Column('redChampPickBot', css_class='col-3'),
+                        ),
+                        Row(
+                            Column('redSuppLaner', css_class='col-3'),
+                            Column('redPlayerPickSupp', css_class='col-3'),
+                            Column('redSuppChamp', css_class='col-3'),
+                            Column('redChampPickSupp', css_class='col-3'),
+                        ),
+                        css_class='col-xl-6'
+                    ),
                 )
             ),
             Fieldset(
                 'Champion Bans',
                 Row(
                     Column('blueBan1', css_class='col-3'),
+                    Column('blueTargetBan1', css_class='col-3 border-end border-5'),
                     Column('redBan1', css_class='col-3'),
-                ),
-                Row(
-                    Column('blueBan2', css_class='col-3'),
-                    Column('redBan2', css_class='col-3'),
-                ),
-                Row(
-                    Column('blueBan3', css_class='col-3'),
-                    Column('redBan3', css_class='col-3'),
-                ),
-                Row(
-                    Column('blueBan4', css_class='col-3'),
-                    Column('redBan4', css_class='col-3'),
-                ),
-                Row(
-                    Column('blueBan5', css_class='col-3'),
-                    Column('redBan5', css_class='col-3'),
-                )
-            ),
-            Fieldset(
-                'Ban Player Target',
-                Row(
-                    Column('blueTargetBan1', css_class='col-3'),
                     Column('redTargetBan1', css_class='col-3'),
                 ),
                 Row(
-                    Column('blueTargetBan2', css_class='col-3'),
+                    Column('blueBan2', css_class='col-3'),
+                    Column('blueTargetBan2', css_class='col-3 border-end border-5'),
+                    Column('redBan2', css_class='col-3'),
                     Column('redTargetBan2', css_class='col-3'),
                 ),
                 Row(
-                    Column('blueTargetBan3', css_class='col-3'),
+                    Column('blueBan3', css_class='col-3'),
+                    Column('blueTargetBan3', css_class='col-3 border-end border-5'),
+                    Column('redBan3', css_class='col-3'),
                     Column('redTargetBan3', css_class='col-3'),
                 ),
                 Row(
-                    Column('blueTargetBan4', css_class='col-3'),
+                    Column('blueBan4', css_class='col-3'),
+                    Column('blueTargetBan4', css_class='col-3 border-end border-5'),
+                    Column('redBan4', css_class='col-3'),
                     Column('redTargetBan4', css_class='col-3'),
                 ),
                 Row(
-                    Column('blueTargetBan5', css_class='col-3'),
+                    Column('blueBan5', css_class='col-3'),
+                    Column('blueTargetBan5', css_class='col-3 border-end border-5'),
+                    Column('redBan5', css_class='col-3'),
                     Column('redTargetBan5', css_class='col-3'),
                 )
             ),
