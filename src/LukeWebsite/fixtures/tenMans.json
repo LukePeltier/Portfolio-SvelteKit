@@ -19742,7 +19742,7 @@
   "fields": {
     "leaderboardName": "Most Double Kills",
     "leaderboardValueName": "Count",
-    "leaderboardEmoji": "2️",
+    "leaderboardEmoji": "2️⃣",
     "leaderboardIsLifetime": true,
     "leaderboardURLName": "doublekillsTable",
     "leaderboardViewClassName": "DoublekillsTable"
@@ -19754,7 +19754,7 @@
   "fields": {
     "leaderboardName": "Most Triple Kills",
     "leaderboardValueName": "Count",
-    "leaderboardEmoji": "3️",
+    "leaderboardEmoji": "3️⃣",
     "leaderboardIsLifetime": true,
     "leaderboardURLName": "triplekillsTable",
     "leaderboardViewClassName": "TriplekillsTable"
@@ -19766,7 +19766,7 @@
   "fields": {
     "leaderboardName": "Most Qaudra Kills",
     "leaderboardValueName": "Count",
-    "leaderboardEmoji": "4️",
+    "leaderboardEmoji": "4️⃣",
     "leaderboardIsLifetime": true,
     "leaderboardURLName": "quadrakillsTable",
     "leaderboardViewClassName": "QuadrakillsTable"
@@ -19778,7 +19778,7 @@
   "fields": {
     "leaderboardName": "Most Penta Kills",
     "leaderboardValueName": "Count",
-    "leaderboardEmoji": "5️",
+    "leaderboardEmoji": "5️⃣",
     "leaderboardIsLifetime": true,
     "leaderboardURLName": "pentakillsTable",
     "leaderboardViewClassName": "PentakillsTable"
