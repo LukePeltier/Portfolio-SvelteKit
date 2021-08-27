@@ -1,3 +1,178 @@
+@font-face {
+    font-family: 'Gill Sans Bold Italic';
+    src: local('Gill Sans Bold Italic'), local('GillSans-BoldItalic'),
+        url('fonts/GillSans-BoldItalic.woff2') format('woff2'),
+        url('fonts/GillSans-BoldItalic.woff') format('woff');
+    font-weight: bold;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Gill Sans Light';
+    src: local('Gill Sans Light'), local('GillSans-Light'),
+        url('fonts/GillSans-Light.woff2') format('woff2'),
+        url('fonts/GillSans-Light.woff') format('woff');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Gill Sans Heavy Italic';
+    src: local('Gill Sans Heavy Italic'), local('GillSans-HeavyItalic'),
+        url('fonts/GillSans-HeavyItalic.woff2') format('woff2'),
+        url('fonts/GillSans-HeavyItalic.woff') format('woff');
+    font-weight: 900;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Gill Sans Bold';
+    src: local('Gill Sans Bold'), local('GillSans-Bold'),
+        url('fonts/GillSans-Bold.woff2') format('woff2'),
+        url('fonts/GillSans-Bold.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Gill Sans Medium Italic';
+    src: local('Gill Sans Medium Italic'), local('GillSans-MediumItalic'),
+        url('fonts/GillSans-MediumItalic.woff2') format('woff2'),
+        url('fonts/GillSans-MediumItalic.woff') format('woff');
+    font-weight: 500;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Gill Sans Medium';
+    src: local('Gill Sans Medium'), local('GillSans-Medium'),
+        url('fonts/GillSans-Medium.woff2') format('woff2'),
+        url('fonts/GillSans-Medium.woff') format('woff');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Gill Sans Light Italic';
+    src: local('Gill Sans Light Italic'), local('GillSans-LightItalic'),
+        url('fonts/GillSans-LightItalic.woff2') format('woff2'),
+        url('fonts/GillSans-LightItalic.woff') format('woff');
+    font-weight: 300;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Gill Sans Heavy';
+    src: local('Gill Sans Heavy'), local('GillSans-Heavy'),
+        url('fonts/GillSans-Heavy.woff2') format('woff2'),
+        url('fonts/GillSans-Heavy.woff') format('woff');
+    font-weight: 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Gill Sans Italic';
+    src: local('Gill Sans Italic'), local('GillSans-Italic'),
+        url('fonts/GillSans-Italic.woff2') format('woff2'),
+        url('fonts/GillSans-Italic.woff') format('woff');
+    font-weight: normal;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Gill Sans Condensed Regular';
+    src: local('Gill Sans Condensed Regular'), local('GillSans-CondensedRegular'),
+        url('fonts/GillSans-CondensedRegular.woff2') format('woff2'),
+        url('fonts/GillSans-CondensedRegular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Gill Sans Condensed Bold';
+    src: local('Gill Sans Condensed Bold'), local('GillSans-CondensedBold'),
+        url('fonts/GillSans-CondensedBold.woff2') format('woff2'),
+        url('fonts/GillSans-CondensedBold.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Gill Sans';
+    src: local('Gill Sans'), local('GillSans'),
+        url('fonts/GillSans.woff2') format('woff2'),
+        url('fonts/GillSans.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+:root {
+  font-family: "Gill Sans", sans-serif !important;
+}
+
+.navbar {
+  font-family: "Gill Sans Bold", sans-serif !important;
+}
+
+.dropdown-item {
+  font-family: "Gill Sans Light", sans-serif !important;
+}
+
+body {
+  font-family: inherit !important;
+}
+
+a {
+  color:inherit;
+  text-decoration: none;
+}
+
+a:hover {
+  color:inherit;
+  text-decoration: underline;
+}
+
+.whiteTableBlackBackground {
+  border: #F3F3F3;
+}
+
+.stat-center{
+  text-align: center;
+  width: 14%;
+  position: relative;
+}
+.stat-right{
+  text-align: right;
+}
+
+.stat-leftcol-border {
+  border-width: 0px !important;
+  color: inherit;
+  overflow: hidden;
+  box-shadow: inset 0px 0 10px -6px rgba(0,0,0, .3) !important;
+  padding: 12px 15px 8px 15px !important;
+}
+
+.stat-inset-border {
+  border-width: 0px !important;
+  color: inherit;
+  overflow: hidden;
+  box-shadow: inset 8px 0 10px -6px rgba(0,0,0, .3) !important;
+  padding: 12px 15px 8px 15px !important;
+}
+
 .smallPlayerStat{
   padding: 10px ;
   border: 1px solid #dee2e6;

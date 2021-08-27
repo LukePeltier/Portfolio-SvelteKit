@@ -10,15 +10,11 @@
       <p>*Meme Games Played: {{memeTotal}}</p>
     </div>
   </div>
-  <div id="overallWinrate" class="row">
-    <div id="overallWinrateChartContainer" class="col-xl-6">
-    <div id="loadingText" class="align-middle text-center" style="font-size:25px"><i class="fas fa-spinner fa-spin"></i></i> Loading</div>
-      <canvas id="overallWinrateChart" data-url="{% url 'overallWinrateChart' %}"</canvas>
-    </div>
+  <div class="row">
     <div id="overallWinrateTableContainer" class="col-xl-6 table-responsive">
-      <table id="overallWinrateTable" class="table table-hover table-bordered table-sm" style="width:100%"
+      <table id="overallWinrateTable" class="table table-hover table-sm bg-white whiteTableBlackBackground" style="width:100%"
         data-url="{% url 'overallWinrateTable' %}">
-        <thead>
+        <thead class="bg-warning">
           <tr>
             <th>Name</th>
             <th>Top</th>
@@ -38,15 +34,10 @@
         </thead>
       </table>
     </div>
-  </div>
-  <div id="overallPlaytime" class="row">
-    <div id="overallPlaytimeChartContainer" class="col-xl-6">
-      <canvas id="overallPlaytimeChart" data-url="{% url 'overallPlaytimeChart' %}"></canvas>
-    </div>
     <div id="overallPlaytimeTableContainer" class="col-xl-6 table-responsive">
-      <table id="overallPlaytimeTable" class="table table-hover table-bordered table-sm" style="width:100%"
+      <table id="overallPlaytimeTable" class="table table-hover table-sm bg-white whiteTableBlackBackground" style="width:100%"
         data-url="{% url 'overallPlaytimeTable' %}">
-        <thead>
+        <thead class="bg-warning">
           <tr>
             <th>Name</th>
             <th>Top</th>
@@ -64,9 +55,7 @@
 </div>
 <script src="{%static 'js/customSort.js'%}"></script>
 <script src="{%static 'js/heatmapColor.js'%}"></script>
-<script src="{%static 'js/overallWinBar.js'%}"></script>
 <script src="{%static 'js/overallWinTable.js'%}"></script>
-<script src="{%static 'js/overallPlayBar.js'%}"></script>
 <script src="{%static 'js/overallPlayTable.js'%}"></script>
 
 {%endblock%}
