@@ -180,34 +180,34 @@ a:hover {
 }
 
 .stat-leftcol-border {
-  border-width: 0px !important;
+  border-width: 0 !important;
   color: inherit;
   overflow: hidden;
-  box-shadow: inset 0px 0 10px -6px rgba(0,0,0, .3) !important;
-  padding: 12px 15px 8px 15px !important;
+  box-shadow: inset 0 0 10px -6px rgba(0,0,0, .3) !important;
+  padding: 12px 15px 8px !important;
 }
 
 .stat-inset-border {
-  border-width: 0px !important;
+  border-width: 0 !important;
   color: inherit;
   overflow: hidden;
   box-shadow: inset 8px 0 10px -6px rgba(0,0,0, .3) !important;
-  padding: 12px 15px 8px 15px !important;
+  padding: 12px 15px 8px !important;
 }
 
 .stat-inset-border-block {
-  border-width: 0px !important;
+  border-width: 0 !important;
   color: inherit;
   box-shadow: inset 8px 0 10px -6px rgba(0,0,0, .3) !important;
-  padding: 12px 15px 8px 15px !important;
+  padding: 12px 15px 8px !important;
 }
 
 .stat-inset-mirror-border {
-  border-width: 0px !important;
+  border-width: 0 !important;
   color: inherit;
   overflow: hidden;
   box-shadow: inset -8px 0 10px -6px rgba(0,0,0, .3) !important;
-  padding: 12px 15px 8px 15px !important;
+  padding: 12px 15px 8px !important;
 }
 
 .smallPlayerStat{
