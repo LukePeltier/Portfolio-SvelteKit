@@ -27,9 +27,9 @@
     <div class="row">
         <div id="blueTeamTableContainer" class="col-xl-6 table-responsive">
             <h2 style="background-color: rgba(63, 127, 191, 0.2);">Blue Team: <b>{{blueTeamWinString}}</b></h2>
-            <table id="blueTeamTable" class="table table-striped table-bordered" style="width:100%;"
+            <table id="blueTeamTable" class="table bg-white whiteTableBlackBackgroundWithHover" style="width:100%; overflow:hidden;"
                 data-url="{% url 'blueTeamTable' object.pk %}">
-                <thead>
+                <thead class='bg-warning'>
                     <tr>
                         <th>Player</th>
                         <th>Champion</th>
@@ -66,9 +66,9 @@
         </div>
         <div id="redTeamTableContainer" class="col-xl-6">
             <h2 style="background-color: rgba(191, 63, 63, 0.5)">Red Team: <b>{{redTeamWinString}}</b></h2>
-            <table id="redTeamTable" class="table table-striped table-bordered" style="width:100%;"
+            <table id="redTeamTable" class="table bg-white whiteTableBlackBackgroundWithHover" style="width:100%; overflow:hidden;"
                 data-url="{% url 'redTeamTable' object.pk %}">
-                <thead>
+                <thead class='bg-warning'>
                     <tr>
                         <th>Player</th>
                         <th>Champion</th>
@@ -107,9 +107,9 @@
     <div class="row" style="padding-top:10px;">
         <div id="blueTeamBansTableContainer" class="col-xl-6 table-responsive">
             <h3>Blue Bans</h3>
-            <table id="blueTeamBansTable" class="table table-striped table-bordered" style="width:100%;"
+            <table id="blueTeamBansTable" class="table bg-white whiteTableBlackBackgroundWithHover" style="width:100%;"
                 data-url="{% url 'blueTeamBanTable' object.pk %}">
-                <thead>
+                <thead class='bg-warning'>
                     <tr>
                         <th>Champion</th>
                         <th>Target Player</th>
@@ -120,9 +120,9 @@
         </div>
         <div id="redTeamBansTableContainer" class="col-xl-6 table-responsive">
             <h3>Red Bans</h3>
-            <table id="redTeamBansTable" class="table table-striped table-bordered" style="width:100%;"
+            <table id="redTeamBansTable" class="table bg-white whiteTableBlackBackgroundWithHover" style="width:100%;"
                 data-url="{% url 'redTeamBanTable' object.pk %}">
-                <thead>
+                <thead class='bg-warning'>
                     <tr>
                         <th>Champion</th>
                         <th>Target Player</th>

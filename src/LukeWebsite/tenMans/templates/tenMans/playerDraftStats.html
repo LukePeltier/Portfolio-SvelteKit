@@ -7,9 +7,9 @@
     <div id="draftOrderContainer" class="row">
         <div id="averageDraftOrderTableContainer" class="col-xl-6 table-responsive">
         <h2>Average Draft Order</h2>
-            <table id="averageDraftOrderTable" class="table table-hover table-bordered table-sm" style="width:100%"
+            <table id="averageDraftOrderTable" class="table bg-white whiteTableBlackBackgroundWithHover table-sm" style="width:100%"
                 data-url="{% url 'averageDraftOrderTable' %}">
-                <thead>
+                <thead class="bg-warning">
                     <tr>
                         <th>Name</th>
                         <th>Average Draft Order</th>
@@ -20,9 +20,9 @@
         </div>
         <div id="expectedDraftOrderWinrateTableContainer" class="col-xl-6 table-responsive">
         <h2>Expected Draft Order by Winrate Confidence</h2>
-            <table id="expectedDraftOrderWinrateTable" class="table table-hover table-bordered table-sm" style="width:100%"
+            <table id="expectedDraftOrderWinrateTable" class="table bg-white whiteTableBlackBackgroundWithHover table-sm" style="width:100%"
                 data-url="{% url 'expectedDraftOrderWinrateTable' %}">
-                <thead>
+                <thead class="bg-warning">
                     <tr>
                         <th>Name</th>
                         <th>Minimum 50% Confidence Winrate</th>
@@ -35,9 +35,9 @@
     <div class="row justify-content-md-center">
         <div id="expectedDraftOrderWinrateTopTableContainer" class="col-xl-2 table-responsive">
             <h2>Top Lane</h2>
-            <table id="expectedDraftOrderWinrateTopTable" class="table table-hover table-bordered table-sm" style="width:100%"
+            <table id="expectedDraftOrderWinrateTopTable" class="table bg-white whiteTableBlackBackgroundWithHover table-sm" style="width:100%"
                 data-url="{% url 'expectedDraftOrderWinrateLaneTable' lane='Top'%}">
-                <thead>
+                <thead class="bg-warning">
                     <tr>
                         <th>Name</th>
                         <th>Minimum 50% Confidence Winrate</th>
@@ -48,9 +48,9 @@
         </div>
         <div id="expectedDraftOrderWinrateJungTableContainer" class="col-xl-2 table-responsive">
             <h2>Jungle</h2>
-            <table id="expectedDraftOrderWinrateJungTable" class="table table-hover table-bordered table-sm" style="width:100%"
+            <table id="expectedDraftOrderWinrateJungTable" class="table bg-white whiteTableBlackBackgroundWithHover table-sm" style="width:100%"
                 data-url="{% url 'expectedDraftOrderWinrateLaneTable' lane='Jungle'%}">
-                <thead>
+                <thead class="bg-warning">
                     <tr>
                         <th>Name</th>
                         <th>Minimum 50% Confidence Winrate</th>
@@ -61,9 +61,9 @@
         </div>
         <div id="expectedDraftOrderWinrateMidTableContainer" class="col-xl-2 table-responsive">
             <h2>Mid Lane</h2>
-            <table id="expectedDraftOrderWinrateMidTable" class="table table-hover table-bordered table-sm" style="width:100%"
+            <table id="expectedDraftOrderWinrateMidTable" class="table bg-white whiteTableBlackBackgroundWithHover table-sm" style="width:100%"
                 data-url="{% url 'expectedDraftOrderWinrateLaneTable' lane='Mid'%}">
-                <thead>
+                <thead class="bg-warning">
                     <tr>
                         <th>Name</th>
                         <th>Minimum 50% Confidence Winrate</th>
@@ -74,9 +74,9 @@
         </div>
         <div id="expectedDraftOrderWinrateBotTableContainer" class="col-xl-2 table-responsive">
             <h2>Bot Lane</h2>
-            <table id="expectedDraftOrderWinrateBotTable" class="table table-hover table-bordered table-sm" style="width:100%"
+            <table id="expectedDraftOrderWinrateBotTable" class="table bg-white whiteTableBlackBackgroundWithHover table-sm" style="width:100%"
                 data-url="{% url 'expectedDraftOrderWinrateLaneTable' lane='Bot'%}">
-                <thead>
+                <thead class="bg-warning">
                     <tr>
                         <th>Name</th>
                         <th>Minimum 50% Confidence Winrate</th>
@@ -87,9 +87,9 @@
         </div>
         <div id="expectedDraftOrderWinrateSuppTableContainer" class="col-xl-2 table-responsive">
             <h2>Support</h2>
-            <table id="expectedDraftOrderWinrateSuppTable" class="table table-hover table-bordered table-sm" style="width:100%"
+            <table id="expectedDraftOrderWinrateSuppTable" class="table bg-white whiteTableBlackBackgroundWithHover table-sm" style="width:100%"
                 data-url="{% url 'expectedDraftOrderWinrateLaneTable' lane='Support'%}">
-                <thead>
+                <thead class="bg-warning">
                     <tr>
                         <th>Name</th>
                         <th>Minimum 50% Confidence Winrate</th>
@@ -102,9 +102,9 @@
     <div class="row justify-content-md-center">
         <div id="expectedDraftOrderWinrateCaptainTableContainer" class="col-xl-2 table-responsive">
             <h2>Captain</h2>
-            <table id="expectedDraftOrderWinrateCaptainTable" class="table table-hover table-bordered table-sm" style="width:100%"
+            <table id="expectedDraftOrderWinrateCaptainTable" class="table bg-white whiteTableBlackBackgroundWithHover table-sm" style="width:100%"
                 data-url="{% url 'expectedDraftOrderWinrateCaptainTable'%}">
-                <thead>
+                <thead class="bg-warning">
                     <tr>
                         <th>Name</th>
                         <th>Minimum 50% Confidence Winrate</th>

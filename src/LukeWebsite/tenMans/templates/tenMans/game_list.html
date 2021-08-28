@@ -4,7 +4,7 @@
 <h1>Games</h1>
 <ul class="list-group">
 {% for game in object_list %}
-    <li class="list-group-item">
+    <li class="list-group-item bg-dark text-light">
     {% if game.gameMemeStatus %}
         <a class="text-warning" href="{% url 'detailGame' game.pk%}">{{ game.gameNumber }} - {{ game.gameDate|date:"DATETIME_FORMAT"}}</a>
     {% else %}

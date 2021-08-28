@@ -699,10 +699,15 @@ class ChampionPlaytimeChartView(DetailView):
 
         labels.append("Overall")
         overallData.append(self.object.getLaneCount(None))
+        labels.append("Top")
         topData.append(self.object.getLaneCount(Lane.objects.get(laneName__exact="Top")))
+        labels.append("Jungle")
         jungData.append(self.object.getLaneCount(Lane.objects.get(laneName__exact="Jungle")))
+        labels.append("Mid")
         midData.append(self.object.getLaneCount(Lane.objects.get(laneName__exact="Mid")))
+        labels.append("Bot")
         botData.append(self.object.getLaneCount(Lane.objects.get(laneName__exact="Bot")))
+        labels.append("Support")
         suppData.append(self.object.getLaneCount(Lane.objects.get(laneName__exact="Support")))
 
         return JsonResponse(data={

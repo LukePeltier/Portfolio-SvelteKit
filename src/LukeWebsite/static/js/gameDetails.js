@@ -2,13 +2,16 @@ $(function () {
     $(document).ready(function () {
         var blueTeamTable = $('#blueTeamTable').DataTable({
             "ajax": $('#blueTeamTable').data('url'),
-            "columns": [{
+            "columns": [
+                {
+                    "className": "stat-right stat-leftcol-border",
                     "data": "playerName",
                     "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
                         $(nTd).html("<a href='/ten_mans/player/" + oData.playerID + "'>" + sData + "</a>");
                     }
                 },
                 {
+                    "className": "stat-center-auto stat-inset-border cellnowrap strong-text",
                     "data": "champion",
                     "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
                         if(oData.riotChampionName!=undefined){
@@ -17,6 +20,7 @@ $(function () {
                     }
                 },
                 {
+                    "className": "stat-center-auto stat-inset-border cellnowrap strong-text",
                     "data": "lane",
                     "render": function (data, type) {
                         if (type === 'sort') {
@@ -41,93 +45,119 @@ $(function () {
                     }
                 },
                 {
+                    "className": "stat-center-auto stat-inset-border cellnowrap strong-text",
                     "data": "draftOrder"
                 },
                 {
+                    "className": "stat-center-auto stat-inset-border cellnowrap strong-text",
                     "data": "kills"
                 },
                 {
+                    "className": "stat-center-auto stat-inset-border cellnowrap strong-text",
                     "data": "deaths"
                 },
                 {
+                    "className": "stat-center-auto stat-inset-border cellnowrap strong-text",
                     "data": "assists"
                 },
                 {
+                    "className": "stat-center-auto stat-inset-border cellnowrap strong-text",
                     "data": "largestKillingSpree"
                 },
                 {
+                    "className": "stat-center-auto stat-inset-border cellnowrap strong-text",
                     "data": "largestMultiKill"
                 },
                 {
+                    "className": "stat-center-auto stat-inset-border cellnowrap strong-text",
                     "data": "doubleKills"
                 },
                 {
+                    "className": "stat-center-auto stat-inset-border cellnowrap strong-text",
                     "data": "tripleKills"
                 },
                 {
+                    "className": "stat-center-auto stat-inset-border cellnowrap strong-text",
                     "data": "quadraKills"
                 },
                 {
+                    "className": "stat-center-auto stat-inset-border cellnowrap strong-text",
                     "data": "pentaKills"
                 },
                 {
+                    "className": "stat-center-auto stat-inset-border cellnowrap strong-text",
                     "data": "totalDamageDealtToChampions",
                     "render": $.fn.dataTable.render.number(',', '.')
                 },
                 {
+                    "className": "stat-center-auto stat-inset-border cellnowrap strong-text",
                     "data": "visionScore"
                 },
                 {
+                    "className": "stat-center-auto stat-inset-border cellnowrap strong-text",
                     "data": "crowdControlScore",
                     "render": $.fn.dataTable.render.number(',', '.')
                 },
                 {
+                    "className": "stat-center-auto stat-inset-border cellnowrap strong-text",
                     "data": "totalDamageTaken",
                     "render": $.fn.dataTable.render.number(',', '.')
                 },
                 {
+                    "className": "stat-center-auto stat-inset-border cellnowrap strong-text",
                     "data": "goldEarned",
                     "render": $.fn.dataTable.render.number(',', '.')
                 },
                 {
+                    "className": "stat-center-auto stat-inset-border cellnowrap strong-text",
                     "data": "turretKills"
                 },
                 {
+                    "className": "stat-center-auto stat-inset-border cellnowrap strong-text",
                     "data": "inhibitorKills"
                 },
                 {
+                    "className": "stat-center-auto stat-inset-border cellnowrap strong-text",
                     "data": "cs"
                 },
                 {
+                    "className": "stat-center-auto stat-inset-border cellnowrap strong-text",
                     "data": "teamJungleMinionsKilled"
                 },
                 {
+                    "className": "stat-center-auto stat-inset-border cellnowrap strong-text",
                     "data": "enemyJungleMinionsKilled"
                 },
                 {
+                    "className": "stat-center-auto stat-inset-border cellnowrap strong-text",
                     "data": "controlWardsPurchased"
                 },
                 {
+                    "className": "stat-center-auto stat-inset-border cellnowrap strong-text",
                     "data": "firstBlood",
                     "render": function (data, type, row) {
                         return (data === true) ? '<p>&#9989;</p>' : '<p>&#10060</p>';
                     }
                 },
                 {
+                    "className": "stat-center-auto stat-inset-border cellnowrap strong-text",
                     "data": "firstTower",
                     "render": function (data, type, row) {
                         return (data === true) ? '<p>&#9989;</p>' : '<p>&#10060</p>';
                     }
                 },
                 {
+                    "className": "stat-center-auto stat-inset-border cellnowrap strong-text",
                     "data": "csRateFirstTen",
                     "render": $.fn.dataTable.render.number(',', '.', 1)
                 },
                 {
+                    "className": "stat-center-auto stat-inset-border cellnowrap strong-text",
                     "data": "csRateSecondTen",
                     "render": $.fn.dataTable.render.number(',', '.', 1)
                 },
                 {
+                    "className": "stat-center-auto stat-inset-border cellnowrap strong-text",
                     "data": "playerID"
                 }
             ],
@@ -142,21 +172,21 @@ $(function () {
                 [2, "asc"]
             ],
             "pageResize": true,
-            "scrollX": true,
-            "fixedColumns": {
-                leftColumns: 3
-            }
+            "scrollX": true
         });
 
         var redTeamTable = $('#redTeamTable').DataTable({
             "ajax": $('#redTeamTable').data('url'),
-            "columns": [{
+            "columns": [
+                {
+                    "className": "stat-right stat-leftcol-border",
                     "data": "playerName",
                     "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
                         $(nTd).html("<a href='/ten_mans/player/" + oData.playerID + "'>" + sData + "</a>");
                     }
                 },
                 {
+                    "className": "stat-center-auto stat-inset-border cellnowrap strong-text",
                     "data": "champion",
                     "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
                         if(oData.riotChampionName!=undefined){
@@ -165,6 +195,7 @@ $(function () {
                     }
                 },
                 {
+                    "className": "stat-center-auto stat-inset-border cellnowrap strong-text",
                     "data": "lane",
                     "render": function (data, type) {
                         if (type === 'sort') {
@@ -189,89 +220,114 @@ $(function () {
                     }
                 },
                 {
+                    "className": "stat-center-auto stat-inset-border cellnowrap strong-text",
                     "data": "draftOrder"
                 },
                 {
+                    "className": "stat-center-auto stat-inset-border cellnowrap strong-text",
                     "data": "kills"
                 },
                 {
+                    "className": "stat-center-auto stat-inset-border cellnowrap strong-text",
                     "data": "deaths"
                 },
                 {
+                    "className": "stat-center-auto stat-inset-border cellnowrap strong-text",
                     "data": "assists"
                 },
                 {
+                    "className": "stat-center-auto stat-inset-border cellnowrap strong-text",
                     "data": "largestKillingSpree"
                 },
                 {
+                    "className": "stat-center-auto stat-inset-border cellnowrap strong-text",
                     "data": "largestMultiKill"
                 },
                 {
+                    "className": "stat-center-auto stat-inset-border cellnowrap strong-text",
                     "data": "doubleKills"
                 },
                 {
+                    "className": "stat-center-auto stat-inset-border cellnowrap strong-text",
                     "data": "tripleKills"
                 },
                 {
+                    "className": "stat-center-auto stat-inset-border cellnowrap strong-text",
                     "data": "quadraKills"
                 },
                 {
+                    "className": "stat-center-auto stat-inset-border cellnowrap strong-text",
                     "data": "pentaKills"
                 },
                 {
+                    "className": "stat-center-auto stat-inset-border cellnowrap strong-text",
                     "data": "totalDamageDealtToChampions",
                     "render": $.fn.dataTable.render.number(',', '.')
                 },
                 {
+                    "className": "stat-center-auto stat-inset-border cellnowrap strong-text",
                     "data": "visionScore"
                 },
                 {
+                    "className": "stat-center-auto stat-inset-border cellnowrap strong-text",
                     "data": "crowdControlScore",
                     "render": $.fn.dataTable.render.number(',', '.')
                 },
                 {
+                    "className": "stat-center-auto stat-inset-border cellnowrap strong-text",
                     "data": "totalDamageTaken",
                     "render": $.fn.dataTable.render.number(',', '.')
                 },
                 {
+                    "className": "stat-center-auto stat-inset-border cellnowrap strong-text",
                     "data": "goldEarned",
                     "render": $.fn.dataTable.render.number(',', '.')
                 },
                 {
+                    "className": "stat-center-auto stat-inset-border cellnowrap strong-text",
                     "data": "turretKills"
                 },
                 {
+                    "className": "stat-center-auto stat-inset-border cellnowrap strong-text",
                     "data": "inhibitorKills"
                 },
                 {
+                    "className": "stat-center-auto stat-inset-border cellnowrap strong-text",
                     "data": "cs"
                 },
                 {
+                    "className": "stat-center-auto stat-inset-border cellnowrap strong-text",
                     "data": "teamJungleMinionsKilled"
                 },
                 {
+                    "className": "stat-center-auto stat-inset-border cellnowrap strong-text",
                     "data": "enemyJungleMinionsKilled"
                 },
                 {
+                    "className": "stat-center-auto stat-inset-border cellnowrap strong-text",
                     "data": "controlWardsPurchased"
                 },
                 {
+                    "className": "stat-center-auto stat-inset-border cellnowrap strong-text",
                     "data": "firstBlood",
                     "render": function (data, type, row) {
                         return (data === true) ? '<p>&#9989;</p>' : '<p>&#10060</p>';
                     }
                 },
                 {
+                    "className": "stat-center-auto stat-inset-border cellnowrap strong-text",
                     "data": "firstTower",
                     "render": function (data, type, row) {
                         return (data === true) ? '<p>&#9989;</p>' : '<p>&#10060</p>';
                     }
                 },
                 {
+                    "className": "stat-center-auto stat-inset-border cellnowrap strong-text",
                     "data": "csRateFirstTen",
                     "render": $.fn.dataTable.render.number(',', '.', 1)
                 },
                 {
+                    "className": "stat-center-auto stat-inset-border cellnowrap strong-text",
                     "data": "csRateSecondTen",
                     "render": $.fn.dataTable.render.number(',', '.', 1)
                 },
@@ -295,16 +351,14 @@ $(function () {
                 [2, "asc"]
             ],
             "pageResize": true,
-            "scrollX": true,
-            "fixedColumns": {
-                leftColumns: 3
-            }
+            "scrollX": true
         });
 
         var blueTeamBansTable = $('#blueTeamBansTable').DataTable({
             "ajax": $('#blueTeamBansTable').data('url'),
             "columns": [
                 {
+                    "className": "stat-right cellnowrap stat-leftcol-border",
                     "data": "champion",
                     "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
                         if(oData.riotChampionName!=undefined){
@@ -313,6 +367,7 @@ $(function () {
                     }
                 },
                 {
+                    "className": "stat-center-auto stat-inset-border cellnowrap strong-text",
                     "data": "playerName",
                     "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
                         $(nTd).html("<a href='/ten_mans/player/" + oData.playerID + "'>" + sData + "</a>");
@@ -339,6 +394,7 @@ $(function () {
             "ajax": $('#redTeamBansTable').data('url'),
             "columns": [
                 {
+                    "className": "stat-right cellnowrap stat-leftcol-border",
                     "data": "champion",
                     "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
                         if(oData.riotChampionName!=undefined){
@@ -347,6 +403,7 @@ $(function () {
                     }
                 },
                 {
+                    "className": "stat-center-auto stat-inset-border cellnowrap strong-text",
                     "data": "playerName",
                     "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
                         $(nTd).html("<a href='/ten_mans/player/" + oData.playerID + "'>" + sData + "</a>");

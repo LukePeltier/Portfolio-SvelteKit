@@ -708,7 +708,6 @@ class DuoForm(forms.Form):
         self.helper.form_id = 'id-laneMatchupForm'
         self.helper.form_method = 'get'
         self.helper.form_action = ''
-
         self.helper.layout = Layout(
             Fieldset(
                 'Players',

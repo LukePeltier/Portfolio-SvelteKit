@@ -13,7 +13,6 @@ table.dataTable thead .sorting_desc_disabled:before {
     font-stretch: normal;
     font-size: 90%;
     line-height: 1.45em;
-    font-family: "Helvetica Neue", HelveticaNeue, Helvetica, Arial, sans-serif;
 }
 
 table.dataTable thead .sorting:after,
@@ -31,5 +30,4 @@ table.dataTable thead .sorting_desc_disabled:after {
     font-stretch: normal;
     font-size: 90%;
     line-height: 1.45em;
-    font-family: "Helvetica Neue", HelveticaNeue, Helvetica, Arial, sans-serif;
 }

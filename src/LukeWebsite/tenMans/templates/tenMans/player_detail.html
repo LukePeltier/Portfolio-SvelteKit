@@ -66,7 +66,7 @@
         <div class="col col-md-6">
             <div class="row">
                 <div class="col">
-                    <div class="border text-center" id="playerTrophyCabinetContainer">
+                    <div class="border text-center text-light" id="playerTrophyCabinetContainer">
                         <h4>Trophy Case</h4>
                         <div id="trophyCase" style="display: inline">
                             <i style="font-size: 30px;" class="fas fa-spinner fa-spin"></i>
@@ -77,9 +77,9 @@
             <div class="row">
                 <div class="col">
                     <div id="playerLaneCountTableContainer" class="table-responsive">
-                        <table id="playerLaneCountTable" class="table table-hover table-bordered table-sm" style="width:100%"
+                        <table id="playerLaneCountTable" class="table bg-white whiteTableBlackBackgroundWithHover table-sm" style="width:100%"
                             style="width:100%;" data-url="{% url 'playerLaneCountTable' object.pk %}">
-                            <thead>
+                            <thead class="bg-warning">
                                 <tr>
                                     <th>Lane</th>
                                     <th>Play Count</th>
@@ -93,9 +93,9 @@
             <div class="row">
                 <div class="col">
                     <div id="playerChampionCountTableContainer" class="table-responsive">
-                        <table id="playerChampionCountTable" class="table table-hover table-bordered table-sm" style="width:100%"
+                        <table id="playerChampionCountTable" class="table bg-white whiteTableBlackBackgroundWithHover table-sm" style="width:100%"
                             style="width:100%;" data-url="{% url 'playerChampionCountTable' object.pk %}">
-                            <thead>
+                            <thead class="bg-warning">
                                 <tr>
                                     <th>Champion</th>
                                     <th>Play Count</th>
@@ -114,9 +114,9 @@
     </div>
     <div class="row">
         <div id="playerGamesTableContainer" class="col-12" style="padding: 0px;">
-            <table id="playerGamesTable" class="table table-sm table-striped table-bordered"
+            <table id="playerGamesTable" class="table table-sm bg-white whiteTableBlackBackgroundWithHover" style="width:100%; overflow:hidden;"
                 data-url="{% url 'playerGamesTable' object.pk %}">
-                <thead>
+                <thead class="bg-warning">
                     <tr>
                         <th>Game</th>
                         <th>Champion</th>

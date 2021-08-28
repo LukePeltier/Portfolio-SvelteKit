@@ -25,10 +25,12 @@ $(function () {
 
             var ctx = $championPlaytimeChart;
 
+            Chart.defaults.global.defaultFontColor='white';
+            Chart.defaults.global.defaultFontFamily = 'Gill Sans Light';
+
             var championPlaytime = new Chart(ctx, {
                 type: 'bar',
                 data: {
-                    labels: data.labels,
                     datasets: [{
                         label: 'Overall',
                         data: data.overall,
@@ -104,22 +106,27 @@ $(function () {
         "ajax": $('#playerChampCountTable').data('url'),
         "columns": [
             {
+                "className": "stat-center stat-leftcol-border",
                 "data": "name",
                 "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
                     $(nTd).html("<a href='/ten_mans/player/" + oData.playerID + "'>" + sData + "</a>");
                 }
             },
             {
+                "className": "stat-center stat-inset-border",
                 "data": "playCount"
             },
             {
+                "className": "stat-center stat-inset-border",
                 "data": "averageKDA"
             },
             {
+                "className": "stat-center stat-inset-border",
                 "data": "winrate",
                 "render": $.fn.dataTable.render.number(',', '.', 0, '', '%')
             },
             {
+                "className": "stat-center stat-inset-border",
                 "data": "playerID"
             }
         ],
@@ -140,12 +147,14 @@ $(function () {
     var champGameTable = $('#champGamesTable').DataTable({
         "ajax": $('#champGamesTable').data('url'),
         "columns": [{
+                "className": "stat-center stat-leftcol-border",
                 "data": "gameNum",
                 "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
                     $(nTd).html("<a href='/ten_mans/game/"+oData.gameID+"'>"+sData+"</a>");
                 }
             },
             {
+                "className": "stat-center stat-inset-border",
                 "data": "player",
                 "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
                     $(nTd).html("<a href='/ten_mans/player/" + oData.playerID + "'>" + sData + "</a>");
@@ -153,14 +162,17 @@ $(function () {
 
             },
             {
+                "className": "stat-center stat-inset-border",
                 "data": "lane",
                 "render": $.fn.dataTable.render.text()
             },
             {
+                "className": "stat-center stat-inset-border",
                 "data": "winLoss",
                 "render": $.fn.dataTable.render.text()
             },
             {
+                "className": "stat-center stat-inset-border",
                 "data": "duration",
                 "render": function(data, type){
                     if(type==='display'){
@@ -184,91 +196,118 @@ $(function () {
                 }
             },
             {
+                "className": "stat-center stat-inset-border",
                 "data": "team",
                 "render": $.fn.dataTable.render.text()
             },
             {
+                "className": "stat-center stat-inset-border",
                 "data": "kills"
             },
             {
+                "className": "stat-center stat-inset-border",
                 "data": "deaths"
             },
             {
+                "className": "stat-center stat-inset-border",
                 "data": "assists"
             },
             {
+                "className": "stat-center stat-inset-border",
                 "data": "largestKillingSpree"
             },
             {
+                "className": "stat-center stat-inset-border",
                 "data": "largestMultiKill"
             },
             {
+                "className": "stat-center stat-inset-border",
                 "data": "doubleKills"
             },
             {
+                "className": "stat-center stat-inset-border",
                 "data": "tripleKills"
             },
             {
+                "className": "stat-center stat-inset-border",
                 "data": "quadraKills"
             },
             {
+                "className": "stat-center stat-inset-border",
                 "data": "pentaKills"
             },
             {
+                "className": "stat-center stat-inset-border",
                 "data": "totalDamageDealtToChampions",
                 "render": $.fn.dataTable.render.number(',', '.')
             },
             {
+                "className": "stat-center stat-inset-border",
                 "data": "visionScore"
             },
             {
+                "className": "stat-center stat-inset-border",
                 "data": "crowdControlScore",
                 "render": $.fn.dataTable.render.number(',', '.')
             },
             {
+                "className": "stat-center stat-inset-border",
                 "data": "totalDamageTaken",
                 "render": $.fn.dataTable.render.number(',', '.')
             },
             {
+                "className": "stat-center stat-inset-border",
                 "data": "goldEarned",
                 "render": $.fn.dataTable.render.number(',', '.')
             },
             {
+                "className": "stat-center stat-inset-border",
                 "data": "turretKills"
             },
             {
+                "className": "stat-center stat-inset-border",
                 "data": "inhibitorKills"
             },
             {
+                "className": "stat-center stat-inset-border",
                 "data": "cs"
             },
             {
+                "className": "stat-center stat-inset-border",
                 "data": "teamJungleMinionsKilled"
             },
             {
+                "className": "stat-center stat-inset-border",
                 "data": "enemyJungleMinionsKilled"
             },
             {
+                "className": "stat-center stat-inset-border",
                 "data": "controlWardsPurchased"
             },
             {
+                "className": "stat-center stat-inset-border",
                 "data": "firstBlood"
             },
             {
+                "className": "stat-center stat-inset-border",
                 "data": "firstTower"
             },
             {
+                "className": "stat-center stat-inset-border",
                 "data": "csRateFirstTen",
                 "render": $.fn.dataTable.render.number(',', '.', 1)
             },
             {
+                "className": "stat-center stat-inset-border",
                 "data": "csRateSecondTen",
                 "render": $.fn.dataTable.render.number(',', '.', 1)
             },
             {
+                "className": "stat-center stat-inset-border",
                 "data": "gameID"
             },
             {
+                "className": "stat-center stat-inset-border",
                 "data": "playerID"
             }
         ],
@@ -282,11 +321,7 @@ $(function () {
         searching: false,
         info: false,
         "order": [[0, "asc"]],
-        "scrollX": true,
-        "fixedColumns":
-        {
-            leftColumns: 4
-        }
+        "scrollX": true
     })
 
 });

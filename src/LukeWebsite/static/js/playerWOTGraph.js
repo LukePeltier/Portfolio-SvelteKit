@@ -17,6 +17,8 @@ $(function () {
 
             var ctx = $winrateOverTimeChart;
 
+            Chart.defaults.global.defaultFontColor='white';
+            Chart.defaults.global.defaultFontFamily = 'Gill Sans Light';
             var overallWinrate = new Chart(ctx, {
                 type: 'line',
                 data: {

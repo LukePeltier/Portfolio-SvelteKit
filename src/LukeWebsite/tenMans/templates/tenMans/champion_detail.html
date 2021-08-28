@@ -22,9 +22,9 @@
         <div class="col-xl-6">
             <div class="row">
                 <div id="playerChampCountTableContainer" class="col table-responsive" style="padding: 0px;">
-                    <table id="playerChampCountTable" class="table table-hover table-bordered table-sm" style="width:100%"
+                    <table id="playerChampCountTable" class="table table-sm bg-white whiteTableBlackBackgroundWithHover" style="width:100%"
                         style="width:100%;" data-url="{% url 'playerChampCountTable' object.pk %}">
-                        <thead>
+                        <thead class="bg-warning">
                             <tr>
                                 <th>Player</th>
                                 <th>Play Count</th>
@@ -71,9 +71,9 @@
     </div>
     <div class="row">
         <div id="champGamesTableContainer" class="col-12 table-responsive" style="padding: 0px;">
-            <table id="champGamesTable" class="table table-sm table-striped table-bordered" style="width:100%"
+            <table id="champGamesTable" class="table table-sm bg-white whiteTableBlackBackgroundWithHover" style="width:100%; overflow:hidden;"
                 data-url="{% url 'champGamesTable' object.pk %}">
-                <thead>
+                <thead class="bg-warning">
                     <tr>
                         <th>Game</th>
                         <th>Player</th>
