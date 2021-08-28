@@ -118,6 +118,10 @@
     font-display: swap;
 }
 
+.strong-text {
+  font-family: "Gill Sans Bold", sans-serif !important;
+}
+
 :root {
   font-family: "Gill Sans", sans-serif !important;
 }
@@ -148,13 +152,31 @@ a:hover {
   border: #F3F3F3;
 }
 
+.whiteTableBlackBackgroundWithHover tbody tr:hover {
+  background-color: #F3F3F3;
+}
+
 .stat-center{
   text-align: center;
-  width: 14%;
+  width: 10%;
   position: relative;
 }
 .stat-right{
   text-align: right;
+  width: 10%;
+  position: relative;
+}
+
+.stat-center-large {
+  text-align: center;
+  width: 33%;
+  position: relative;
+}
+
+.stat-right-large{
+  text-align: right;
+  width: 33%;
+  position: relative;
 }
 
 .stat-leftcol-border {
@@ -170,6 +192,21 @@ a:hover {
   color: inherit;
   overflow: hidden;
   box-shadow: inset 8px 0 10px -6px rgba(0,0,0, .3) !important;
+  padding: 12px 15px 8px 15px !important;
+}
+
+.stat-inset-border-block {
+  border-width: 0px !important;
+  color: inherit;
+  box-shadow: inset 8px 0 10px -6px rgba(0,0,0, .3) !important;
+  padding: 12px 15px 8px 15px !important;
+}
+
+.stat-inset-mirror-border {
+  border-width: 0px !important;
+  color: inherit;
+  overflow: hidden;
+  box-shadow: inset -8px 0 10px -6px rgba(0,0,0, .3) !important;
   padding: 12px 15px 8px 15px !important;
 }
 
@@ -205,10 +242,6 @@ table.dataTable.table-striped.DTFC_Cloned tbody tr:nth-of-type(even) {
 }
 .leftBorder{
   border-left: solid 2px !important;
-}
-
-#id-laneMatchupForm{
-  width: 15%;
 }
 
 .linedheader{
@@ -254,4 +287,8 @@ table.dataTable.table-striped.DTFC_Cloned tbody tr:nth-of-type(even) {
     50% {
         background-position: 100% 0;
     }
+}
+
+.dataTables_scrollBody thead tr {
+  visibility: collapse;
 }

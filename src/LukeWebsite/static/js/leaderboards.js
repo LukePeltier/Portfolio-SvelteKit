@@ -4,6 +4,7 @@ $(function () {
             "ajax": $('#mostKillsGameTable').data('url'),
             "columns": [
                 {
+                    "className": "stat-right-large stat-leftcol-border",
                     "data": "name",
                     "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
                         $(nTd).html("<a href='/ten_mans/player/" + oData.playerID + "'>" + sData + "</a>");
@@ -11,9 +12,11 @@ $(function () {
                 },
 
                 {
+                    "className": "stat-center-large stat-inset-border strong-text",
                     "data": "data"
                 },
                 {
+                    "className": "stat-center-large stat-inset-border strong-text",
                     "data": "game",
                     "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
                         $(nTd).html("<a href='/ten_mans/game/"+oData.gameID+"'>"+sData+"</a>");
@@ -44,6 +47,7 @@ $(function () {
             "ajax": $('#mostDeathsGameTable').data('url'),
             "columns": [
                 {
+                    "className": "stat-right-large stat-leftcol-border",
                     "data": "name",
                     "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
                         $(nTd).html("<a href='/ten_mans/player/" + oData.playerID + "'>" + sData + "</a>");
@@ -51,9 +55,11 @@ $(function () {
                 },
 
                 {
+                    "className": "stat-center-large stat-inset-border strong-text",
                     "data": "data"
                 },
                 {
+                    "className": "stat-center-large stat-inset-border strong-text",
                     "data": "game",
                     "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
                         $(nTd).html("<a href='/ten_mans/game/"+oData.gameID+"'>"+sData+"</a>");
@@ -84,6 +90,7 @@ $(function () {
             "ajax": $('#mostAssistsGameTable').data('url'),
             "columns": [
                 {
+                    "className": "stat-right-large stat-leftcol-border",
                     "data": "name",
                     "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
                         $(nTd).html("<a href='/ten_mans/player/" + oData.playerID + "'>" + sData + "</a>");
@@ -91,9 +98,11 @@ $(function () {
                 },
 
                 {
+                    "className": "stat-center-large stat-inset-border strong-text",
                     "data": "data"
                 },
                 {
+                    "className": "stat-center-large stat-inset-border strong-text",
                     "data": "game",
                     "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
                         $(nTd).html("<a href='/ten_mans/game/"+oData.gameID+"'>"+sData+"</a>");
@@ -124,6 +133,7 @@ $(function () {
             "ajax": $('#mostDamageGameTable').data('url'),
             "columns": [
                 {
+                    "className": "stat-right-large stat-leftcol-border",
                     "data": "name",
                     "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
                         $(nTd).html("<a href='/ten_mans/player/" + oData.playerID + "'>" + sData + "</a>");
@@ -131,10 +141,12 @@ $(function () {
                 },
 
                 {
+                    "className": "stat-center-large stat-inset-border strong-text",
                     "data": "data",
                     "render": $.fn.dataTable.render.number(',', '.')
                 },
                 {
+                    "className": "stat-center-large stat-inset-border strong-text",
                     "data": "game",
                     "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
                         $(nTd).html("<a href='/ten_mans/game/"+oData.gameID+"'>"+sData+"</a>");
@@ -165,6 +177,7 @@ $(function () {
             "ajax": $('#mostSpreeGameTable').data('url'),
             "columns": [
                 {
+                    "className": "stat-right-large stat-leftcol-border",
                     "data": "name",
                     "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
                         $(nTd).html("<a href='/ten_mans/player/" + oData.playerID + "'>" + sData + "</a>");
@@ -172,9 +185,11 @@ $(function () {
                 },
 
                 {
+                    "className": "stat-center-large stat-inset-border strong-text",
                     "data": "data"
                 },
                 {
+                    "className": "stat-center-large stat-inset-border strong-text",
                     "data": "game",
                     "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
                         $(nTd).html("<a href='/ten_mans/game/"+oData.gameID+"'>"+sData+"</a>");
@@ -205,6 +220,7 @@ $(function () {
             "ajax": $('#mostCSGameTable').data('url'),
             "columns": [
                 {
+                    "className": "stat-right-large stat-leftcol-border",
                     "data": "name",
                     "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
                         $(nTd).html("<a href='/ten_mans/player/" + oData.playerID + "'>" + sData + "</a>");
@@ -212,9 +228,11 @@ $(function () {
                 },
 
                 {
+                    "className": "stat-center-large stat-inset-border strong-text",
                     "data": "data"
                 },
                 {
+                    "className": "stat-center-large stat-inset-border strong-text",
                     "data": "game",
                     "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
                         $(nTd).html("<a href='/ten_mans/game/"+oData.gameID+"'>"+sData+"</a>");
@@ -245,6 +263,7 @@ $(function () {
             "ajax": $('#mostCSFirstTwentyGameTable').data('url'),
             "columns": [
                 {
+                    "className": "stat-right-large stat-leftcol-border",
                     "data": "name",
                     "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
                         $(nTd).html("<a href='/ten_mans/player/" + oData.playerID + "'>" + sData + "</a>");
@@ -252,9 +271,11 @@ $(function () {
                 },
 
                 {
+                    "className": "stat-center-large stat-inset-border strong-text",
                     "data": "data"
                 },
                 {
+                    "className": "stat-center-large stat-inset-border strong-text",
                     "data": "game",
                     "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
                         $(nTd).html("<a href='/ten_mans/game/"+oData.gameID+"'>"+sData+"</a>");
@@ -285,6 +306,7 @@ $(function () {
             "ajax": $('#mostVisionGameTable').data('url'),
             "columns": [
                 {
+                    "className": "stat-right-large stat-leftcol-border",
                     "data": "name",
                     "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
                         $(nTd).html("<a href='/ten_mans/player/" + oData.playerID + "'>" + sData + "</a>");
@@ -292,9 +314,11 @@ $(function () {
                 },
 
                 {
+                    "className": "stat-center-large stat-inset-border strong-text",
                     "data": "data"
                 },
                 {
+                    "className": "stat-center-large stat-inset-border strong-text",
                     "data": "game",
                     "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
                         $(nTd).html("<a href='/ten_mans/game/"+oData.gameID+"'>"+sData+"</a>");
@@ -325,6 +349,7 @@ $(function () {
             "ajax": $('#mostControlWardGameTable').data('url'),
             "columns": [
                 {
+                    "className": "stat-right-large stat-leftcol-border",
                     "data": "name",
                     "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
                         $(nTd).html("<a href='/ten_mans/player/" + oData.playerID + "'>" + sData + "</a>");
@@ -332,9 +357,11 @@ $(function () {
                 },
 
                 {
+                    "className": "stat-center-large stat-inset-border strong-text",
                     "data": "data"
                 },
                 {
+                    "className": "stat-center-large stat-inset-border strong-text",
                     "data": "game",
                     "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
                         $(nTd).html("<a href='/ten_mans/game/"+oData.gameID+"'>"+sData+"</a>");
@@ -365,6 +392,7 @@ $(function () {
             "ajax": $('#mostBanGameTable').data('url'),
             "columns": [
                 {
+                    "className": "stat-right-large stat-leftcol-border",
                     "data": "name",
                     "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
                         $(nTd).html("<a href='/ten_mans/player/" + oData.playerID + "'>" + sData + "</a>");
@@ -372,9 +400,11 @@ $(function () {
                 },
 
                 {
+                    "className": "stat-center-large stat-inset-border strong-text",
                     "data": "data"
                 },
                 {
+                    "className": "stat-center-large stat-inset-border strong-text",
                     "data": "game",
                     "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
                         $(nTd).html("<a href='/ten_mans/game/"+oData.gameID+"'>"+sData+"</a>");
@@ -405,6 +435,7 @@ $(function () {
             "ajax": $('#mostChampsTable').data('url'),
             "columns": [
                 {
+                    "className": "stat-right-large stat-leftcol-border",
                     "data": "name",
                     "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
                         $(nTd).html("<a href='/ten_mans/player/" + oData.playerID + "'>" + sData + "</a>");
@@ -412,6 +443,7 @@ $(function () {
                 },
 
                 {
+                    "className": "stat-center-large stat-inset-border strong-text",
                     "data": "data"
                 },
                 {
@@ -436,6 +468,7 @@ $(function () {
             "ajax": $('#captainWinrateTable').data('url'),
             "columns": [
                 {
+                    "className": "stat-right-large stat-leftcol-border",
                     "data": "name",
                     "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
                         $(nTd).html("<a href='/ten_mans/player/" + oData.playerID + "'>" + sData + "</a>");
@@ -443,6 +476,7 @@ $(function () {
                 },
 
                 {
+                    "className": "stat-center-large stat-inset-border strong-text",
                     "data": "data"
                 },
                 {
@@ -467,6 +501,7 @@ $(function () {
             "ajax": $('#captainCountTable').data('url'),
             "columns": [
                 {
+                    "className": "stat-right-large stat-leftcol-border",
                     "data": "name",
                     "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
                         $(nTd).html("<a href='/ten_mans/player/" + oData.playerID + "'>" + sData + "</a>");
@@ -474,6 +509,7 @@ $(function () {
                 },
 
                 {
+                    "className": "stat-center-large stat-inset-border strong-text",
                     "data": "data"
                 },
                 {
@@ -497,6 +533,7 @@ $(function () {
             "ajax": $('#winstreakTable').data('url'),
             "columns": [
                 {
+                    "className": "stat-right-large stat-leftcol-border",
                     "data": "name",
                     "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
                         $(nTd).html("<a href='/ten_mans/player/" + oData.playerID + "'>" + sData + "</a>");
@@ -504,10 +541,11 @@ $(function () {
                 },
 
                 {
+                    "className": "stat-center-large stat-inset-border strong-text",
                     "data": "data",
                     "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
                         if(oData.isCurrent){
-                            $(nTd).html("<p>" + sData + " <span class=\"badge rounded-pill bg-success\">Current</span></p>");
+                            $(nTd).html("<span class=\"badge rounded-pill bg-success\">"+ sData + "</span>");
                         }
                     }
 
@@ -537,6 +575,7 @@ $(function () {
             "ajax": $('#lossstreakTable').data('url'),
             "columns": [
                 {
+                    "className": "stat-right-large stat-leftcol-border",
                     "data": "name",
                     "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
                         $(nTd).html("<a href='/ten_mans/player/" + oData.playerID + "'>" + sData + "</a>");
@@ -544,10 +583,11 @@ $(function () {
                 },
 
                 {
+                    "className": "stat-center-large stat-inset-border strong-text",
                     "data": "data",
                     "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
                         if(oData.isCurrent){
-                            $(nTd).html("<p>" + sData + " <span class=\"badge rounded-pill bg-danger\">Current</span></p>");
+                            $(nTd).html("<span class=\"badge rounded-pill bg-danger\">"+ sData + "</span>");
                         }
                     }
                 },
@@ -576,6 +616,7 @@ $(function () {
             "ajax": $('#pentakillsTable').data('url'),
             "columns": [
                 {
+                    "className": "stat-right-large stat-leftcol-border",
                     "data": "name",
                     "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
                         $(nTd).html("<a href='/ten_mans/player/" + oData.playerID + "'>" + sData + "</a>");
@@ -583,6 +624,7 @@ $(function () {
                 },
 
                 {
+                    "className": "stat-center-large stat-inset-border strong-text",
                     "data": "data"
                 },
                 {
@@ -606,6 +648,7 @@ $(function () {
             "ajax": $('#quadrakillsTable').data('url'),
             "columns": [
                 {
+                    "className": "stat-right-large stat-leftcol-border",
                     "data": "name",
                     "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
                         $(nTd).html("<a href='/ten_mans/player/" + oData.playerID + "'>" + sData + "</a>");
@@ -613,6 +656,7 @@ $(function () {
                 },
 
                 {
+                    "className": "stat-center-large stat-inset-border strong-text",
                     "data": "data"
                 },
                 {
@@ -636,6 +680,7 @@ $(function () {
             "ajax": $('#triplekillsTable').data('url'),
             "columns": [
                 {
+                    "className": "stat-right-large stat-leftcol-border",
                     "data": "name",
                     "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
                         $(nTd).html("<a href='/ten_mans/player/" + oData.playerID + "'>" + sData + "</a>");
@@ -643,6 +688,7 @@ $(function () {
                 },
 
                 {
+                    "className": "stat-center-large stat-inset-border strong-text",
                     "data": "data"
                 },
                 {
@@ -667,6 +713,7 @@ $(function () {
             "ajax": $('#doublekillsTable').data('url'),
             "columns": [
                 {
+                    "className": "stat-right-large stat-leftcol-border",
                     "data": "name",
                     "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
                         $(nTd).html("<a href='/ten_mans/player/" + oData.playerID + "'>" + sData + "</a>");
@@ -674,6 +721,7 @@ $(function () {
                 },
 
                 {
+                    "className": "stat-center-large stat-inset-border strong-text",
                     "data": "data"
                 },
                 {

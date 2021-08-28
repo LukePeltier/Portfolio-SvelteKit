@@ -25,10 +25,12 @@ $(function () {
 
             var ctx = $championPlaytimeChart;
 
+            Chart.defaults.global.defaultFontColor='white';
+            Chart.defaults.global.defaultFontFamily = 'Gill Sans Light';
+
             var championPlaytime = new Chart(ctx, {
                 type: 'bar',
                 data: {
-                    labels: data.labels,
                     datasets: [{
                         label: 'Overall',
                         data: data.overall,
@@ -319,10 +321,7 @@ $(function () {
         searching: false,
         info: false,
         "order": [[0, "asc"]],
-        "scrollX": true,
-        "initComplete": function(settings, json) {
-            $('.dataTables_scrollBody thead tr').css({visibility:'collapse'});
-        }
+        "scrollX": true
     })
 
 });

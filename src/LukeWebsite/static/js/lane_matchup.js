@@ -25,6 +25,8 @@ $(function () {
 
             var ctx = $laneMatchupChart;
 
+            Chart.defaults.global.defaultFontColor='white';
+            Chart.defaults.global.defaultFontFamily = 'Gill Sans Light';
             var laneMatchup = new Chart(ctx, {
                 type: 'horizontalBar',
                 data: {
@@ -74,13 +76,16 @@ $(function () {
     $(document).ready(function () {
         var matchupGamesTable = $('#matchupGamesTable').DataTable({
             "ajax": $('#matchupGamesTable').data('url'),
-            "columns": [{
+            "columns": [
+                {
+                    "className": "stat-center cellnowrap stat-leftcol-border rightBorder",
                     "data": "gameNum",
                     "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
                         $(nTd).html("<a href='/ten_mans/game/" + oData.gameID + "'>" + sData + "</a>");
                     }
                 },
                 {
+                    "className": "stat-center cellnowrap stat-inset-border",
                     "data": "leftchampion",
                     "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
                         if (oData.leftriotChampionName != undefined) {
@@ -92,37 +97,46 @@ $(function () {
 
                 },
                 {
+                    "className": "stat-center cellnowrap stat-inset-border",
                     "data": "leftcs"
                 },
                 {
+                    "className": "stat-center cellnowrap stat-inset-border",
                     "data": "leftkda",
                     "render": $.fn.dataTable.render.text()
                 },
                 {
+                    "className": "stat-center cellnowrap stat-inset-border",
                     "data": "leftlane",
                     "render": $.fn.dataTable.render.text()
                 },
                 {
+                    "className": "stat-center cellnowrap stat-inset-border rightBorder",
                     "data": "leftwinLoss",
                     "render": $.fn.dataTable.render.text()
                 },
                 {
+                    "className": "stat-center cellnowrap stat-inset-border",
                     "data": "rightwinLoss",
                     "render": $.fn.dataTable.render.text()
                 },
                 {
+                    "className": "stat-center cellnowrap stat-inset-border",
                     "data": "rightlane",
                     "render": $.fn.dataTable.render.text()
                 },
                 {
+                    "className": "stat-center cellnowrap stat-inset-border",
                     "data": "rightkda",
                     "render": $.fn.dataTable.render.text()
                 },
 
                 {
+                    "className": "stat-center cellnowrap stat-inset-border",
                     "data": "rightcs"
                 },
                 {
+                    "className": "stat-center cellnowrap stat-inset-border",
                     "data": "rightchampion",
                     "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
                         if (oData.rightriotChampionName != undefined) {
@@ -159,19 +173,7 @@ $(function () {
                 {
                     targets: [11, 12, 13, 14, 15, 16, 17],
                     visible: false
-                },
-                {
-                    targets: [1, 2, 3, 4],
-                    className: 'text-end'
-                },
-                {
-                    targets: 5,
-                    className: 'text-end rightBorder'
-                },
-                {
-                    targets: [0, 5],
-                    className: 'rightBorder'
-                },
+                }
             ],
             paging: false,
             searching: false,
@@ -188,10 +190,13 @@ $(function () {
         });
         var matchupCountTable = $('#matchupCountTable').DataTable({
             "ajax": $('#matchupCountTable').data('url'),
-            "columns": [{
+            "columns": [
+                {
+                    "className": "stat-right-large stat-leftcol-border",
                     "data": "lane"
                 },
                 {
+                    "className": "stat-center-large cellnowrap stat-inset-border strong-text",
                     "data": "playCount"
                 }
             ],

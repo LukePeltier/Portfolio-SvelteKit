@@ -22,13 +22,16 @@ $(function () {
     $(document).ready(function () {
         var duoGamesTable = $('#duoGamesTable').DataTable({
             "ajax": $('#duoGamesTable').data('url'),
-            "columns": [{
+            "columns": [
+                {
+                    "className": "stat-center stat-leftcol-border rightBorder",
                     "data": "gameNum",
                     "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
                         $(nTd).html("<a href='/ten_mans/game/" + oData.gameID + "'>" + sData + "</a>");
                     }
                 },
                 {
+                    "className": "stat-center stat-inset-border",
                     "data": "leftchampion",
                     "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
                         if (oData.leftriotChampionName != undefined) {
@@ -40,33 +43,41 @@ $(function () {
 
                 },
                 {
+                    "className": "stat-center stat-inset-border",
                     "data": "leftcs"
                 },
                 {
+                    "className": "stat-center stat-inset-border",
                     "data": "leftkda",
                     "render": $.fn.dataTable.render.text()
                 },
                 {
+                    "className": "stat-center stat-inset-border",
                     "data": "leftlane",
                     "render": $.fn.dataTable.render.text()
                 },
                 {
+                    "className": "stat-center text-center stat-leftcol-border rightBorder leftBorder",
                     "data": "leftwinLoss",
                     "render": $.fn.dataTable.render.text()
                 },
                 {
+                    "className": "stat-center stat-inset-mirror-border",
                     "data": "rightlane",
                     "render": $.fn.dataTable.render.text()
                 },
                 {
+                    "className": "stat-center stat-inset-mirror-border",
                     "data": "rightkda",
                     "render": $.fn.dataTable.render.text()
                 },
 
                 {
+                    "className": "stat-center stat-inset-mirror-border",
                     "data": "rightcs"
                 },
                 {
+                    "className": "stat-center stat-inset-mirror-border",
                     "data": "rightchampion",
                     "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
                         if (oData.rightriotChampionName != undefined) {
@@ -105,14 +116,6 @@ $(function () {
                     visible: false
                 },
                 {
-                    targets: [1, 2, 3, 4],
-                    className: 'text-end'
-                },
-                {
-                    targets: 5,
-                    className: 'text-end rightBorder leftBorder'
-                },
-                {
                     targets: [0],
                     className: 'rightBorder'
                 },
@@ -124,6 +127,7 @@ $(function () {
                 [0, "asc"]
             ],
             "scrollX": true,
+            "scrollY": false,
             "createdRow": function (row, data, dataIndex) {
                 if (data.highlightRow == true) {
                     $(row).addClass('yellowRow');
