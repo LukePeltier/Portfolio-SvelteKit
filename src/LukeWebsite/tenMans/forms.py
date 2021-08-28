@@ -449,10 +449,10 @@ class NewGameForm(forms.Form):
         redTargetsToBlue.append(cleaned_data.get('redTargetBan5'))
 
         for possibleRedPlayer in blueTargetsToRed:
-            if possibleRedPlayer not in redPlayers:
+            if possibleRedPlayer is not None and possibleRedPlayer not in redPlayers:
                 raise ValidationError("Target Ban Target %(value)s not valid, not on other team", params={'value', possibleRedPlayer.playerName})
         for possibleBluePlayer in redTargetsToBlue:
-            if possibleBluePlayer not in bluePlayers:
+            if possibleBluePlayer is not None and possibleBluePlayer not in bluePlayers:
                 raise ValidationError("Target Ban Target %(value)s not valid, not on other team", params={'value', possibleBluePlayer.playerName})
         # endregion
 

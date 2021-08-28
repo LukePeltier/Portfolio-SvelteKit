@@ -27,7 +27,7 @@ $(function () {
             "ajax": $('#playerChampionCountTable').data('url'),
             "columns": [
                 {
-                    "className": "stat-right-large stat-leftcol-border",
+                    "className": "stat-right stat-leftcol-border",
                     "data": "name",
                     "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
                         if(oData.riotChampionName!=undefined){
@@ -36,16 +36,16 @@ $(function () {
                     }
                 },
                 {
-                    "className": "stat-center-large stat-inset-border strong-text",
+                    "className": "stat-center stat-inset-border strong-text",
                     "data": "playCount"
                 },
                 {
-                    "className": "stat-center-large stat-inset-border strong-text",
+                    "className": "stat-center stat-inset-border strong-text",
                     "data": "winrate",
                     "render": $.fn.dataTable.render.number(',', '.', 0, '', '%')
                 },
                 {
-                    "className": "stat-center-large stat-inset-border strong-text",
+                    "className": "stat-center stat-inset-border strong-text",
                     "data": "averageKDA"
                 },
                 {
