@@ -6,6 +6,10 @@ import importlib
 # Create your models here.
 
 
+class Season(models.Model):
+    seasonNumber = models.PositiveIntegerField(unique=True)
+
+
 class Game(models.Model):
     gameNumber = models.PositiveIntegerField(unique=True)
     gameBlueWins = models.BooleanField()
@@ -14,6 +18,7 @@ class Game(models.Model):
     gameDate = models.DateTimeField(auto_now_add=True)
     gameDuration = models.PositiveIntegerField()
     gameRiotID = models.PositiveBigIntegerField(null=True)
+    season = models.ForeignKey(Season, on_delete=models.CASCADE, default=1)
 
     def getTotalGames():
         return Game.objects.all().count()
