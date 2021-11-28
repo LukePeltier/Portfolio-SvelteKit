@@ -530,9 +530,9 @@ class UpdateGameForm(forms.Form):
                 raise ValidationError("Match not found")
             if match.queue != cass.Queue.custom:
                 raise ValidationError("Match not a custom game")
+        # TODO: check if game ended in surrender
 
         localGame.gameRiotID = remoteGameID
-
         localGame.gameDuration = match.duration.total_seconds()
         localGame.save()
 

@@ -3,11 +3,36 @@ from scipy import stats
 import numpy as np
 from django_cassiopeia import cassiopeia as cass
 import importlib
+from django.db.models import Max
 # Create your models here.
 
 
 class Season(models.Model):
     seasonNumber = models.PositiveIntegerField(unique=True)
+
+    def getCurrentSeason():
+        maxSeason = Game.objects.aggregate(Max('season__seasonNumber'))['season__seasonNumber__max']
+        return maxSeason
+
+
+class Leaderboard(models.Model):
+    leaderboardName = models.TextField(unique=True)
+    leaderboardValueName = models.TextField()
+    leaderboardEmoji = models.TextField()
+    leaderboardIsLifetime = models.BooleanField()
+    leaderboardURLName = models.TextField(default='')
+    leaderboardViewClassName = models.TextField(null=False)
+
+    def getTrophyHolder(self):
+        # from  import (MostKillsGameTable)  # noqa: F401
+        mod = importlib.import_module('tenMans.views.leaderboard_tables')
+        leaderboardclass_ = getattr(mod, self.leaderboardViewClassName)
+        instance = leaderboardclass_()
+        results = instance.get(None, objectReturn=True)
+        if not results:
+            return None
+        playerID = results[0]['playerID']
+        return playerID
 
 
 class Game(models.Model):
@@ -19,6 +44,8 @@ class Game(models.Model):
     gameDuration = models.PositiveIntegerField()
     gameRiotID = models.PositiveBigIntegerField(null=True)
     season = models.ForeignKey(Season, on_delete=models.CASCADE, default=1)
+    gameEndedInSurrender = models.BooleanField(default=0)
+    gameEndedInEarlySurrender = models.BooleanField(default=0)
 
     def getTotalGames():
         return Game.objects.all().count()
@@ -844,6 +871,20 @@ class GameLanerStats(models.Model):
     csRateFirstTen = models.FloatField()
     csRateSecondTen = models.FloatField()
 
+    # match v5 only
+    baronKills = models.PositiveIntegerField(default=0)
+    dragonKills = models.PositiveIntegerField(default=0)
+
+    goldSpent = models.PositiveIntegerField(default=0)
+
+    largestCriticalStrike = models.PositiveIntegerField(default=0)
+    longestTimeSpentLiving = models.PositiveIntegerField(default=0)
+    killedNexus = models.BooleanField(default=0)
+    objectivesStolen = models.PositiveIntegerField(default=0)
+    numberOfFlashes = models.PositiveIntegerField(default=0)
+    totalTimeSpentDead = models.PositiveIntegerField(default=0)
+    timePlayed = models.PositiveIntegerField(default=0)
+
     def getTotalCS(self):
         return self.laneMinionsKilled + self.neutralMinionsKilled
 
@@ -851,11 +892,63 @@ class GameLanerStats(models.Model):
         return (self.csRateFirstTen + self.csRateSecondTen) / 2
 
     def provideStats(localGame, champMap, match: cass.Match):
+        if localGame.season.seasonNumber < 3:
+            return
+
         for participant in match.participants:
+
+            participant: cass.core.match.Participant
             # find champ
             championTrueName = champMap[participant.champion.id]
             championObject = Champion.objects.filter(championName__exact=championTrueName).get()
             gameLaner = GameLaner.objects.filter(champion__exact=championObject, game__exact=localGame).get()
+
+            stats = participant.stats
+            stats: cass.core.match.ParticipantStats
+            foundkills = stats.kills
+            founddeaths = stats.deaths
+            foundassists = stats.assists
+            foundlargestKillingSpree = stats.largest_killing_spree
+            foundlargestMultiKill = stats.largest_multi_kill
+            founddoubleKills = stats.double_kills
+            foundtripleKills = stats.triple_kills
+            foundquadraKills = stats.quadra_kills
+            foundpentaKills = stats.penta_kills
+            foundtotalDamageDealtToChampions = stats.total_damage_dealt_to_champions
+            foundvisionScore = stats.vision_score
+            foundcrowdControlScore = stats.time_CCing_others
+            foundtotalDamageTaken = stats.total_damage_taken
+            foundgoldEarned = stats.gold_earned
+            foundturretKills = stats.turret_kills
+            foundinhibitorKills = stats.inhibitor_kills
+            foundlaneMinionsKilled = stats.total_minions_killed
+            foundneutralMinionsKilled = stats.neutral_minions_killed
+            foundteamJungleMinionsKilled = stats.neutral_minions_killed_team_jungle
+            foundenemyJungleMinionsKilled = stats.neutral_minions_killed_enemy_jungle
+            foundcontrolWardsPurchased = stats.vision_wards_bought_in_game
+            foundfirstBlood = stats.first_blood_kill
+            foundfirstTower = stats.first_tower_kill
+
+            # match v5
+            foundbaronKills = stats.baron_kills
+            founddragonKills = stats.dragon_kills
+            foundgoldSpent = stats.gold_spent
+            foundlargestCriticalStrike = stats.largest_critical_strike
+            foundlongestTimeSpentLiving = stats.longest_time_spent_living
+            foundkilledNexus = stats.nexus_kills >= 0
+            foundobjectivesStolen = stats.objectives_stolen
+
+            # determine flash
+            flashId = cass.SummonerSpell(name="Flash").key
+            if participant.summoner_spell_d == flashId:
+                foundnumberOfFlashes = stats.summoner_spell_1_casts
+
+            if participant.summoner_spell_f == flashId:
+                foundnumberOfFlashes = stats.summoner_spell_2_casts
+
+            foundtotalTimeSpentDead = stats.total_time_spent_dead
+            foundtimePlayed = stats.time_played
+
             # check for existing statsObject
             try:
                 statsObject = GameLanerStats.objects.get(gameLaner__exact=gameLaner)
@@ -863,68 +956,78 @@ class GameLanerStats(models.Model):
                 statsObject = None
 
             if statsObject is not None:
-                statsObject: GameLanerStats
-                statsObject.gameLaner = gameLaner
-                participant: cass.core.match.Participant
-                stats = participant.stats
-                stats: cass.core.match.ParticipantStats
-                timeline = participant.timeline
-                timeline: cass.core.match.ParticipantTimeline
-                statsObject.kills = stats.kills
-                statsObject.deaths = stats.deaths
-                statsObject.assists = stats.assists
-                statsObject.largestKillingSpree = stats.largest_killing_spree
-                statsObject.largestMultiKill = stats.largest_multi_kill
-                statsObject.doubleKills = stats.double_kills
-                statsObject.tripleKills = stats.triple_kills
-                statsObject.quadraKills = stats.quadra_kills
-                statsObject.pentaKills = stats.penta_kills
-                statsObject.totalDamageDealtToChampions = stats.total_damage_dealt_to_champions
-                statsObject.visionScore = stats.vision_score
-                statsObject.crowdControlScore = stats.time_CCing_others
-                statsObject.totalDamageTaken = stats.total_damage_taken
-                statsObject.goldEarned = stats.gold_earned
-                statsObject.turretKills = stats.turret_kills
-                statsObject.inhibitorKills = stats.inhibitor_kills
-                statsObject.laneMinionsKilled = stats.total_minions_killed
-                statsObject.neutralMinionsKilled = stats.neutral_minions_killed
-                statsObject.teamJungleMinionsKilled = stats.neutral_minions_killed_team_jungle
-                statsObject.enemyJungleMinionsKilled = stats.neutral_minions_killed_enemy_jungle
-                statsObject.controlWardsPurchased = stats.vision_wards_bought_in_game
-                statsObject.firstBlood = stats.first_blood_kill
-                statsObject.firstTower = stats.first_tower_kill
-                statsObject.csRateFirstTen = timeline.creeps_per_min_deltas['0-10']
-                statsObject.csRateSecondTen = timeline.creeps_per_min_deltas['10-20'] if '10-20' in timeline.creeps_per_min_deltas else 0
+                statsObject.kills = foundkills
+                statsObject.deaths = founddeaths
+                statsObject.assists = foundassists
+                statsObject.largestKillingSpree = foundlargestKillingSpree
+                statsObject.largestMultiKill = foundlargestMultiKill
+                statsObject.doubleKills = founddoubleKills
+                statsObject.tripleKills = foundtripleKills
+                statsObject.quadraKills = foundquadraKills
+                statsObject.pentaKills = foundpentaKills
+                statsObject.totalDamageDealtToChampions = foundtotalDamageDealtToChampions
+                statsObject.visionScore = foundvisionScore
+                statsObject.crowdControlScore = foundcrowdControlScore
+                statsObject.totalDamageTaken = foundtotalDamageTaken
+                statsObject.goldEarned = foundgoldEarned
+                statsObject.turretKills = foundturretKills
+                statsObject.inhibitorKills = foundinhibitorKills
+                statsObject.laneMinionsKilled = foundlaneMinionsKilled
+                statsObject.neutralMinionsKilled = foundneutralMinionsKilled
+                statsObject.teamJungleMinionsKilled = foundteamJungleMinionsKilled
+                statsObject.enemyJungleMinionsKilled = foundenemyJungleMinionsKilled
+                statsObject.controlWardsPurchased = foundcontrolWardsPurchased
+                statsObject.firstBlood = foundfirstBlood
+                statsObject.firstTower = foundfirstTower
+                statsObject.baronKills = foundbaronKills
+                statsObject.dragonKills = founddragonKills
+                statsObject.goldSpent = foundgoldSpent
+                statsObject.largestCriticalStrike = foundlargestCriticalStrike
+                statsObject.longestTimeSpentLiving = foundlongestTimeSpentLiving
+                statsObject.killedNexus = foundkilledNexus
+                statsObject.objectivesStolen = foundobjectivesStolen
+                statsObject.numberOfFlashes = foundnumberOfFlashes
+                statsObject.totalTimeSpentDead = foundtotalTimeSpentDead
+                statsObject.timePlayed = foundtimePlayed
+
             else:
-                stats = participant.stats
-                timeline = participant.timeline
                 statsObject = GameLanerStats(
                     gameLaner=gameLaner,
-                    kills=stats.kills,
-                    deaths=stats.deaths,
-                    assists=stats.assists,
-                    largestKillingSpree=stats.largest_killing_spree,
-                    largestMultiKill=stats.largest_multi_kill,
-                    doubleKills=stats.double_kills,
-                    tripleKills=stats.triple_kills,
-                    quadraKills=stats.quadra_kills,
-                    pentaKills=stats.penta_kills,
-                    totalDamageDealtToChampions=stats.total_damage_dealt_to_champions,
-                    visionScore=stats.vision_score,
-                    crowdControlScore=stats.time_CCing_others,
-                    totalDamageTaken=stats.total_damage_taken,
-                    goldEarned=stats.gold_earned,
-                    turretKills=stats.turret_kills,
-                    inhibitorKills=stats.inhibitor_kills,
-                    laneMinionsKilled=stats.total_minions_killed,
-                    neutralMinionsKilled=stats.neutral_minions_killed,
-                    teamJungleMinionsKilled=stats.neutral_minions_killed_team_jungle,
-                    enemyJungleMinionsKilled=stats.neutral_minions_killed_enemy_jungle,
-                    controlWardsPurchased=stats.vision_wards_bought_in_game,
-                    firstBlood=stats.first_blood_kill,
-                    firstTower=stats.first_tower_kill,
-                    csRateFirstTen=timeline.creeps_per_min_deltas['0-10'],
-                    csRateSecondTen=timeline.creeps_per_min_deltas['10-20'] if '10-20' in timeline.creeps_per_min_deltas else 0)
+                    kills=foundkills,
+                    deaths=founddeaths,
+                    assists=foundassists,
+                    largestKillingSpree=foundlargestKillingSpree,
+                    largestMultiKill=foundlargestMultiKill,
+                    doubleKills=founddoubleKills,
+                    tripleKills=foundtripleKills,
+                    quadraKills=foundquadraKills,
+                    pentaKills=foundpentaKills,
+                    totalDamageDealtToChampions=foundtotalDamageDealtToChampions,
+                    visionScore=foundvisionScore,
+                    crowdControlScore=foundcrowdControlScore,
+                    totalDamageTaken=foundtotalDamageTaken,
+                    goldEarned=foundgoldEarned,
+                    turretKills=foundturretKills,
+                    inhibitorKills=foundinhibitorKills,
+                    laneMinionsKilled=foundlaneMinionsKilled,
+                    neutralMinionsKilled=foundneutralMinionsKilled,
+                    teamJungleMinionsKilled=foundteamJungleMinionsKilled,
+                    enemyJungleMinionsKilled=foundenemyJungleMinionsKilled,
+                    controlWardsPurchased=foundcontrolWardsPurchased,
+                    firstBlood=foundfirstBlood,
+                    firstTower=foundfirstTower,
+                    csRateFirstTen=None,
+                    csRateSecondTen=None,
+                    baronKills=foundbaronKills,
+                    dragonKills=founddragonKills,
+                    goldSpent=foundgoldSpent,
+                    largestCriticalStrike=foundlargestCriticalStrike,
+                    longestTimeSpentLiving=foundlongestTimeSpentLiving,
+                    killedNexus=foundkilledNexus,
+                    objectivesStolen=foundobjectivesStolen,
+                    numberOfFlashes=foundnumberOfFlashes,
+                    totalTimeSpentDead=foundtotalTimeSpentDead,
+                    timePlayed=foundtimePlayed)
             statsObject.save()
 
 
@@ -933,23 +1036,3 @@ class GameBan(models.Model):
     champion = models.ForeignKey(Champion, on_delete=models.CASCADE)
     targetPlayer = models.ForeignKey(
         Player, on_delete=models.CASCADE, null=True)
-
-
-class Leaderboard(models.Model):
-    leaderboardName = models.TextField(unique=True)
-    leaderboardValueName = models.TextField()
-    leaderboardEmoji = models.TextField()
-    leaderboardIsLifetime = models.BooleanField()
-    leaderboardURLName = models.TextField(default='')
-    leaderboardViewClassName = models.TextField(null=False)
-
-    def getTrophyHolder(self):
-        # from  import (MostKillsGameTable)  # noqa: F401
-        mod = importlib.import_module('tenMans.views.leaderboard_tables')
-        leaderboardclass_ = getattr(mod, self.leaderboardViewClassName)
-        instance = leaderboardclass_()
-        results = instance.get(None, objectReturn=True)
-        if not results:
-            return None
-        playerID = results[0]['playerID']
-        return playerID
