@@ -9,7 +9,7 @@ from django.db.models import Max
 from django_cassiopeia import cassiopeia as cass
 
 from tenMans.models import (Champion, Game, GameBan, GameLaner, GameLanerStats,
-                            Lane, Player)
+                            Lane, Player, Season)
 
 
 class NewGameForm(forms.Form):
@@ -19,7 +19,8 @@ class NewGameForm(forms.Form):
     randomTeams = forms.BooleanField(label="Random Teams", required=False)
     memeGame = forms.BooleanField(label="Meme Game", required=False)
     gameDate = forms.DateTimeField(label="Date of Game", widget=DateTimePickerInput())
-    remoteGameID = forms.IntegerField(label="Riot Game ID", widget=forms.TextInput, required=False)
+    season = forms.IntegerField(label="Season", min_value=1, max_value=Season.getCurrentSeason() + 1)
+    remoteGameID = forms.CharField(label="Riot Game ID", widget=forms.TextInput, required=False)
 
     blueTopLaner = forms.ModelChoiceField(label="Blue Top Laner", queryset=Player.objects.all().order_by('playerName'))
     blueJungLaner = forms.ModelChoiceField(label="Blue Jungler", queryset=Player.objects.all().order_by('playerName'))
@@ -110,12 +111,15 @@ class NewGameForm(forms.Form):
             Fieldset(
                 'Basic Game Info',
                 Row(
-                    Column('didBlueWin', css_class='col-xs-4'),
-                    Column('randomTeams', css_class='col-xs-4'),
-                    Column('memeGame', css_class='col-xs-4')
+                    Column('didBlueWin', css_class='col-xl-1'),
+                    Column('randomTeams', css_class='col-xl-1'),
+                    Column('memeGame', css_class='col-xl-1')
                 ),
                 Row(
                     Column('gameDate', css_class='col-2')
+                ),
+                Row(
+                    Column('season', css_class='col-2')
                 ),
                 Row(
                     Column('remoteGameID', css_class='col-2')
@@ -236,7 +240,13 @@ class NewGameForm(forms.Form):
         gameRandomTeams = self.cleaned_data.get('randomTeams')
         gameMemeStatus = self.cleaned_data.get('memeGame')
         gameDate = self.cleaned_data.get('gameDate')
-        game = Game(gameNumber=gameNumber, gameBlueWins=gameBlueWins, gameRandomTeams=gameRandomTeams, gameMemeStatus=gameMemeStatus, gameDate=gameDate, gameDuration=0)
+        season = self.cleaned_data.get('season')
+        seasonObject = Season.objects.filter(seasonNumber__exact=season).get()
+        if(seasonObject is None):
+            # Make new season
+            seasonObject = Season(seasonNumber=season)
+            seasonObject.save()
+        game = Game(gameNumber=gameNumber, gameBlueWins=gameBlueWins, gameRandomTeams=gameRandomTeams, gameMemeStatus=gameMemeStatus, gameDate=gameDate, gameDuration=0, season=seasonObject)
         game.save()
 
         playerNameLaneDict = {}
@@ -346,10 +356,10 @@ class NewGameForm(forms.Form):
 
         remoteGameID = self.cleaned_data['remoteGameID']
         if remoteGameID is not None:
-            champMap = {champion.id: champion.name for champion in cass.get_champions()}
-            match = cass.get_match(remoteGameID)
+            champMap = {champion.id: champion.name for champion in cass.get_champions(region="NA")}
+            match = cass.get_match(remoteGameID, region="NA")
 
-            game.gameRiotID = remoteGameID
+            game.gameRiotID = remoteGameID.removeprefix("NA1_")
 
             game.gameDuration = match.duration.total_seconds()
             game.save()
@@ -475,11 +485,16 @@ class NewGameForm(forms.Form):
     def clean_remoteGameID(self):
         data = self.cleaned_data['remoteGameID']
 
-        match = cass.get_match(data)
+        match = cass.get_match(data, region="NA")
         if match is None:
             raise ValidationError("Match not found")
-        if(match.queue != cass.Queue.custom):
-            raise ValidationError("Match not a custom game")
+        return data
+
+    def clean_season(self):
+        data = self.cleaned_data['season']
+        currentSeason = Season.getCurrentSeason()
+        if data > currentSeason + 1:
+            raise ValidationError("Cannot skip seasons")
         return data
 
 
@@ -524,15 +539,13 @@ class UpdateGameForm(forms.Form):
 
         remoteGameID = self.cleaned_data['remoteGameID']
         if remoteGameID is not None:
-            champMap = {champion.id: champion.name for champion in cass.get_champions()}
-            match = cass.get_match(remoteGameID)
+            champMap = {champion.id: champion.name for champion in cass.get_champions(region="NA")}
+            match = cass.get_match(remoteGameID, region="NA")
             if match is None:
                 raise ValidationError("Match not found")
-            if match.queue != cass.Queue.custom:
-                raise ValidationError("Match not a custom game")
         # TODO: check if game ended in surrender
 
-        localGame.gameRiotID = remoteGameID
+        localGame.gameRiotID = remoteGameID.removeprefix("NA1_")
         localGame.gameDuration = match.duration.total_seconds()
         localGame.save()
 
@@ -548,11 +561,9 @@ class UpdateGameForm(forms.Form):
             else:
                 data = existingGame.gameRiotID
 
-        match = cass.get_match(data)
+        match = cass.get_match(data, region="NA")
         if match is None:
             raise ValidationError("Match not found")
-        if match.queue != cass.Queue.custom:
-            raise ValidationError("Match not a custom game")
         return data
 
     def clean_password(self):
@@ -590,15 +601,13 @@ class UpdateAllGamesForm(forms.Form):
         for localGame in games:
             localGame: Game
 
-            remoteGameID = localGame.gameRiotID
+            remoteGameID = "NA1_" + str(localGame.gameRiotID)
             if remoteGameID is not None:
-                champMap = {champion.id: champion.name for champion in cass.get_champions()}
+                champMap = {champion.id: champion.name for champion in cass.get_champions(region="NA")}
 
-            match = cass.get_match(remoteGameID)
+            match = cass.get_match(remoteGameID, region="NA")
             if match is None:
                 raise ValidationError("Match not found")
-            if match.queue != cass.Queue.custom:
-                raise ValidationError("Match not a custom game")
 
             localGame.gameDuration = match.duration.total_seconds()
             localGame.save()

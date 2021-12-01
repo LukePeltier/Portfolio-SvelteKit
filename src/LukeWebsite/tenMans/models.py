@@ -894,9 +894,7 @@ class GameLanerStats(models.Model):
     def provideStats(localGame, champMap, match: cass.Match):
         if localGame.season.seasonNumber < 3:
             return
-
         for participant in match.participants:
-
             participant: cass.core.match.Participant
             # find champ
             championTrueName = champMap[participant.champion.id]
@@ -923,9 +921,9 @@ class GameLanerStats(models.Model):
             foundinhibitorKills = stats.inhibitor_kills
             foundlaneMinionsKilled = stats.total_minions_killed
             foundneutralMinionsKilled = stats.neutral_minions_killed
-            foundteamJungleMinionsKilled = stats.neutral_minions_killed_team_jungle
-            foundenemyJungleMinionsKilled = stats.neutral_minions_killed_enemy_jungle
-            foundcontrolWardsPurchased = stats.vision_wards_bought_in_game
+            foundteamJungleMinionsKilled = 0
+            foundenemyJungleMinionsKilled = 0
+            foundcontrolWardsPurchased = stats.vision_wards_bought
             foundfirstBlood = stats.first_blood_kill
             foundfirstTower = stats.first_tower_kill
 
@@ -937,9 +935,10 @@ class GameLanerStats(models.Model):
             foundlongestTimeSpentLiving = stats.longest_time_spent_living
             foundkilledNexus = stats.nexus_kills >= 0
             foundobjectivesStolen = stats.objectives_stolen
+            foundnumberOfFlashes = 0
 
             # determine flash
-            flashId = cass.SummonerSpell(name="Flash").key
+            flashId = cass.SummonerSpell(name="Flash", region="NA").key
             if participant.summoner_spell_d == flashId:
                 foundnumberOfFlashes = stats.summoner_spell_1_casts
 
@@ -989,6 +988,7 @@ class GameLanerStats(models.Model):
                 statsObject.numberOfFlashes = foundnumberOfFlashes
                 statsObject.totalTimeSpentDead = foundtotalTimeSpentDead
                 statsObject.timePlayed = foundtimePlayed
+                statsObject.save()
 
             else:
                 statsObject = GameLanerStats(
@@ -1016,8 +1016,8 @@ class GameLanerStats(models.Model):
                     controlWardsPurchased=foundcontrolWardsPurchased,
                     firstBlood=foundfirstBlood,
                     firstTower=foundfirstTower,
-                    csRateFirstTen=None,
-                    csRateSecondTen=None,
+                    csRateFirstTen=0,
+                    csRateSecondTen=0,
                     baronKills=foundbaronKills,
                     dragonKills=founddragonKills,
                     goldSpent=foundgoldSpent,
@@ -1028,7 +1028,7 @@ class GameLanerStats(models.Model):
                     numberOfFlashes=foundnumberOfFlashes,
                     totalTimeSpentDead=foundtotalTimeSpentDead,
                     timePlayed=foundtimePlayed)
-            statsObject.save()
+                statsObject.save()
 
 
 class GameBan(models.Model):

@@ -138,7 +138,6 @@ apiKeyFile = os.path.join(os.path.dirname(__file__), '..', '..', 'tenMans', 'con
 config_object.read(apiKeyFile)
 apiKey = config_object['general']['RIOT_API_KEY']
 CASSIOPEIA_RIOT_API_KEY = apiKey  # api key in env var
-CASSIOPEIA_DEFAULT_REGION = "NA"   # default region
 CASSIOPEIA_PIPELINE = {   # small pipeine to get started
     "Omnistone": {},
     "DDragon": {},
