@@ -14,7 +14,8 @@ class Season(models.Model):
     def getCurrentSeason():
         try:
             maxSeason = Game.objects.aggregate(Max('season__seasonNumber'))['season__seasonNumber__max']
-            return maxSeason
+            if maxSeason is None:
+                return 1
         except ProgrammingError:
             return 1
 
