@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.utils import ProgrammingError
 from scipy import stats
 import numpy as np
 from django_cassiopeia import cassiopeia as cass
@@ -11,8 +12,11 @@ class Season(models.Model):
     seasonNumber = models.PositiveIntegerField(unique=True)
 
     def getCurrentSeason():
-        maxSeason = Game.objects.aggregate(Max('season__seasonNumber'))['season__seasonNumber__max']
-        return maxSeason
+        try:
+            maxSeason = Game.objects.aggregate(Max('season__seasonNumber'))['season__seasonNumber__max']
+            return maxSeason
+        except ProgrammingError:
+            return 1
 
 
 class Leaderboard(models.Model):
