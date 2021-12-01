@@ -16,8 +16,12 @@ class Migration(migrations.Migration):
             name='season',
             field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, to='tenMans.season'),
         ),
-        migrations.RunSQL([
-            "UPDATE tenMans_game SET season_id = 2 WHERE gameNumber > 23",
-        ]
+        migrations.RunSQL(
+            sql=[
+                "UPDATE tenMans_game SET season_id = 2 WHERE gameNumber > 23",
+            ],
+            reverse_sql=[
+                "UPDATE tenMans_game SET season_id = 1 WHERE gameNumber > 23"
+            ]
         )
     ]

@@ -124,11 +124,17 @@
 
 :root {
   font-family: "Gill Sans", sans-serif !important;
-  --dark: #264653;
-  --lightblue: #1B9AAA;
-  --green: #3AB795;
-  --yellow: #fbbe07;
-  --red: #F63E02;
+  --tenmansdark: #112120;
+  --tenmansblue: #4361EE;
+  --tenmansgreen: #2BA84A;
+  --tenmansyellow: #FFCD56;
+  --tenmansaccentyellow: #E3B505;
+  --tenmansred: #C44536;
+  --tenmanswhite: #FFFFFF;
+  --tenmanspurple: #662E9B;
+  --tenmansorange: #DD6E42;
+  --tenmansgrey: #C9CBCE;
+  --tenmanshighlight: #E3B50533;
 }
 
 .navbar {
@@ -240,7 +246,7 @@ table.dataTable.table-striped.DTFC_Cloned tbody tr:nth-of-type(even) {
 
 .yellowRow{
   /* background-color:rgb(255, 205, 86, 0.2) !important; */
-  background-color: var(--yellow) !important;
+  background-color: var(--tenmanshighlight) !important;
 }
 
 .rightBorder{

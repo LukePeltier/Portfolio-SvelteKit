@@ -6,8 +6,9 @@ class GlobalVars():
     ver = None
 
     def getLoLVersion():
-        try:
-            GlobalVars.ver = cass.get_version()
-        except ValueError:
-            time.sleep(1)
+        while GlobalVars.ver is None:
+            try:
+                GlobalVars.ver = cass.get_version(region="NA")
+            except ValueError:
+                time.sleep(1)
         return GlobalVars.ver

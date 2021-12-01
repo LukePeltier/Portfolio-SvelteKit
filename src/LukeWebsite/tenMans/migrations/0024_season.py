@@ -17,9 +17,13 @@ class Migration(migrations.Migration):
                 ('seasonNumber', models.PositiveIntegerField(unique=True)),
             ],
         ),
-        migrations.RunSQL([
-            "INSERT INTO tenMans_season VALUES (1, 1), (2, 2), (3, 3)",
-        ]
+        migrations.RunSQL(
+            sql=[
+                "INSERT INTO tenMans_season VALUES (1, 1), (2, 2), (3, 3)",
+            ],
+            reverse_sql=[
+                "DELETE FROM tenMans_season"
+            ]
         )
 
     ]

@@ -102,7 +102,9 @@ $(function () {
                 {
                     "className": "stat-center stat-inset-border cellnowrap",
                     "data": "winLoss",
-                    "render": $.fn.dataTable.render.text()
+                    "render": function (data, type, row) {
+                        return (data === "W") ? '<p>&#9989;</p>' : '<p>&#10060</p>';
+                    }
                 },
                 {
                     "className": "stat-center stat-inset-border cellnowrap",
@@ -219,11 +221,17 @@ $(function () {
                 },
                 {
                     "className": "stat-center stat-inset-border cellnowrap",
-                    "data": "firstBlood"
+                    "data": "firstBlood",
+                    "render": function (data, type, row) {
+                        return (data === true) ? '<p>&#9989;</p>' : '<p>&#10060</p>';
+                    }
                 },
                 {
                     "className": "stat-center stat-inset-border cellnowrap",
-                    "data": "firstTower"
+                    "data": "firstTower",
+                    "render": function (data, type, row) {
+                        return (data === true) ? '<p>&#9989;</p>' : '<p>&#10060</p>';
+                    }
                 },
                 {
                     "className": "stat-center stat-inset-border cellnowrap",

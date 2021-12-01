@@ -1,24 +1,4 @@
 $(function () {
-    window.chartColors = {
-        red: 'rgb(255, 99, 132)',
-        orange: 'rgb(255, 159, 64)',
-        yellow: 'rgb(255, 205, 86)',
-        green: 'rgb(92, 184, 92)',
-        blue: 'rgb(54, 162, 235)',
-        purple: 'rgb(153, 102, 255)',
-        grey: 'rgb(201, 203, 207)',
-        white: 'rgb(255, 255, 255)',
-        redTransparent: 'rgb(255, 99, 132, 0.2)',
-        orangeTransparent: 'rgb(255, 159, 64, 0.2)',
-        yellowTransparent: 'rgb(255, 205, 86, 0.2)',
-        greenTransparent: 'rgb(92, 184, 92, 0.2)',
-        blueTransparent: 'rgb(54, 162, 235, 0.2)',
-        purpleTransparent: 'rgb(153, 102, 255, 0.2)',
-        greyTransparent: 'rgb(201, 203, 207, 0.2)',
-        whiteTransparent: 'rgb(255, 255, 255, 0.2)'
-    };
-
-
     $(document).ready(function () {
         var duoGamesTable = $('#duoGamesTable').DataTable({
             "ajax": $('#duoGamesTable').data('url'),
