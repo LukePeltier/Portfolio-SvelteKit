@@ -1,4 +1,4 @@
-from bootstrap_datepicker_plus import DateTimePickerInput
+from bootstrap_datepicker_plus.widgets import DateTimePickerInput
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import (ButtonHolder, Column, Fieldset, Layout, Row,
                                  Submit)

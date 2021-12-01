@@ -18,7 +18,7 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.RunSQL([
-            "INSERT INTO tenmans_season VALUES (1, 1), (2, 2), (3, 3)",
+            "INSERT INTO tenMans_season VALUES (1, 1), (2, 2), (3, 3)",
         ]
         )
 

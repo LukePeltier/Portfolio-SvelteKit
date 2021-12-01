@@ -124,6 +124,11 @@
 
 :root {
   font-family: "Gill Sans", sans-serif !important;
+  --dark: #264653;
+  --lightblue: #1B9AAA;
+  --green: #3AB795;
+  --yellow: #fbbe07;
+  --red: #F63E02;
 }
 
 .navbar {
@@ -234,7 +239,8 @@ table.dataTable.table-striped.DTFC_Cloned tbody tr:nth-of-type(even) {
 }
 
 .yellowRow{
-  background-color:rgb(255, 205, 86, 0.2) !important;
+  /* background-color:rgb(255, 205, 86, 0.2) !important; */
+  background-color: var(--yellow) !important;
 }
 
 .rightBorder{
