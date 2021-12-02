@@ -2,12 +2,17 @@
 {% load static %}
 {%block content%}
 <div>
+  <div id="seasonBanner" class="row">
+    <div class="col">
+      <h2 class="text-center">Current Season: {{currentSeason}}</h2>
+    </div>
+  </div>
   <div id="basicNumbers" class="row">
     <div class="col">
-      <h2>Total Games Played: {{gameTotal}}*</h2>
+      <h2 class="text-center">Total Games Played: {{gameTotal}}*</h2>
     </div>
     <div class="col">
-      <p>*Meme Games Played: {{memeTotal}}</p>
+      <p class="text-center">*Meme Games Played: {{memeTotal}}</p>
     </div>
   </div>
   <div class="row">

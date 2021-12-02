@@ -9,11 +9,12 @@ from django.views.generic.base import ContextMixin, TemplateView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import FormView
 from django.views.generic.list import ListView
+# from django_cassiopeia import cassiopeia as cass
 from tenMans.extras.data import GlobalVars
 from tenMans.forms import (CreatePlayer, DuoForm, LaneMatchup, NewGameForm,
                            UpdateAllGamesForm, UpdateGameForm)
 from tenMans.models import (Champion, Game, GameBan, GameLaner, GameLanerStats,
-                            Lane, Leaderboard, Player)
+                            Lane, Leaderboard, Player, Season)
 
 
 class BaseTenMansContextMixin(ContextMixin):
@@ -28,6 +29,7 @@ class Dashboard(TemplateView, BaseTenMansContextMixin):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['currentSeason'] = Season.getCurrentSeason()
         context['gameTotal'] = Game.objects.all().count()
         context['memeTotal'] = Game.objects.all().filter(gameMemeStatus=True).count()
         return context
@@ -1082,3 +1084,17 @@ class Leaderboards(TemplateView, BaseTenMansContextMixin):
         context['NonLifeTimeTables'] = Leaderboard.objects.filter(leaderboardIsLifetime__exact=0)
         context['LifeTimeTables'] = Leaderboard.objects.filter(leaderboardIsLifetime__exact=1)
         return context
+
+
+class CurrentSeason(View):
+
+    def get(self, request, *args, **kwargs):
+        return JsonResponse(data={
+            'season': Season.getCurrentSeason()
+        })
+
+
+class Tournaments(View):
+
+    def post(self, request, *args, **kwargs):
+        pass

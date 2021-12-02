@@ -59,4 +59,5 @@ urlpatterns = [
     path('quadrakillsTable/', views.leaderboard_tables.QuadrakillsTable.as_view(), name='quadrakillsTable'),
     path('triplekillsTable/', views.leaderboard_tables.TriplekillsTable.as_view(), name='triplekillsTable'),
     path('doublekillsTable/', views.leaderboard_tables.DoublekillsTable.as_view(), name='doublekillsTable'),
+    path('currentSeason/', views.base_views.CurrentSeason.as_view(), name='currentSeason'),
 ]

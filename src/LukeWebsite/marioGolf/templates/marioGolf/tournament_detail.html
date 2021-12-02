@@ -109,7 +109,7 @@
                         if (typeof (this.data()) === "number") {
                             $(this.node()).css('background-color', getRGBGolfScorecardColor(this.data(), $(this.node()).data('par')));
                         } else if (this.data() === "N/A" || this.data() === null) {
-                            $(this.node()).css('color', window.chartColors.grey);
+                            $(this.node()).css('color', getComputerStyle(document.documentElement).getPropertyValue('--tenmansgrey'));
                         }
                     }
                 });

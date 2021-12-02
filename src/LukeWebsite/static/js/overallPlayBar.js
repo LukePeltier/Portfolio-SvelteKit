@@ -1,16 +1,6 @@
 $(function () {
 
     var $overallPlaytimeChart = $("#overallPlaytimeChart");
-    window.chartColors = {
-        red: 'rgb(255, 99, 132)',
-        orange: 'rgb(255, 159, 64)',
-        yellow: 'rgb(255, 205, 86)',
-        green: 'rgb(92, 184, 92)',
-        blue: 'rgb(54, 162, 235)',
-        purple: 'rgb(153, 102, 255)',
-        grey: 'rgb(201, 203, 207)',
-        white: 'rgb(255, 255, 255)'
-    };
     $.ajax({
         url: $overallPlaytimeChart.data("url"),
         success: function (data) {
@@ -27,9 +17,9 @@ $(function () {
                         backgroundColor: function (context) {
                             var index = context.dataIndex;
                             var value = context.dataset.data[index];
-                            return getRGBHeatmapColor(value, window.chartColors.white, window.chartColors.green, window.chartColors.yellow, 1, false, 0, 50, data.max)
+                            return getRGBHeatmapColorFromHex(value, getComputedStyle(document.documentElement).getPropertyValue('--tenmanswhite'), getComputedStyle(document.documentElement).getPropertyValue('--tenmansgreen'), getComputedStyle(document.documentElement).getPropertyValue('--tenmansyellow'), 1, false, 0, 50, data.max)
                         },
-                        borderColor: window.chartColors.green,
+                        borderColor: getComputedStyle(document.documentElement).getPropertyValue('--tenmansgreen'),
                         borderWidth: 1,
                         minBarLength: 5
                     }, {
@@ -39,9 +29,9 @@ $(function () {
                         backgroundColor: function (context) {
                             var index = context.dataIndex;
                             var value = context.dataset.data[index];
-                            return getRGBHeatmapColor(value, window.chartColors.white, window.chartColors.green, window.chartColors.yellow, 1, false, 0, 50, data.max)
+                            return getRGBHeatmapColorFromHex(value, getComputedStyle(document.documentElement).getPropertyValue('--tenmanswhite'), getComputedStyle(document.documentElement).getPropertyValue('--tenmansgreen'), getComputedStyle(document.documentElement).getPropertyValue('--tenmansyellow'), 1, false, 0, 50, data.max)
                         },
-                        borderColor: window.chartColors.green,
+                        borderColor: getComputedStyle(document.documentElement).getPropertyValue('--tenmansgreen'),
                         borderWidth: 1,
                         minBarLength: 5
                     }, {
@@ -51,9 +41,9 @@ $(function () {
                         backgroundColor: function (context) {
                             var index = context.dataIndex;
                             var value = context.dataset.data[index];
-                            return getRGBHeatmapColor(value, window.chartColors.white, window.chartColors.green, window.chartColors.yellow, 1, false, 0, 50, data.max)
+                            return getRGBHeatmapColorFromHex(value, getComputedStyle(document.documentElement).getPropertyValue('--tenmanswhite'), getComputedStyle(document.documentElement).getPropertyValue('--tenmansgreen'), getComputedStyle(document.documentElement).getPropertyValue('--tenmansyellow'), 1, false, 0, 50, data.max)
                         },
-                        borderColor: window.chartColors.green,
+                        borderColor: getComputedStyle(document.documentElement).getPropertyValue('--tenmansgreen'),
                         borderWidth: 1,
                         minBarLength: 5
                     }, {
@@ -63,9 +53,9 @@ $(function () {
                         backgroundColor: function (context) {
                             var index = context.dataIndex;
                             var value = context.dataset.data[index];
-                            return getRGBHeatmapColor(value, window.chartColors.white, window.chartColors.green, window.chartColors.yellow, 1, false, 0, 50, data.max)
+                            return getRGBHeatmapColorFromHex(value, getComputedStyle(document.documentElement).getPropertyValue('--tenmanswhite'), getComputedStyle(document.documentElement).getPropertyValue('--tenmansgreen'), getComputedStyle(document.documentElement).getPropertyValue('--tenmansyellow'), 1, false, 0, 50, data.max)
                         },
-                        borderColor: window.chartColors.green,
+                        borderColor: getComputedStyle(document.documentElement).getPropertyValue('--tenmansgreen'),
                         borderWidth: 1,
                         minBarLength: 5
                     }, {
@@ -75,9 +65,9 @@ $(function () {
                         backgroundColor: function (context) {
                             var index = context.dataIndex;
                             var value = context.dataset.data[index];
-                            return getRGBHeatmapColor(value, window.chartColors.white, window.chartColors.green, window.chartColors.yellow, 1, false, 0, 50, data.max)
+                            return getRGBHeatmapColorFromHex(value, getComputedStyle(document.documentElement).getPropertyValue('--tenmanswhite'), getComputedStyle(document.documentElement).getPropertyValue('--tenmansgreen'), getComputedStyle(document.documentElement).getPropertyValue('--tenmansyellow'), 1, false, 0, 50, data.max)
                         },
-                        borderColor: window.chartColors.green,
+                        borderColor: getComputedStyle(document.documentElement).getPropertyValue('--tenmansgreen'),
                         borderWidth: 1,
                         minBarLength: 5
                     }, {
@@ -87,9 +77,9 @@ $(function () {
                         backgroundColor: function (context) {
                             var index = context.dataIndex;
                             var value = context.dataset.data[index];
-                            return getRGBHeatmapColor(value, window.chartColors.white, window.chartColors.green, window.chartColors.yellow, 1, false, 0, 50, data.max)
+                            return getRGBHeatmapColorFromHex(value, getComputedStyle(document.documentElement).getPropertyValue('--tenmanswhite'), getComputedStyle(document.documentElement).getPropertyValue('--tenmansgreen'), getComputedStyle(document.documentElement).getPropertyValue('--tenmansyellow'), 1, false, 0, 50, data.max)
                         },
-                        borderColor: window.chartColors.green,
+                        borderColor: getComputedStyle(document.documentElement).getPropertyValue('--tenmansgreen'),
                         borderWidth: 1,
                         minBarLength: 5
                     }]
@@ -103,8 +93,8 @@ $(function () {
                             generateLabels: function (chart) {
                                 labels = Chart.defaults.global.legend.labels.generateLabels(chart);
                                 for (var key in labels) {
-                                    labels[key].fillStyle = window.chartColors.blue;
-                                    labels[key].strokeStyle = window.chartColors.blue;
+                                    labels[key].fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--tenmansblue');
+                                    labels[key].strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--tenmansblue');
                                 }
                                 return labels;
                             }

@@ -1,14 +1,4 @@
 $(function () {
-    window.chartColors = {
-        red: 'rgb(255, 99, 132)',
-        orange: 'rgb(255, 159, 64)',
-        yellow: 'rgb(255, 205, 86)',
-        green: 'rgb(92, 184, 92)',
-        blue: 'rgb(54, 162, 235)',
-        purple: 'rgb(153, 102, 255)',
-        grey: 'rgb(201, 203, 207)',
-        white: 'rgb(255, 255, 255)'
-    };
 
     var $winrateOverTimeChart = $("#winrateOverTimeChart");
     $.ajax({
@@ -27,38 +17,38 @@ $(function () {
                         label: 'Overall',
                         data: data.overall,
                         fill: false,
-                        backgroundColor: window.chartColors.purple,
-                        borderColor: window.chartColors.purple
+                        backgroundColor: getComputedStyle(document.documentElement).getPropertyValue('--tenmanspurple'),
+                        borderColor: getComputedStyle(document.documentElement).getPropertyValue('--tenmanspurple')
                     }, {
                         label: 'Top',
                         data: data.top,
                         fill: false,
-                        backgroundColor: window.chartColors.red,
-                        borderColor: window.chartColors.red
+                        backgroundColor: getComputedStyle(document.documentElement).getPropertyValue('--tenmansred'),
+                        borderColor: getComputedStyle(document.documentElement).getPropertyValue('--tenmansred')
                     }, {
                         label: 'Jungle',
                         data: data.jungle,
                         fill: false,
-                        backgroundColor: window.chartColors.orange,
-                        borderColor: window.chartColors.orange
+                        backgroundColor: getComputedStyle(document.documentElement).getPropertyValue('--tenmansorange'),
+                        borderColor: getComputedStyle(document.documentElement).getPropertyValue('--tenmansorange')
                     }, {
                         label: 'Middle',
                         data: data.mid,
                         fill: false,
-                        backgroundColor: window.chartColors.yellow,
-                        borderColor: window.chartColors.yellow
+                        backgroundColor: getComputedStyle(document.documentElement).getPropertyValue('--tenmansyellow'),
+                        borderColor: getComputedStyle(document.documentElement).getPropertyValue('--tenmansyellow')
                     }, {
                         label: 'Bottom',
                         data: data.bot,
                         fill: false,
-                        backgroundColor: window.chartColors.green,
-                        borderColor: window.chartColors.green
+                        backgroundColor: getComputedStyle(document.documentElement).getPropertyValue('--tenmansgreen'),
+                        borderColor: getComputedStyle(document.documentElement).getPropertyValue('--tenmansgreen')
                     }, {
                         label: 'Support',
                         data: data.support,
                         fill: false,
-                        backgroundColor: window.chartColors.blue,
-                        borderColor: window.chartColors.blue
+                        backgroundColor: getComputedStyle(document.documentElement).getPropertyValue('--tenmansblue'),
+                        borderColor: getComputedStyle(document.documentElement).getPropertyValue('--tenmansblue')
                     }]
                 },
                 options: {

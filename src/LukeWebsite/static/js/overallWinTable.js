@@ -1,14 +1,4 @@
 $(function () {
-    var color = Chart.helpers.color;
-    window.chartColors = {
-        red: 'rgb(255, 99, 132)',
-        orange: 'rgb(255, 159, 64)',
-        yellow: 'rgb(255, 205, 86)',
-        green: 'rgb(92, 184, 92)',
-        blue: 'rgb(54, 162, 235)',
-        purple: 'rgb(153, 102, 255)',
-        grey: 'rgb(201, 203, 207)'
-    };
     $(document).ready(function () {
         var winrateTable = $('#overallWinrateTable').DataTable({
             "ajax": $('#overallWinrateTable').data('url'),
@@ -93,9 +83,9 @@ $(function () {
         winrateTable.on('draw', function () {
             winrateTable.cells().every(function () {
                 if (typeof (this.data()) === "number") {
-                    $(this.node()).css('background-color', getRGBHeatmapColor(this.data(), window.chartColors.red, window.chartColors.green, window.chartColors.yellow, $(this.node()).data('alpha'), true, 0, 50, 100));
+                    $(this.node()).css('background-color', getRGBHeatmapColorFromHex(this.data(), getComputedStyle(document.documentElement).getPropertyValue('--tenmansred'), getComputedStyle(document.documentElement).getPropertyValue('--tenmansgreen'), getComputedStyle(document.documentElement).getPropertyValue('--tenmansyellow'), $(this.node()).data('alpha'), true, 0, 50, 100, false));
                 } else if (this.data() === "N/A") {
-                    $(this.node()).css('color', window.chartColors.grey);
+                    $(this.node()).css('color', getComputedStyle(document.documentElement).getPropertyValue('--tenmansgrey'));
                 }
             });
         });
