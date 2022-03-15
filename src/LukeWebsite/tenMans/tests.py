@@ -285,16 +285,16 @@ class FullDataTest(TestCase):
 
     def test_player_winrate(self):
         for player in self.players:
-            player.getWinrate(None)
+            player.getWinrate(None, None)
             for lane in self.lanes:
-                player.getWinrate(lane)
+                player.getWinrate(lane, None)
 
     def test_player_lanecount(self):
         for player in self.players:
-            player.getLaneCount(None)
+            player.getLaneCount(None, None)
 
             for lane in self.lanes:
-                player.getLaneCount(lane)
+                player.getLaneCount(lane, None)
 
     def test_player_averagedraftorder(self):
         for player in self.players:
@@ -322,7 +322,7 @@ class FullDataTest(TestCase):
     def test_player_lanerate(self):
         for player in self.players:
             for lane in self.lanes:
-                player.getLaneRate(lane)
+                player.getLaneRate(lane, None)
 
     def test_player_mostplayedchampionstring(self):
         for player in self.players:

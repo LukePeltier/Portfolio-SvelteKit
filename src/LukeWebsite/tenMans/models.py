@@ -20,6 +20,9 @@ class Season(models.Model):
         except ProgrammingError:
             return 1
 
+    def getCurrentSeasonObject():
+        return Season.objects.get(seasonNumber__exact=Season.getCurrentSeason())
+
 
 class Leaderboard(models.Model):
     leaderboardName = models.TextField(unique=True)
@@ -67,35 +70,52 @@ class Game(models.Model):
 class Player(models.Model):
     playerName = models.TextField(unique=True)
 
-    def getWinrate(self, lane):
-        if(lane is None):
+    def getWinrate(self, lane, season):
+        if(lane is None and season is None):
             # Overall winrate
             gamesPlayed = GameLaner.objects.filter(player__exact=self.id)
+        elif(lane is None):
+            # season winrate
+            gamesPlayed = GameLaner.objects.filter(player__exact=self.id, game__season__exact=season.id)
+        elif(season is None):
+            # Overall lane winrate
+            gamesPlayed = GameLaner.objects.filter(
+                player__exact=self.id, lane__exact=lane.id)
         else:
             # Lane winrate
             gamesPlayed = GameLaner.objects.filter(
-                player__exact=self.id, lane__exact=lane.id)
+                player__exact=self.id, lane__exact=lane.id, game__season__exact=season.id)
         winrate = Player.getWinrateOnList(gamesPlayed)
         if winrate is None:
             return "N/A"
         return winrate
 
-    def getLaneRate(self, lane):
+    def getLaneRate(self, lane, season):
         players = Player.objects.all()
         topNumber = 0
         for player in players:
-            count = player.getLaneCount(lane)
+            count = player.getLaneCount(lane, season)
             if(count > topNumber):
                 topNumber = count
-        playerNumber = self.getLaneCount(lane)
+        playerNumber = self.getLaneCount(lane, season)
         return round(playerNumber / topNumber, 1)
 
-    def getLaneCount(self, lane):
-        if(lane is None):
-            return GameLaner.objects.filter(player__exact=self.id).count()
+    def getLaneCount(self, lane, season):
+        if(lane is None and season is None):
+            # Overall
+            gamesPlayed = GameLaner.objects.filter(player__exact=self.id)
+        elif(lane is None):
+            # season
+            gamesPlayed = GameLaner.objects.filter(player__exact=self.id, game__season__exact=season.id)
+        elif(season is None):
+            # Overall lane
+            gamesPlayed = GameLaner.objects.filter(
+                player__exact=self.id, lane__exact=lane.id)
         else:
-            return GameLaner.objects.filter(
-                player__exact=self.id, lane__exact=lane.id).count()
+            # Season Lane
+            gamesPlayed = GameLaner.objects.filter(
+                player__exact=self.id, lane__exact=lane.id, game__season__exact=season.id)
+        return gamesPlayed.count()
 
     def getWinrateHistorical(self, maxGame, lane):
         if(lane is None):
@@ -129,10 +149,10 @@ class Player(models.Model):
         return round(totalDraftSum / totalDraftDivisor, 2)
 
     def getMinConfidenceWinrate(self, lane):
-        if self.getWinrate(lane) == 'N/A' or self.getLaneCount(lane) < 3:
+        if self.getWinrate(lane, None) == 'N/A' or self.getLaneCount(lane, None) < 3:
             return None
         conf_int = stats.norm.interval(0.5, self.getWinrate(
-            lane) / 100, (0.5 / np.sqrt(self.getLaneCount(lane))))
+            lane, None) / 100, (0.5 / np.sqrt(self.getLaneCount(lane, None))))
         return round(max(conf_int[0], 0) * 100, 2)
 
     def getMinConfidenceCaptainWinrate(self):

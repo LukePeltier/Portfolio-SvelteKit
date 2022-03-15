@@ -1,7 +1,7 @@
 $(function () {
     $(document).ready(function () {
         var winrateTable = $('#overallWinrateTable').DataTable({
-            "ajax": $('#overallWinrateTable').data('url'),
+            "ajax": $('#overallWinrateTable').data('url') + location.search,
             "columns": [
                 {
                     "className": "stat-center stat-leftcol-border",
