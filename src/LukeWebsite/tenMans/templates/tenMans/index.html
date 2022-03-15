@@ -2,10 +2,26 @@
 {% load static %}
 {%block content%}
 <div>
-  <div id="seasonBanner" class="row">
-    <div class="col">
+  <div id="seasonBanner" class="row justify-content-end">
+    <div class="col-4">
       <h2 class="text-center">Current Season: {{currentSeason}}</h2>
     </div>
+    {% if seasons %}
+    <div class="col-4 justify-content-center">
+      <div class="dropdown">
+        <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+          data-bs-toggle="dropdown" aria-expanded="false">
+          Season Dashboard
+        </a>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+          <li><a class="dropdown-item" href="{% url 'tenMansHome'%}">All</a></li>
+          {% for season in seasons %}
+          <li><a class="dropdown-item" href="{% url 'tenMansHome'%}?season={{season}}">Season {{season}}</a></li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+    {% endif %}
   </div>
   <div id="basicNumbers" class="row">
     <div class="col">
@@ -25,8 +41,8 @@
   </div>
   <div class="row">
     <div id="overallWinrateTableContainer" class="col-xl-6 table-responsive">
-      <table id="overallWinrateTable" class="table table-hover table-sm bg-white whiteTableBlackBackground" style="width:100%"
-        data-url="{% url 'overallWinrateTable' %}">
+      <table id="overallWinrateTable" class="table table-hover table-sm bg-white whiteTableBlackBackground"
+        style="width:100%" data-url="{% url 'overallWinrateTable' %}">
         <thead class="bg-warning">
           <tr>
             <th>Name</th>
@@ -48,8 +64,8 @@
       </table>
     </div>
     <div id="overallPlaytimeTableContainer" class="col-xl-6 table-responsive">
-      <table id="overallPlaytimeTable" class="table table-hover table-sm bg-white whiteTableBlackBackground" style="width:100%"
-        data-url="{% url 'overallPlaytimeTable' %}">
+      <table id="overallPlaytimeTable" class="table table-hover table-sm bg-white whiteTableBlackBackground"
+        style="width:100%" data-url="{% url 'overallPlaytimeTable' %}">
         <thead class="bg-warning">
           <tr>
             <th>Name</th>

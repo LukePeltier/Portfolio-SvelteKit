@@ -3,10 +3,8 @@ import tenMans.views as views
 
 urlpatterns = [
     path('', views.base_views.Dashboard.as_view(), name='tenMansHome'),
-    path('overallWinrateChart/', views.base_views.overallWinrateBarChart, name='overallWinrateChart'),
-    path('overallWinrateTable/', views.base_views.overallWinrateTable, name='overallWinrateTable'),
-    path('overallPlaytimeChart/', views.base_views.overallPlaytimeBarChart, name='overallPlaytimeChart'),
-    path('overallPlaytimeTable/', views.base_views.overallPlaytimeTable, name='overallPlaytimeTable'),
+    path('overallWinrateTable/', views.base_views.OverallWinrateTable.as_view(), name='overallWinrateTable'),
+    path('overallPlaytimeTable/', views.base_views.OverallPlaytimeTable.as_view(), name='overallPlaytimeTable'),
     path('player/<int:pk>/', views.base_views.PlayerDetailView.as_view(), name='detailPlayer'),
     path('player/<int:pk>/winrateOTData/', views.base_views.PlayerWinrateOverTimeView.as_view(), name='playerWinrateOverTime'),
     path('newgame/', views.base_views.NewGameView.as_view(), name='newGameFormView'),

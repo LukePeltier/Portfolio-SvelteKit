@@ -1,7 +1,7 @@
 $(function () {
     $(document).ready(function () {
         var playtimeTable = $('#overallPlaytimeTable').DataTable({
-            "ajax": $('#overallPlaytimeTable').data('url'),
+            "ajax": $('#overallPlaytimeTable').data('url') + location.search,
             "columns": [
                 {
                     "className": "stat-right stat-leftcol-border",

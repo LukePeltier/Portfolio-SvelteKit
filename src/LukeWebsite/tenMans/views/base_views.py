@@ -32,119 +32,69 @@ class Dashboard(TemplateView, BaseTenMansContextMixin):
         context['currentSeason'] = Season.getCurrentSeason()
         context['gameTotal'] = Game.objects.all().count()
         context['memeTotal'] = Game.objects.all().filter(gameMemeStatus=True).count()
+        context['seasons'] = Season.objects.values_list('seasonNumber', flat=True)
         return context
 
 
-def overallWinrateBarChart(request):
-    labels, overallData, topData, jungData, midData, botData, suppData, overallAlpha, topAlpha, jungAlpha, midAlpha, botAlpha, suppAlpha = ([] for i in range(13))
-    queryset = Player.objects.order_by('playerName')
+class OverallWinrateTable(View):
+    def get(self, request, *args, **kwargs):
+        data = []
+        queryset = Player.objects.order_by('playerName')
+        print(request.GET)
+        if 'season' in request.GET:
+            season = Season.objects.get(seasonNumber__exact=request.GET['season'])
+        else:
+            season = None
 
-    for player in queryset:
-        labels.append(player.playerName)
+        for player in queryset:
+            playerDict = {}
+            playerDict["name"] = player.playerName
+            playerDict["overall"] = player.getWinrate(None, season)
+            playerDict["top"] = player.getWinrate(Lane.objects.get(laneName__exact="Top"), season)
+            playerDict["jungle"] = player.getWinrate(Lane.objects.get(laneName__exact="Jungle"), season)
+            playerDict["mid"] = player.getWinrate(Lane.objects.get(laneName__exact="Mid"), season)
+            playerDict["bot"] = player.getWinrate(Lane.objects.get(laneName__exact="Bot"), season)
+            playerDict["supp"] = player.getWinrate(Lane.objects.get(laneName__exact="Support"), season)
+            playerDict["overallAlpha"] = player.getLaneRate(None, season)
+            playerDict["topAlpha"] = player.getLaneRate(Lane.objects.get(laneName__exact="Top"), season)
+            playerDict["jungleAlpha"] = player.getLaneRate(Lane.objects.get(laneName__exact="Jungle"), season)
+            playerDict["midAlpha"] = player.getLaneRate(Lane.objects.get(laneName__exact="Mid"), season)
+            playerDict["botAlpha"] = player.getLaneRate(Lane.objects.get(laneName__exact="Bot"), season)
+            playerDict["suppAlpha"] = player.getLaneRate(Lane.objects.get(laneName__exact="Support"), season)
+            playerDict["playerID"] = player.id
+            data.append(playerDict)
 
-        overallData.append(player.getWinrate(None))
-        topData.append(player.getWinrate(Lane.objects.get(laneName__exact="Top")))
-        jungData.append(player.getWinrate(Lane.objects.get(laneName__exact="Jungle")))
-        midData.append(player.getWinrate(Lane.objects.get(laneName__exact="Mid")))
-        botData.append(player.getWinrate(Lane.objects.get(laneName__exact="Bot")))
-        suppData.append(player.getWinrate(Lane.objects.get(laneName__exact="Support")))
-
-        overallAlpha.append(player.getLaneRate(None))
-        topAlpha.append(player.getLaneRate(Lane.objects.get(laneName__exact="Top")))
-        jungAlpha.append(player.getLaneRate(Lane.objects.get(laneName__exact="Jungle")))
-        midAlpha.append(player.getLaneRate(Lane.objects.get(laneName__exact="Mid")))
-        botAlpha.append(player.getLaneRate(Lane.objects.get(laneName__exact="Bot")))
-        suppAlpha.append(player.getLaneRate(Lane.objects.get(laneName__exact="Support")))
-
-    return JsonResponse(data={
-        'labels': labels,
-        'overall': overallData,
-        'top': topData,
-        'jungle': jungData,
-        'mid': midData,
-        'bot': botData,
-        'support': suppData,
-        'overallAlpha': overallAlpha,
-        'topAlpha': topAlpha,
-        'jungleAlpha': jungAlpha,
-        'midAlpha': midAlpha,
-        'botAlpha': botAlpha,
-        'supportAlpha': suppAlpha
-    })
+        return JsonResponse(data={
+            'data': data
+        })
 
 
-def overallPlaytimeBarChart(request):
-    labels, overallData, topData, jungData, midData, botData, suppData = ([] for i in range(7))
-    queryset = Player.objects.order_by('playerName')
+class OverallPlaytimeTable(View):
 
-    for player in queryset:
-        labels.append(player.playerName)
+    def get(self, request, *args, **kwargs):
+        data = []
+        queryset = Player.objects.order_by('playerName')
+        print(request.GET)
+        if 'season' in request.GET:
+            season = Season.objects.get(seasonNumber__exact=request.GET['season'])
+        else:
+            season = None
 
-        overallData.append(player.getLaneCount(None))
-        topData.append(player.getLaneCount(Lane.objects.get(laneName__exact="Top")))
-        jungData.append(player.getLaneCount(Lane.objects.get(laneName__exact="Jungle")))
-        midData.append(player.getLaneCount(Lane.objects.get(laneName__exact="Mid")))
-        botData.append(player.getLaneCount(Lane.objects.get(laneName__exact="Bot")))
-        suppData.append(player.getLaneCount(Lane.objects.get(laneName__exact="Support")))
+        for player in queryset:
+            playerDict = {}
+            playerDict["name"] = player.playerName
+            playerDict["overall"] = player.getLaneCount(None, season)
+            playerDict["top"] = player.getLaneCount(Lane.objects.get(laneName__exact="Top"), season)
+            playerDict["jungle"] = player.getLaneCount(Lane.objects.get(laneName__exact="Jungle"), season)
+            playerDict["mid"] = player.getLaneCount(Lane.objects.get(laneName__exact="Mid"), season)
+            playerDict["bot"] = player.getLaneCount(Lane.objects.get(laneName__exact="Bot"), season)
+            playerDict["supp"] = player.getLaneCount(Lane.objects.get(laneName__exact="Support"), season)
+            playerDict["playerID"] = player.id
+            data.append(playerDict)
 
-    return JsonResponse(data={
-        'labels': labels,
-        'overall': overallData,
-        'top': topData,
-        'jungle': jungData,
-        'mid': midData,
-        'bot': botData,
-        'support': suppData,
-        'max': Game.getTotalGames()
-    })
-
-
-def overallWinrateTable(request):
-    data = []
-    queryset = Player.objects.order_by('playerName')
-
-    for player in queryset:
-        playerDict = {}
-        playerDict["name"] = player.playerName
-        playerDict["overall"] = player.getWinrate(None)
-        playerDict["top"] = player.getWinrate(Lane.objects.get(laneName__exact="Top"))
-        playerDict["jungle"] = player.getWinrate(Lane.objects.get(laneName__exact="Jungle"))
-        playerDict["mid"] = player.getWinrate(Lane.objects.get(laneName__exact="Mid"))
-        playerDict["bot"] = player.getWinrate(Lane.objects.get(laneName__exact="Bot"))
-        playerDict["supp"] = player.getWinrate(Lane.objects.get(laneName__exact="Support"))
-        playerDict["overallAlpha"] = player.getLaneRate(None)
-        playerDict["topAlpha"] = player.getLaneRate(Lane.objects.get(laneName__exact="Top"))
-        playerDict["jungleAlpha"] = player.getLaneRate(Lane.objects.get(laneName__exact="Jungle"))
-        playerDict["midAlpha"] = player.getLaneRate(Lane.objects.get(laneName__exact="Mid"))
-        playerDict["botAlpha"] = player.getLaneRate(Lane.objects.get(laneName__exact="Bot"))
-        playerDict["suppAlpha"] = player.getLaneRate(Lane.objects.get(laneName__exact="Support"))
-        playerDict["playerID"] = player.id
-        data.append(playerDict)
-
-    return JsonResponse(data={
-        'data': data
-    })
-
-
-def overallPlaytimeTable(request):
-    data = []
-    queryset = Player.objects.order_by('playerName')
-
-    for player in queryset:
-        playerDict = {}
-        playerDict["name"] = player.playerName
-        playerDict["overall"] = player.getLaneCount(None)
-        playerDict["top"] = player.getLaneCount(Lane.objects.get(laneName__exact="Top"))
-        playerDict["jungle"] = player.getLaneCount(Lane.objects.get(laneName__exact="Jungle"))
-        playerDict["mid"] = player.getLaneCount(Lane.objects.get(laneName__exact="Mid"))
-        playerDict["bot"] = player.getLaneCount(Lane.objects.get(laneName__exact="Bot"))
-        playerDict["supp"] = player.getLaneCount(Lane.objects.get(laneName__exact="Support"))
-        playerDict["playerID"] = player.id
-        data.append(playerDict)
-
-    return JsonResponse(data={
-        'data': data
-    })
+        return JsonResponse(data={
+            'data': data
+        })
 
 
 class PlayerDetailView(DetailView, BaseTenMansContextMixin):
@@ -158,7 +108,7 @@ class PlayerDetailView(DetailView, BaseTenMansContextMixin):
         context['highestWinrateChamp'] = self.object.getHighestWinrateChampionString()
         context['averageBansPulled'] = self.object.getAveragePulledBans()
         context['mostBannedChamp'] = self.object.getMostBannedChampionString()
-        context['totalGamesPlayed'] = self.object.getLaneCount(None)
+        context['totalGamesPlayed'] = self.object.getLaneCount(None, None)
         context['blueSideWinrate'] = self.object.getSideWinrate("Blue")
         context['redSideWinrate'] = self.object.getSideWinrate("Red")
         context['overallAverageKDA'] = self.object.getAverageKDALaneString(None)
@@ -189,8 +139,9 @@ class PlayerWinrateOverTimeView(DetailView):
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
-        labels, overallData, topData, jungData, midData, botData, suppData = ([] for i in range(7))
+        labels, overallData, topData, jungData, midData, botData, suppData, seasons = ([] for i in range(8))
         games = Game.objects.all().order_by('gameNumber')
+        seasonNum = 1
         for game in games:
             labels.append(game.gameNumber)
             overallData.append(self.object.getWinrateHistorical(game, None))
@@ -199,6 +150,10 @@ class PlayerWinrateOverTimeView(DetailView):
             midData.append(self.object.getWinrateHistorical(game, Lane.objects.get(laneName__exact="Mid")))
             botData.append(self.object.getWinrateHistorical(game, Lane.objects.get(laneName__exact="Bot")))
             suppData.append(self.object.getWinrateHistorical(game, Lane.objects.get(laneName__exact="Support")))
+            if(game.season.seasonNumber != seasonNum):
+                seasons.append(game.gameNumber)
+                seasonNum = game.season.seasonNumber
+
         return JsonResponse(data={
             'labels': labels,
             'overall': overallData,
@@ -206,7 +161,8 @@ class PlayerWinrateOverTimeView(DetailView):
             'jungle': jungData,
             'mid': midData,
             'bot': botData,
-            'support': suppData
+            'support': suppData,
+            'seasons': seasons
         })
 
 
@@ -221,7 +177,7 @@ class PlayerLaneCountTable(DetailView):
         for lane in queryset:
             laneDict = {}
             laneDict["lane"] = lane.laneName
-            laneDict["playCount"] = self.object.getLaneCount(lane)
+            laneDict["playCount"] = self.object.getLaneCount(lane, None)
             laneDict["averageKDA"] = self.object.getAverageKDALaneString(lane)
             data.append(laneDict)
 
