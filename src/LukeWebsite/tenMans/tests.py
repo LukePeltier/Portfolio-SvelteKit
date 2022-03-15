@@ -417,20 +417,8 @@ class FullDataTest(TestCase):
 
         self.assertEqual(response.status_code, 200)
 
-    def test_view_winrateChart(self):
-        url = reverse("overallWinrateChart")
-        response = self.client.get(url)
-
-        self.assertEqual(response.status_code, 200)
-
     def test_view_winrateTable(self):
         url = reverse("overallWinrateTable")
-        response = self.client.get(url)
-
-        self.assertEqual(response.status_code, 200)
-
-    def test_view_playtimeChart(self):
-        url = reverse("overallPlaytimeChart")
         response = self.client.get(url)
 
         self.assertEqual(response.status_code, 200)
