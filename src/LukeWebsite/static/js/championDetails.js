@@ -7,75 +7,49 @@ $(function () {
 
             var ctx = $championPlaytimeChart;
 
-            Chart.defaults.global.defaultFontColor='white';
-            Chart.defaults.global.defaultFontFamily = 'Gill Sans Light';
-
-            var championPlaytime = new Chart(ctx, {
+            Chart.defaults.color='white';
+            Chart.defaults.font.family='Gill Sans Light';
+            var championPlaytime = new Chart(ctx,
+            {
                 type: 'bar',
                 data: {
+                    labels: data.labels,
                     datasets: [{
                         label: 'Overall',
-                        data: data.overall,
-                        fill: false,
+                        data: data.overall.concat(data.top, data.jungle, data.mid, data.bot, data.support),
                         borderWidth: 1,
                         minBarLength: 5,
-                        backgroundColor: getComputedStyle(document.documentElement).getPropertyValue('--tenmanspurple')+ "33",
-                        borderColor: getComputedStyle(document.documentElement).getPropertyValue('--tenmanspurple')
-                    }, {
-                        label: 'Top',
-                        data: data.top,
-                        fill: false,
-                        borderWidth: 1,
-                        minBarLength: 5,
-                        backgroundColor: getComputedStyle(document.documentElement).getPropertyValue('--tenmansred')+ "33",
-                        borderColor: getComputedStyle(document.documentElement).getPropertyValue('--tenmansred')
-                    }, {
-                        label: 'Jungle',
-                        data: data.jungle,
-                        fill: false,
-                        borderWidth: 1,
-                        minBarLength: 5,
-                        backgroundColor: getComputedStyle(document.documentElement).getPropertyValue('--tenmansorange')+ "33",
-                        borderColor: getComputedStyle(document.documentElement).getPropertyValue('--tenmansorange')
-                    }, {
-                        label: 'Middle',
-                        data: data.mid,
-                        fill: false,
-                        borderWidth: 1,
-                        minBarLength: 5,
-                        backgroundColor: getComputedStyle(document.documentElement).getPropertyValue('--tenmansyellow')+ "33",
-                        borderColor: getComputedStyle(document.documentElement).getPropertyValue('--tenmansyellow')
-                    }, {
-                        label: 'Bottom',
-                        data: data.bot,
-                        fill: false,
-                        borderWidth: 1,
-                        minBarLength: 5,
-                        backgroundColor: getComputedStyle(document.documentElement).getPropertyValue('--tenmansgreen')+ "33",
-                        borderColor: getComputedStyle(document.documentElement).getPropertyValue('--tenmansgreen')
-                    }, {
-                        label: 'Support',
-                        data: data.support,
-                        fill: false,
-                        borderWidth: 1,
-                        minBarLength: 5,
-                        backgroundColor: getComputedStyle(document.documentElement).getPropertyValue('--tenmansblue')+ "33",
-                        borderColor: getComputedStyle(document.documentElement).getPropertyValue('--tenmansblue')
+                        backgroundColor: [
+                            getComputedStyle(document.documentElement).getPropertyValue('--tenmanspurple') + "33",
+                            getComputedStyle(document.documentElement).getPropertyValue('--tenmansred') + "33",
+                            getComputedStyle(document.documentElement).getPropertyValue('--tenmansorange') + "33",
+                            getComputedStyle(document.documentElement).getPropertyValue('--tenmansyellow') + "33",
+                            getComputedStyle(document.documentElement).getPropertyValue('--tenmansgreen') + "33",
+                            getComputedStyle(document.documentElement).getPropertyValue('--tenmansblue') + "33"
+                        ],
+                        borderColor: [
+                            getComputedStyle(document.documentElement).getPropertyValue('--tenmanspurple'),
+                            getComputedStyle(document.documentElement).getPropertyValue('--tenmansred'),
+                            getComputedStyle(document.documentElement).getPropertyValue('--tenmansorange'),
+                            getComputedStyle(document.documentElement).getPropertyValue('--tenmansyellow'),
+                            getComputedStyle(document.documentElement).getPropertyValue('--tenmansgreen'),
+                            getComputedStyle(document.documentElement).getPropertyValue('--tenmansblue')
+                        ]
                     }]
                 },
                 options: {
                     responsive: true,
-                    title: {
-                        display: true,
-                        text: 'Playtime Bar Chart'
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Playtime Bar Chart'
+                        }
                     },
                     scales: {
-                        yAxes: [{
-                            ticks: {
-                                suggestedMin: 0,
-                                suggestedMax: 5
-                            }
-                        }]
+                        y: {
+                            suggestedMin: 0,
+                            suggestedMax: 5
+                        }
                     }
                 }
             });

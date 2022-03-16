@@ -85,8 +85,6 @@ $(function () {
                         x:{
                             grid: {
                                 color: function(context) {
-                                    console.log(data.seasons)
-                                    console.log(context.tick.value)
                                     if(data.seasons.indexOf(context.tick.value+1)!==-1){
                                         return getComputedStyle(document.documentElement).getPropertyValue('--tenmanshighlightbold');
                                     }

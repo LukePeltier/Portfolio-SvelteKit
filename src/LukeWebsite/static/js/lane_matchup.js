@@ -7,10 +7,10 @@ $(function () {
 
             var ctx = $laneMatchupChart;
 
-            Chart.defaults.global.defaultFontColor='white';
-            Chart.defaults.global.defaultFontFamily = 'Gill Sans Light';
+            Chart.defaults.color='white';
+            Chart.defaults.font.family='Gill Sans Light';
             var laneMatchup = new Chart(ctx, {
-                type: 'horizontalBar',
+                type: 'bar',
                 data: {
                     labels: data.labels,
                     datasets: [{
@@ -28,18 +28,17 @@ $(function () {
                     }]
                 },
                 options: {
+                    indexAxis: 'y',
                     responsive: true,
                     scales: {
-                        xAxes: [{
+                        x: {
                             stacked: true,
-                            ticks: {
-                                min: 0,
-                                max: 100
-                            }
-                        }],
-                        yAxes: [{
+                            min: 0,
+                            max: 100
+                        },
+                        y: {
                             stacked: true,
-                        }]
+                        }
                     },
                     title: {
                         display: true,

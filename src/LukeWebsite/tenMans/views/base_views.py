@@ -62,6 +62,8 @@ class OverallWinrateTable(View):
             playerDict["botAlpha"] = player.getLaneRate(Lane.objects.get(laneName__exact="Bot"), season)
             playerDict["suppAlpha"] = player.getLaneRate(Lane.objects.get(laneName__exact="Support"), season)
             playerDict["playerID"] = player.id
+            if(playerDict["overall"] == "N/A"):
+                continue
             data.append(playerDict)
 
         return JsonResponse(data={
@@ -90,6 +92,8 @@ class OverallPlaytimeTable(View):
             playerDict["bot"] = player.getLaneCount(Lane.objects.get(laneName__exact="Bot"), season)
             playerDict["supp"] = player.getLaneCount(Lane.objects.get(laneName__exact="Support"), season)
             playerDict["playerID"] = player.id
+            if(playerDict["overall"] == 0):
+                continue
             data.append(playerDict)
 
         return JsonResponse(data={
