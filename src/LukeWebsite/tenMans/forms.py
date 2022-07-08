@@ -485,6 +485,9 @@ class NewGameForm(forms.Form):
     def clean_remoteGameID(self):
         data = self.cleaned_data['remoteGameID']
 
+        if not data.startswith("NA1_"):
+            raise ValidationError("Match code must start with NA1_ (region code)")
+
         match = cass.get_match(data, region="NA")
         if match is None:
             raise ValidationError("Match not found")
