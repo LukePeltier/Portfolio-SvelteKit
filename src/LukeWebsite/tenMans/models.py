@@ -954,12 +954,12 @@ class GameLanerStats(models.Model):
             foundfirstTower = stats.first_tower_kill
 
             # match v5
-            foundbaronKills = stats.baron_kills
-            founddragonKills = stats.dragon_kills
+            foundbaronKills = stats.to_dict()['baronKills']
+            founddragonKills = stats.to_dict()['dragonKills']
             foundgoldSpent = stats.gold_spent
             foundlargestCriticalStrike = stats.largest_critical_strike
             foundlongestTimeSpentLiving = stats.longest_time_spent_living
-            foundkilledNexus = stats.nexus_kills >= 0
+            foundkilledNexus = stats.nexus_kills > 0
             foundobjectivesStolen = stats.objectives_stolen
             foundnumberOfFlashes = 0
 
