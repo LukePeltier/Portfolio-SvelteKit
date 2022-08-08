@@ -6,6 +6,11 @@ module.exports = {
       fontFamily: {
         'lato': ['Lato'],
         'robotomono': ['Roboto Mono']
+      },
+      colors: {
+        'statisticRed': '#c05d84',
+        'statisticBlue': '#45a1ca',
+        'oldTenMansYellow': '#ffc107'
       }
     },
   },
