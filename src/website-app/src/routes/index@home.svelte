@@ -1,7 +1,8 @@
 <script lang="ts">
   import { afterNavigate } from '$app/navigation';
   import { typewriter } from '$lib/Typewriter.svelte';
-  import { fade } from 'svelte/transition';
+  import { fly } from 'svelte/transition';
+  import { backOut } from 'svelte/easing';
 
   let pageVisible = false;
   //test
@@ -29,7 +30,11 @@
     >
       Luke Peltier
     </h1>
-    <div in:fade={{ delay: 1500 }} id="fadeInDiv" class="justify-center">
+    <div
+      in:fly={{ delay: 1500, y: 500, duration: 2000, easing: backOut }}
+      id="fadeInDiv"
+      class="justify-center"
+    >
       <p class="font-robotomono text-5xl text-center text-zinc-300">Projects</p>
       <div class="flex justify-center">
         <div id="projectsGrid" class="grid grid-cols-3">
