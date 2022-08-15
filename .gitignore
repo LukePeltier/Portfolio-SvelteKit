@@ -362,3 +362,5 @@ config.js
 conf
 
 cover/
+
+src/website-api/website.db
