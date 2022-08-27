@@ -10,7 +10,7 @@ import (
 var DB *gorm.DB
 
 func SetupWebsiteDB() {
-	DB, err := gorm.Open(sqlite.Open("../website.db"), &gorm.Config{})
+	DB, err := gorm.Open(sqlite.Open("website.db"), &gorm.Config{})
 	if err != nil {
 		panic("failed to connect database")
 	}

@@ -5,5 +5,5 @@ import (
 )
 
 func SetupTenMansDB(db *gorm.DB) {
-	db.AutoMigrate(&Season{})
+	db.AutoMigrate(&Season{}, &Game{}, &Leaderboard{})
 }
