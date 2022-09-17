@@ -1,9 +1,15 @@
 package main
 
 import (
-	models "lukepeltier/website-api/models"
+	"log"
+
+	"github.com/pocketbase/pocketbase"
 )
 
 func main() {
-	models.SetupWebsiteDB()
+	// models.SetupWebsiteDB()
+	app := pocketbase.New()
+	if err := app.Start(); err != nil {
+        log.Fatal(err)
+    }
 }
