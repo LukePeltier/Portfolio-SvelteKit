@@ -25,7 +25,7 @@
 <div class="flex flex-col justify-items-center">
   {#if pageVisible}
     <h1
-      in:typewriter
+      in:typewriter={{}}
       class="font-robotomono font-semibold text-9xl text-center text-zinc-300 mb-20"
     >
       Luke Peltier
