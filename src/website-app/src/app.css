@@ -1,0 +1,123 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+    font-family: 'Gill Sans Bold Italic';
+    src: local('Gill Sans Bold Italic'), local('GillSans-BoldItalic'),
+        url('fonts/GillSans/GillSans-BoldItalic.woff2') format('woff2'),
+        url('fonts/GillSans/GillSans-BoldItalic.woff') format('woff');
+    font-weight: bold;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Gill Sans Light';
+    src: local('Gill Sans Light'), local('GillSans-Light'),
+        url('fonts/GillSans/GillSans-Light.woff2') format('woff2'),
+        url('fonts/GillSans/GillSans-Light.woff') format('woff');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Gill Sans Heavy Italic';
+    src: local('Gill Sans Heavy Italic'), local('GillSans-HeavyItalic'),
+        url('fonts/GillSans/GillSans-HeavyItalic.woff2') format('woff2'),
+        url('fonts/GillSans/GillSans-HeavyItalic.woff') format('woff');
+    font-weight: 900;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Gill Sans Bold';
+    src: local('Gill Sans Bold'), local('GillSans-Bold'),
+        url('fonts/GillSans/GillSans-Bold.woff2') format('woff2'),
+        url('fonts/GillSans/GillSans-Bold.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Gill Sans Medium Italic';
+    src: local('Gill Sans Medium Italic'), local('GillSans-MediumItalic'),
+        url('fonts/GillSans/GillSans-MediumItalic.woff2') format('woff2'),
+        url('fonts/GillSans/GillSans-MediumItalic.woff') format('woff');
+    font-weight: 500;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Gill Sans Medium';
+    src: local('Gill Sans Medium'), local('GillSans-Medium'),
+        url('fonts/GillSans/GillSans-Medium.woff2') format('woff2'),
+        url('fonts/GillSans/GillSans-Medium.woff') format('woff');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Gill Sans Light Italic';
+    src: local('Gill Sans Light Italic'), local('GillSans-LightItalic'),
+        url('fonts/GillSans/GillSans-LightItalic.woff2') format('woff2'),
+        url('fonts/GillSans/GillSans-LightItalic.woff') format('woff');
+    font-weight: 300;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Gill Sans Heavy';
+    src: local('Gill Sans Heavy'), local('GillSans-Heavy'),
+        url('fonts/GillSans/GillSans-Heavy.woff2') format('woff2'),
+        url('fonts/GillSans/GillSans-Heavy.woff') format('woff');
+    font-weight: 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Gill Sans Italic';
+    src: local('Gill Sans Italic'), local('GillSans-Italic'),
+        url('fonts/GillSans/GillSans-Italic.woff2') format('woff2'),
+        url('fonts/GillSans/GillSans-Italic.woff') format('woff');
+    font-weight: normal;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Gill Sans Condensed Regular';
+    src: local('Gill Sans Condensed Regular'), local('GillSans-CondensedRegular'),
+        url('fonts/GillSans/GillSans-CondensedRegular.woff2') format('woff2'),
+        url('fonts/GillSans/GillSans-CondensedRegular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Gill Sans Condensed Bold';
+    src: local('Gill Sans Condensed Bold'), local('GillSans-CondensedBold'),
+        url('fonts/GillSans/GillSans-CondensedBold.woff2') format('woff2'),
+        url('fonts/GillSans/GillSans-CondensedBold.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Gill Sans';
+    src: local('Gill Sans'), local('GillSans'),
+        url('fonts/GillSans/GillSans.woff2') format('woff2'),
+        url('fonts/GillSans/GillSans.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}

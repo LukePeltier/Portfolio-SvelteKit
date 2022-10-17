@@ -4,12 +4,7 @@ import * as path from 'path';
 
 /** @type {import('vite').UserConfig} */
 const config = {
-  plugins: [sveltekit()],
-  resolve: {
-    alias: {
-      $static: path.resolve(__dirname, './static')
-    }
-  }
+  plugins: [sveltekit()]
 };
 
 export default config;

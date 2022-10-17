@@ -8,10 +8,10 @@
 </script>
 
 <nav class="sm:justify-center space-x-4 bg-zinc-800 mb-8">
-  <div class="grid grid-cols-10 py-4 text-center">
+  <div class="grid grid-cols-10 py-4 text-center font-tenmansbold text-lg">
     <a
       href="/ten-mans"
-      class="rounded-lg px-3 py-2 text-zinc-100 font-bold hover:bg-zinc-900 hover:text-zinc-100"
+      class="rounded-lg px-3 py-2 text-zinc-100 font-bold hover:bg-zinc-900 hover:text-zinc-100 text-xl"
       >10 Mans Statistics</a
     >
     {#each navItems as nav}
