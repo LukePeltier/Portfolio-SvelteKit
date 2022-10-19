@@ -38,5 +38,6 @@
   "dependencies": {
     "daisyui": "^2.22.0",
     "gridjs": "^5.0.2"
-  }
+  },
+  "packageManager": "yarn@3.2.4"
 }
