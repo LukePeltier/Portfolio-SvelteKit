@@ -37,6 +37,7 @@
   "type": "module",
   "dependencies": {
     "daisyui": "^2.22.0",
-    "gridjs": "^5.0.2"
+    "gridjs": "^5.0.2",
+    "pocketbase": "^0.7.4"
   }
 }
