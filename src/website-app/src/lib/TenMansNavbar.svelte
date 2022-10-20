@@ -1,16 +1,16 @@
 <script lang="ts">
   let navItems = [
-    { title: 'Player Draft Stats', url: '/ten-mans/player-draft-stats' },
-    { title: 'Leaderboards', url: '/ten-mans/leaderboards' },
-    { title: 'Games', url: '/ten-mans/games' },
-    { title: 'Champions', url: '/ten-mans/champions' }
+    { title: 'Player Draft Stats', url: '/ten_mans/player-draft-stats' },
+    { title: 'Leaderboards', url: '/ten_mans/leaderboards' },
+    { title: 'Games', url: '/ten_mans/games' },
+    { title: 'Champions', url: '/ten_mans/champions' }
   ];
 </script>
 
 <nav class="sm:justify-center space-x-4 bg-zinc-800 mb-8">
   <div class="grid grid-cols-10 py-4 text-center font-tenmansbold text-lg">
     <a
-      href="/ten-mans"
+      href="/ten_mans"
       class="rounded-lg px-3 py-2 text-zinc-100 font-bold hover:bg-zinc-900 hover:text-zinc-100 text-xl"
       >10 Mans Statistics</a
     >
