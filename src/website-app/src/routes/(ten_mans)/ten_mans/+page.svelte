@@ -4,7 +4,7 @@
   import { readable } from 'svelte/store';
   export let data: PageData;
 
-  const tableData: {
+  const gamesPlayedTableData: {
     name: string;
     top: number;
     jungle: number;
@@ -13,48 +13,110 @@
     support: number;
   }[] = [];
 
-  let sortedRows = data.rows.sort(function (a, b) {
+  let gamesPlayedSortedRows = data.gamesPlayed.sort(function (a, b) {
     if (a.name < b.name) return -1;
     if (a.name > b.name) return 1;
     return 0;
   });
 
-  for (const row of sortedRows) {
-    tableData.push(row);
+  for (const row of gamesPlayedSortedRows) {
+    gamesPlayedTableData.push(row);
   }
 
-  const readableTable = readable(tableData);
+  const gamesPlayedReadableTable = readable(gamesPlayedTableData);
 
-  const table = createTable(readableTable);
+  const gamesPlayedTable = createTable(gamesPlayedReadableTable);
 
-  const columns = table.createColumns([
-    table.column({
+  const gamesPlayedColumns = gamesPlayedTable.createColumns([
+    gamesPlayedTable.column({
       header: 'Name',
       accessor: 'name'
     }),
-    table.column({
+    gamesPlayedTable.column({
       header: 'Top',
       accessor: 'top'
     }),
-    table.column({
+    gamesPlayedTable.column({
       header: 'Jungle',
       accessor: 'jungle'
     }),
-    table.column({
+    gamesPlayedTable.column({
       header: 'Mid',
       accessor: 'mid'
     }),
-    table.column({
+    gamesPlayedTable.column({
       header: 'Bot',
       accessor: 'bot'
     }),
-    table.column({
+    gamesPlayedTable.column({
       header: 'Support',
       accessor: 'support'
     })
   ]);
 
-  const { headerRows, rows, tableAttrs, tableBodyAttrs } = table.createViewModel(columns);
+  const {
+    headerRows: gamesPlayed_headerRows,
+    rows: gamesPlayed_rows,
+    tableAttrs: gamesPlayed_tableAttrs,
+    tableBodyAttrs: gamesPlayed_tableBodyAttrs
+  } = gamesPlayedTable.createViewModel(gamesPlayedColumns);
+
+  const gamesWonTableData: {
+    name: string;
+    top: string;
+    jungle: string;
+    mid: string;
+    bot: string;
+    support: string;
+  }[] = [];
+
+  let gamesWonSortedRows = data.gamesWon.sort(function (a, b) {
+    if (a.name < b.name) return -1;
+    if (a.name > b.name) return 1;
+    return 0;
+  });
+
+  for (const row of gamesWonSortedRows) {
+    gamesWonTableData.push(row);
+  }
+
+  const gamesWonReadableTable = readable(gamesWonTableData);
+
+  const gamesWonTable = createTable(gamesWonReadableTable);
+
+  const gamesWonColumns = gamesWonTable.createColumns([
+    gamesWonTable.column({
+      header: 'Name',
+      accessor: 'name'
+    }),
+    gamesWonTable.column({
+      header: 'Top',
+      accessor: 'top'
+    }),
+    gamesWonTable.column({
+      header: 'Jungle',
+      accessor: 'jungle'
+    }),
+    gamesWonTable.column({
+      header: 'Mid',
+      accessor: 'mid'
+    }),
+    gamesWonTable.column({
+      header: 'Bot',
+      accessor: 'bot'
+    }),
+    gamesWonTable.column({
+      header: 'Support',
+      accessor: 'support'
+    })
+  ]);
+
+  const {
+    headerRows: gamesWon_headerRows,
+    rows: gamesWon_rows,
+    tableAttrs: gamesWon_tableAttrs,
+    tableBodyAttrs: gamesWon_tableBodyAttrs
+  } = gamesWonTable.createViewModel(gamesWonColumns);
 </script>
 
 <svelte:head>
@@ -62,10 +124,10 @@
 </svelte:head>
 
 <div class="grid-container grid grid-cols-2 justify-items-stretch gap-4 m-12">
-  <div id="playCountWrapper" class="">
-    <table {...$tableAttrs}>
+  <div id="winPercentWrapper" class="">
+    <table {...$gamesWon_tableAttrs} class="w-full text-left text-gray-500 dark:text-gray-400">
       <thead>
-        {#each $headerRows as headerRow (headerRow.id)}
+        {#each $gamesWon_headerRows as headerRow (headerRow.id)}
           <Subscribe rowAttrs={headerRow.attrs()} let:rowAttrs>
             <tr {...rowAttrs}>
               {#each headerRow.cells as cell (cell.id)}
@@ -79,8 +141,8 @@
           </Subscribe>
         {/each}
       </thead>
-      <tbody {...$tableBodyAttrs}>
-        {#each $rows as row (row.id)}
+      <tbody {...$gamesWon_tableBodyAttrs}>
+        {#each $gamesWon_rows as row (row.id)}
           <Subscribe rowAttrs={row.attrs()} let:rowAttrs>
             <tr {...rowAttrs}>
               {#each row.cells as cell (cell.id)}
@@ -96,10 +158,10 @@
       </tbody>
     </table>
   </div>
-  <div id="winPercentWrapper" class="">
-    <table {...$tableAttrs}>
-      <thead>
-        {#each $headerRows as headerRow (headerRow.id)}
+  <div id="playCountWrapper" class="">
+    <table {...$gamesPlayed_tableAttrs} class="w-full text-left text-gray-500 dark:text-gray-400">
+      <thead class="text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+        {#each $gamesPlayed_headerRows as headerRow (headerRow.id)}
           <Subscribe rowAttrs={headerRow.attrs()} let:rowAttrs>
             <tr {...rowAttrs}>
               {#each headerRow.cells as cell (cell.id)}
@@ -113,8 +175,8 @@
           </Subscribe>
         {/each}
       </thead>
-      <tbody {...$tableBodyAttrs}>
-        {#each $rows as row (row.id)}
+      <tbody {...$gamesPlayed_tableBodyAttrs}>
+        {#each $gamesPlayed_rows as row (row.id)}
           <Subscribe rowAttrs={row.attrs()} let:rowAttrs>
             <tr {...rowAttrs}>
               {#each row.cells as cell (cell.id)}

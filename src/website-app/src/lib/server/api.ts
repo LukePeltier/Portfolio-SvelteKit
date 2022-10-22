@@ -19,7 +19,8 @@ export class Api {
 
   async getGameLanesByPlayer(player: string) {
     const resultList = await this.client.records.getList('gameLaner', 1, Number.MAX_SAFE_INTEGER, {
-      filter: `player.id = "${player}"`
+      filter: `player.id = "${player}"`,
+      expand: `game`
     });
     return resultList;
   }
