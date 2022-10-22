@@ -13,6 +13,8 @@
     "format": "prettier --write --plugin-search-dir=. ."
   },
   "devDependencies": {
+    "@iconify/icons-akar-icons": "^1.2.10",
+    "@iconify/svelte": "^3.0.0",
     "@playwright/test": "^1.22.2",
     "@sveltejs/adapter-auto": "next",
     "@sveltejs/kit": "next",
