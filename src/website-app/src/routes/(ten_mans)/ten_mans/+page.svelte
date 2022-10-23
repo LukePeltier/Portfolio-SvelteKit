@@ -1,31 +1,32 @@
 <script lang="ts">
   import type { PageData } from './$types';
   import { createTable, Subscribe, Render } from 'svelte-headless-table';
+  import { addSortBy } from 'svelte-headless-table/plugins';
   import { readable } from 'svelte/store';
   export let data: PageData;
 
-  const gamesPlayedTableData: {
-    name: string;
-    top: number;
-    jungle: number;
-    mid: number;
-    bot: number;
-    support: number;
-  }[] = [];
+  function getStatSortValue(i: string): number {
+    if (i === 'N/A') {
+      return -1;
+    }
 
-  let gamesPlayedSortedRows = data.gamesPlayed.sort(function (a, b) {
-    if (a.name < b.name) return -1;
-    if (a.name > b.name) return 1;
-    return 0;
-  });
-
-  for (const row of gamesPlayedSortedRows) {
-    gamesPlayedTableData.push(row);
+    if (i.includes('%')) {
+      const num_string = i.replaceAll('%', '');
+      return Number(num_string);
+    } else {
+      console.error('Error, received string which cannot be sorted', i);
+      return -2;
+    }
   }
 
-  const gamesPlayedReadableTable = readable(gamesPlayedTableData);
+  /**
+   * Games Played Table
+   */
+  const gamesPlayedReadableTable = readable(data.gamesPlayed);
 
-  const gamesPlayedTable = createTable(gamesPlayedReadableTable);
+  const gamesPlayedTable = createTable(gamesPlayedReadableTable, {
+    sort: addSortBy({ initialSortKeys: [{ id: 'name', order: 'asc' }] })
+  });
 
   const gamesPlayedColumns = gamesPlayedTable.createColumns([
     gamesPlayedTable.column({
@@ -61,28 +62,15 @@
     tableBodyAttrs: gamesPlayed_tableBodyAttrs
   } = gamesPlayedTable.createViewModel(gamesPlayedColumns);
 
-  const gamesWonTableData: {
-    name: string;
-    top: string;
-    jungle: string;
-    mid: string;
-    bot: string;
-    support: string;
-  }[] = [];
+  /**
+   * Games Won Table
+   */
 
-  let gamesWonSortedRows = data.gamesWon.sort(function (a, b) {
-    if (a.name < b.name) return -1;
-    if (a.name > b.name) return 1;
-    return 0;
+  const gamesWonReadableTable = readable(data.gamesWon);
+
+  const gamesWonTable = createTable(gamesWonReadableTable, {
+    sort: addSortBy({ initialSortKeys: [{ id: 'name', order: 'asc' }], disableMultiSort: true })
   });
-
-  for (const row of gamesWonSortedRows) {
-    gamesWonTableData.push(row);
-  }
-
-  const gamesWonReadableTable = readable(gamesWonTableData);
-
-  const gamesWonTable = createTable(gamesWonReadableTable);
 
   const gamesWonColumns = gamesWonTable.createColumns([
     gamesWonTable.column({
@@ -91,23 +79,48 @@
     }),
     gamesWonTable.column({
       header: 'Top',
-      accessor: 'top'
+      accessor: 'top',
+      plugins: {
+        sort: {
+          getSortValue: (i) => getStatSortValue(i)
+        }
+      }
     }),
     gamesWonTable.column({
       header: 'Jungle',
-      accessor: 'jungle'
+      accessor: 'jungle',
+      plugins: {
+        sort: {
+          getSortValue: (i) => getStatSortValue(i)
+        }
+      }
     }),
     gamesWonTable.column({
       header: 'Mid',
-      accessor: 'mid'
+      accessor: 'mid',
+      plugins: {
+        sort: {
+          getSortValue: (i) => getStatSortValue(i)
+        }
+      }
     }),
     gamesWonTable.column({
       header: 'Bot',
-      accessor: 'bot'
+      accessor: 'bot',
+      plugins: {
+        sort: {
+          getSortValue: (i) => getStatSortValue(i)
+        }
+      }
     }),
     gamesWonTable.column({
       header: 'Support',
-      accessor: 'support'
+      accessor: 'support',
+      plugins: {
+        sort: {
+          getSortValue: (i) => getStatSortValue(i)
+        }
+      }
     })
   ]);
 
@@ -123,17 +136,25 @@
   <title>10 Mans Statistics</title>
 </svelte:head>
 
-<div class="grid-container m-12 grid grid-cols-2 justify-items-stretch gap-4 ">
+<div class="m-12 grid grid-cols-2 justify-items-stretch gap-4 ">
   <div id="winPercentWrapper" class="">
-    <table {...$gamesWon_tableAttrs} class="w-full text-left text-gray-500 dark:text-gray-400">
+    <table
+      {...$gamesWon_tableAttrs}
+      class="table w-full text-left text-gray-500 dark:text-gray-400"
+    >
       <thead>
         {#each $gamesWon_headerRows as headerRow (headerRow.id)}
           <Subscribe rowAttrs={headerRow.attrs()} let:rowAttrs>
             <tr {...rowAttrs}>
               {#each headerRow.cells as cell (cell.id)}
-                <Subscribe attrs={cell.attrs()} let:attrs>
-                  <th {...attrs}>
+                <Subscribe attrs={cell.attrs()} let:attrs props={cell.props()} let:props>
+                  <th {...attrs} on:click={props.sort.toggle}>
                     <Render of={cell.render()} />
+                    {#if props.sort.order === 'asc'}
+                      ⬇️
+                    {:else if props.sort.order === 'desc'}
+                      ⬆️
+                    {/if}
                   </th>
                 </Subscribe>
               {/each}
@@ -144,7 +165,7 @@
       <tbody {...$gamesWon_tableBodyAttrs}>
         {#each $gamesWon_rows as row (row.id)}
           <Subscribe rowAttrs={row.attrs()} let:rowAttrs>
-            <tr {...rowAttrs}>
+            <tr {...rowAttrs} class="hover">
               {#each row.cells as cell (cell.id)}
                 <Subscribe attrs={cell.attrs()} let:attrs>
                   <td {...attrs}>
@@ -159,15 +180,23 @@
     </table>
   </div>
   <div id="playCountWrapper" class="">
-    <table {...$gamesPlayed_tableAttrs} class="w-full text-left text-gray-500 dark:text-gray-400">
-      <thead class="bg-gray-50 uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
+    <table
+      {...$gamesPlayed_tableAttrs}
+      class="table w-full text-left text-gray-500 dark:text-gray-400"
+    >
+      <thead class="">
         {#each $gamesPlayed_headerRows as headerRow (headerRow.id)}
           <Subscribe rowAttrs={headerRow.attrs()} let:rowAttrs>
             <tr {...rowAttrs}>
               {#each headerRow.cells as cell (cell.id)}
-                <Subscribe attrs={cell.attrs()} let:attrs>
-                  <th {...attrs}>
+                <Subscribe attrs={cell.attrs()} let:attrs props={cell.props()} let:props>
+                  <th {...attrs} on:click={props.sort.toggle}>
                     <Render of={cell.render()} />
+                    {#if props.sort.order === 'asc'}
+                      ⬇️
+                    {:else if props.sort.order === 'desc'}
+                      ⬆️
+                    {/if}
                   </th>
                 </Subscribe>
               {/each}
@@ -178,7 +207,7 @@
       <tbody {...$gamesPlayed_tableBodyAttrs}>
         {#each $gamesPlayed_rows as row (row.id)}
           <Subscribe rowAttrs={row.attrs()} let:rowAttrs>
-            <tr {...rowAttrs}>
+            <tr {...rowAttrs} class="hover">
               {#each row.cells as cell (cell.id)}
                 <Subscribe attrs={cell.attrs()} let:attrs>
                   <td {...attrs}>

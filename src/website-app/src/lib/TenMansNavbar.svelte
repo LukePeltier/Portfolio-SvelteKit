@@ -18,25 +18,25 @@
 <div>
   <div>
     <nav
-      class="font-tenmansbold mb-8 w-full space-x-4 bg-zinc-800 text-lg lg:flex lg:items-center lg:justify-between"
+      class="font-tenmansbold bg-neutral mb-8 w-full space-x-4 text-lg lg:flex lg:items-center lg:justify-between"
     >
       <div class="flex items-center justify-between">
         <a
           href="/"
-          class="rounded-lg px-3 py-2 font-medium text-zinc-300 hover:bg-zinc-900 hover:text-zinc-100"
+          class="text-neutral-content hover:bg-neutral-focus rounded-lg px-3 py-2 font-medium"
         >
           <Icon icon={arrowLeft} />
         </a>
         <a
           href="/ten_mans"
-          class="rounded-lg px-3 py-2 text-xl font-bold text-zinc-100 hover:bg-zinc-900 hover:text-zinc-100 lg:text-2xl"
+          class="text-neutral-content hover:bg-neutral-focus rounded-lg px-3 py-2 text-xl font-bold lg:text-2xl"
           >10 Mans Statistics</a
         >
         <!-- Mobile menu button -->
         <div on:click={toggleNavbar} on:keypress={toggleNavbar} class="flex lg:hidden">
           <button
             type="button"
-            class="text-zinc-300 hover:text-gray-400 focus:text-gray-400 focus:outline-none"
+            class="text-neutral-content focus:text-neutral-focus-content focus:outline-none"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -65,7 +65,7 @@
         {#each navItems as nav}
           <a
             href={nav.url}
-            class="rounded-lg px-3 py-2 font-medium text-zinc-300 hover:bg-zinc-900 hover:text-zinc-100"
+            class="hover:bg-neutral-focus text-neutral-content rounded-lg px-3 py-2 font-medium"
             >{nav.title}</a
           >
         {/each}

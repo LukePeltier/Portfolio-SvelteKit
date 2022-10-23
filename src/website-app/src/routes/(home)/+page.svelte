@@ -33,7 +33,7 @@
       Luke Peltier
     </h1>
     <div
-      in:fly={{ delay: 1500, y: 500, duration: 2000, easing: backOut }}
+      in:fly={{ delay: 1500, y: -1, duration: 2000, easing: backOut }}
       id="fadeInDiv"
       class="justify-center"
     >
