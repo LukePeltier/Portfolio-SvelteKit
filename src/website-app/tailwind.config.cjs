@@ -10,12 +10,12 @@ module.exports = {
         tenmansbold: ['Gill Sans Bold']
       },
       colors: {
-        statisticRed: '#c05d84',
-        statisticBlue: '#45a1ca',
+        statisticRed: '#ff4e50',
+        statisticBlue: '#3273fa',
         oldTenMansYellow: '#ffc107'
       }
     }
   },
   plugins: [require('daisyui')],
-  daisyui: {}
+  daisyui: { themes: ['dark', 'black'] }
 };

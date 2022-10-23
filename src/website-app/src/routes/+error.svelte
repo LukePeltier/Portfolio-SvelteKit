@@ -6,6 +6,6 @@
   }
 </script>
 
-<h1 class="text-5xl text-center">{$page.status} : {errorMessage}</h1>
+<h1 class="text-center text-5xl">{$page.status} : {errorMessage}</h1>
 
 <p>Oopsie woopsie</p>

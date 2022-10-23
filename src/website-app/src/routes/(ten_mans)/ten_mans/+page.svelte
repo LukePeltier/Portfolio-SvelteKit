@@ -123,7 +123,7 @@
   <title>10 Mans Statistics</title>
 </svelte:head>
 
-<div class="grid-container grid grid-cols-2 justify-items-stretch gap-4 m-12">
+<div class="grid-container m-12 grid grid-cols-2 justify-items-stretch gap-4 ">
   <div id="winPercentWrapper" class="">
     <table {...$gamesWon_tableAttrs} class="w-full text-left text-gray-500 dark:text-gray-400">
       <thead>
@@ -160,7 +160,7 @@
   </div>
   <div id="playCountWrapper" class="">
     <table {...$gamesPlayed_tableAttrs} class="w-full text-left text-gray-500 dark:text-gray-400">
-      <thead class="text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+      <thead class="bg-gray-50 uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
         {#each $gamesPlayed_headerRows as headerRow (headerRow.id)}
           <Subscribe rowAttrs={headerRow.attrs()} let:rowAttrs>
             <tr {...rowAttrs}>

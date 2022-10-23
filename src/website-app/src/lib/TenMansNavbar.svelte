@@ -18,25 +18,25 @@
 <div>
   <div>
     <nav
-      class="w-full space-x-4 lg:flex lg:justify-between lg:items-center bg-zinc-800 mb-8 font-tenmansbold text-lg"
+      class="font-tenmansbold mb-8 w-full space-x-4 bg-zinc-800 text-lg lg:flex lg:items-center lg:justify-between"
     >
       <div class="flex items-center justify-between">
         <a
           href="/"
-          class="rounded-lg px-3 py-2 text-zinc-300 font-medium hover:bg-zinc-900 hover:text-zinc-100"
+          class="rounded-lg px-3 py-2 font-medium text-zinc-300 hover:bg-zinc-900 hover:text-zinc-100"
         >
           <Icon icon={arrowLeft} />
         </a>
         <a
           href="/ten_mans"
-          class="rounded-lg px-3 py-2 text-zinc-100 font-bold hover:bg-zinc-900 hover:text-zinc-100 text-xl lg:text-2xl"
+          class="rounded-lg px-3 py-2 text-xl font-bold text-zinc-100 hover:bg-zinc-900 hover:text-zinc-100 lg:text-2xl"
           >10 Mans Statistics</a
         >
         <!-- Mobile menu button -->
         <div on:click={toggleNavbar} on:keypress={toggleNavbar} class="flex lg:hidden">
           <button
             type="button"
-            class="text-zinc-300 hover:text-gray-400 focus:outline-none focus:text-gray-400"
+            class="text-zinc-300 hover:text-gray-400 focus:text-gray-400 focus:outline-none"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -44,7 +44,7 @@
               viewBox="0 0 24 24"
               stroke-width="1.5"
               stroke="currentColor"
-              class="w-6 h-6"
+              class="h-6 w-6"
             >
               <path
                 stroke-linecap="round"
@@ -58,14 +58,14 @@
 
       <!-- Mobile Menu open: "block", Menu closed: "hidden" -->
       <div
-        class="flex-col pr-8 mt-8 space-y-4 lg:flex lg:space-y-0 lg:flex-row lg:items-center lg:space-x-10 lg:mt-0 {showMenu
+        class="mt-8 flex-col space-y-4 pr-8 lg:mt-0 lg:flex lg:flex-row lg:items-center lg:space-y-0 lg:space-x-10 {showMenu
           ? 'flex'
           : 'hidden'}"
       >
         {#each navItems as nav}
           <a
             href={nav.url}
-            class="rounded-lg px-3 py-2 text-zinc-300 font-medium hover:bg-zinc-900 hover:text-zinc-100"
+            class="rounded-lg px-3 py-2 font-medium text-zinc-300 hover:bg-zinc-900 hover:text-zinc-100"
             >{nav.title}</a
           >
         {/each}

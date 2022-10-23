@@ -3,6 +3,8 @@
   import Navbar from '$lib/TenMansNavbar.svelte';
 </script>
 
-<Navbar />
+<div data-theme="dark" class="h-screen w-screen">
+  <Navbar />
 
-<slot />
+  <slot />
+</div>

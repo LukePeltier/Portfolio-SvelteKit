@@ -1,8 +1,10 @@
 <script lang="ts">
+  import Icon from '@iconify/svelte';
   import { afterNavigate } from '$app/navigation';
   import { typewriter } from '$lib/Typewriter.svelte';
   import { fly } from 'svelte/transition';
   import { backOut } from 'svelte/easing';
+  import arrowRight from '@iconify/icons-akar-icons/arrow-right';
 
   let pageVisible = false;
   //test
@@ -26,7 +28,7 @@
   {#if pageVisible}
     <h1
       in:typewriter={{}}
-      class="font-robotomono font-semibold text-9xl text-center text-zinc-300 mb-20"
+      class="font-robotomono text-neutral-content mb-20 text-center text-9xl font-semibold"
     >
       Luke Peltier
     </h1>
@@ -35,24 +37,23 @@
       id="fadeInDiv"
       class="justify-center"
     >
-      <p class="font-robotomono text-5xl text-center text-zinc-300">Projects</p>
+      <p class="font-robotomono text-neutral-content text-center text-5xl">Projects</p>
       <div class="flex justify-center">
-        <div id="projectsGrid" class="grid grid-cols-3">
-          <div id="tenMansLink" class="p-10 col-start-2">
-            <a style="display:block" href="/ten_mans">
-              <div
-                id="tenMans"
-                class="ring ring-oldTenMansYellow p-4 rounded-lg shadow-2xl shadow-black hover:shadow-none"
-              >
-                <p class="font-lato text-3xl text-zinc-300">LoL Ten Mans</p>
-                <p class="max-w-prose text-zinc-300 font-lato">
-                  This app is a website which will display statistics in the custom matches I
-                  conduct with my friends in the video game League of Legends.
-                </p>
-              </div>
-            </a>
+        <div
+          class="card-bordered border-oldTenMansYellow text-oldTenMansYellow-content mt-10 w-96 rounded-lg"
+        >
+          <div class="card-body">
+            <h2 class="card-title">LoL Ten Mans</h2>
+            <p>
+              This app is a website which will display statistics in the custom matches I conduct
+              with my friends in the video game League of Legends.
+            </p>
+            <div class="card-actions justify-end">
+              <a href="/ten_mans"><button class="btn"><Icon icon={arrowRight} /></button></a>
+            </div>
           </div>
         </div>
+        <!-- </div> -->
       </div>
     </div>
   {/if}
