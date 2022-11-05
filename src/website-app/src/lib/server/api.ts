@@ -1,11 +1,11 @@
 import PocketBase from 'pocketbase';
-import { API_USER, API_PASS } from '$env/static/private';
+import { API_USER, API_PASS, API_URL } from '$env/static/private';
 
 export class Api {
   client: PocketBase;
 
   constructor() {
-    this.client = new PocketBase('http://host.docker.internal:8090');
+    this.client = new PocketBase(API_URL)
   }
 
   async authenticate() {
