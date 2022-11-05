@@ -43,5 +43,6 @@
     "daisyui": "^2.22.0",
     "pocketbase": "^0.7.4",
     "theme-change": "^2.2.0"
-  }
+  },
+  "packageManager": "yarn@3.2.4"
 }
