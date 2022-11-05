@@ -82,7 +82,7 @@
       accessor: 'top',
       plugins: {
         sort: {
-          getSortValue: (i) => getStatSortValue(i)
+          getSortValue: (i: string) => getStatSortValue(i)
         }
       }
     }),
@@ -91,7 +91,7 @@
       accessor: 'jungle',
       plugins: {
         sort: {
-          getSortValue: (i) => getStatSortValue(i)
+          getSortValue: (i: string) => getStatSortValue(i)
         }
       }
     }),
@@ -100,7 +100,7 @@
       accessor: 'mid',
       plugins: {
         sort: {
-          getSortValue: (i) => getStatSortValue(i)
+          getSortValue: (i: string) => getStatSortValue(i)
         }
       }
     }),
@@ -109,7 +109,7 @@
       accessor: 'bot',
       plugins: {
         sort: {
-          getSortValue: (i) => getStatSortValue(i)
+          getSortValue: (i: string) => getStatSortValue(i)
         }
       }
     }),
@@ -118,7 +118,7 @@
       accessor: 'support',
       plugins: {
         sort: {
-          getSortValue: (i) => getStatSortValue(i)
+          getSortValue: (i: string) => getStatSortValue(i)
         }
       }
     })
