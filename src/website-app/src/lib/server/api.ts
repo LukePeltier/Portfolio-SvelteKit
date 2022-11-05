@@ -5,7 +5,7 @@ export class Api {
   client: PocketBase;
 
   constructor() {
-    this.client = new PocketBase('http://127.0.0.1:8090');
+    this.client = new PocketBase('http://host.docker.internal:8090');
   }
 
   async authenticate() {
