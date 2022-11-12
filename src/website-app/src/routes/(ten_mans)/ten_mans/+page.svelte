@@ -17,21 +17,65 @@
     }
   }
 
+  function compareStats(a: string, b: string): number {
+    let aSortValue = getStatSortValue(a);
+    let bSortValue = getStatSortValue(b);
+    if (aSortValue > bSortValue) {
+      return 1;
+    } else if (bSortValue > aSortValue) {
+      return -1;
+    }
+    return 0;
+  }
+
   /**
    * Games Won Table
    */
 
   const gamesWonData = data.gamesWon;
-  const gamesWonColumns = [
+  const gamesColumns = [
     {
       name: 'Name'
+    }, {
+      name: 'Top',
+      sort: {
+        compare: compareStats
+      }
+    },
+    {
+      name: 'Jungle',
+      sort: {
+        compare: compareStats
+      }
+    },
+    {
+      name: 'Mid',
+      sort: {
+        compare: compareStats
+      }
+    },
+    {
+      name: 'Bot',
+      sort: {
+        compare: compareStats
+      }
+    },
+    {
+      name: 'Support',
+      sort: {
+        compare: compareStats
+      }
     }
   ];
 
   /**
    * Games Played Table
    */
-  const gamesPlayedReadableTable = data.gamesPlayed;
+  const gamesPlayedData = data.gamesPlayed;
+
+  const gameTablesClasses = {
+    table: 'w-full'
+  }
 </script>
 
 <svelte:head>
@@ -39,47 +83,6 @@
 </svelte:head>
 
 <div class="m-12 grid grid-cols-2 justify-items-stretch gap-4 ">
-  <Grid data={gamesWonData} sort />
-  <!-- <div id="playCountWrapper" class="">
-    <table
-      {...$gamesPlayed_tableAttrs}
-      class="table w-full text-left text-gray-500 dark:text-gray-400"
-    >
-      <thead class="">
-        {#each $gamesPlayed_headerRows as headerRow (headerRow.id)}
-          <Subscribe rowAttrs={headerRow.attrs()} let:rowAttrs>
-            <tr {...rowAttrs}>
-              {#each headerRow.cells as cell (cell.id)}
-                <Subscribe attrs={cell.attrs()} let:attrs props={cell.props()} let:props>
-                  <th {...attrs} on:click={props.sort.toggle}>
-                    <Render of={cell.render()} />
-                    {#if props.sort.order === 'asc'}
-                      ⬇️
-                    {:else if props.sort.order === 'desc'}
-                      ⬆️
-                    {/if}
-                  </th>
-                </Subscribe>
-              {/each}
-            </tr>
-          </Subscribe>
-        {/each}
-      </thead>
-      <tbody {...$gamesPlayed_tableBodyAttrs}>
-        {#each $gamesPlayed_rows as row (row.id)}
-          <Subscribe rowAttrs={row.attrs()} let:rowAttrs>
-            <tr {...rowAttrs} class="hover">
-              {#each row.cells as cell (cell.id)}
-                <Subscribe attrs={cell.attrs()} let:attrs>
-                  <td {...attrs}>
-                    <Render of={cell.render()} />
-                  </td>
-                </Subscribe>
-              {/each}
-            </tr>
-          </Subscribe>
-        {/each}
-      </tbody>
-    </table>
-  </div> -->
+  <Grid data={gamesWonData} sort columns={gamesColumns} className={gameTablesClasses}/>
+  <Grid data={gamesPlayedData} sort columns={gamesColumns} className={gameTablesClasses}/>
 </div>
