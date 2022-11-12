@@ -31,12 +31,21 @@
   /**
    * Games Won Table
    */
-
   const gamesWonData = data.gamesWon;
+
+  /**
+   * Games Played Table
+   */
+  const gamesPlayedData = data.gamesPlayed;
+
+  const gameTablesClasses = {
+    table: "w-full"
+  };
   const gamesColumns = [
     {
       name: 'Name'
-    }, {
+    },
+    {
       name: 'Top',
       sort: {
         compare: compareStats
@@ -67,22 +76,17 @@
       }
     }
   ];
-
-  /**
-   * Games Played Table
-   */
-  const gamesPlayedData = data.gamesPlayed;
-
-  const gameTablesClasses = {
-    table: 'w-full'
-  }
 </script>
 
 <svelte:head>
   <title>10 Mans Statistics</title>
 </svelte:head>
 
-<div class="m-12 grid grid-cols-2 justify-items-stretch gap-4 ">
-  <Grid data={gamesWonData} sort columns={gamesColumns} className={gameTablesClasses}/>
-  <Grid data={gamesPlayedData} sort columns={gamesColumns} className={gameTablesClasses}/>
+<div class="m-12 flex flex-row justify-items-stretch gap-4 ">
+  <div>
+    <Grid data={gamesWonData} sort columns={gamesColumns} className={gameTablesClasses} />
+  </div>
+  <div>
+    <Grid data={gamesPlayedData} sort columns={gamesColumns} className={gameTablesClasses} />
+  </div>
 </div>
