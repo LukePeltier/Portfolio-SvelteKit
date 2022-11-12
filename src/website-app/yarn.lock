@@ -1951,6 +1951,25 @@ __metadata:
   languageName: node
   linkType: hard
 
+"gridjs-svelte@npm:^2.1.1":
+  version: 2.1.1
+  resolution: "gridjs-svelte@npm:2.1.1"
+  peerDependencies:
+    gridjs: ">=5.0.0"
+    svelte: ">=3.30.0"
+  checksum: 0352408ba181433d972151edc7f90981960df4b303969b923cd9ab7bf941f551ee35a97add7f9b15dc5e6c06f26f6ad7f3821c8884f08a10cc0a75de97573285
+  languageName: node
+  linkType: hard
+
+"gridjs@npm:^5.1.0":
+  version: 5.1.0
+  resolution: "gridjs@npm:5.1.0"
+  dependencies:
+    preact: ^10.10.6
+  checksum: aa6f1e208fb34b865a122b34c6346f5d3edfac1bd8c9446b4177a6f1fa361df4ac6aa946df2df0cbc1f8fb577bb93f3ed48c8f97091b536e4f12c9ac5cbc36d6
+  languageName: node
+  linkType: hard
+
 "has-flag@npm:^4.0.0":
   version: 4.0.0
   resolution: "has-flag@npm:4.0.0"
@@ -2904,6 +2923,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"preact@npm:^10.10.6":
+  version: 10.11.2
+  resolution: "preact@npm:10.11.2"
+  checksum: 92b4087a4048595e43fc5c005e9a1f3c890ec83657689de9b40b1894e26f8c2b6b071c63e08941a44044d1612532f8313483b62e3d6e1aa3c39bde27614ed790
+  languageName: node
+  linkType: hard
+
 "prelude-ls@npm:^1.2.1":
   version: 1.2.1
   resolution: "prelude-ls@npm:1.2.1"
@@ -3390,32 +3416,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"svelte-headless-table@npm:^0.15.1":
-  version: 0.15.3
-  resolution: "svelte-headless-table@npm:0.15.3"
-  dependencies:
-    svelte-keyed: ^1.1.5
-    svelte-render: ^1.5.0
-    svelte-subscribe: ^1.0.4
-  checksum: 101d3365bb09c60f13f225947bb965626a32ae276f6463fc3b6a138094f9899767c01772970dea2195fd09299b802480758f034fa6ec52bd89378c9681d4431b
-  languageName: node
-  linkType: hard
-
 "svelte-hmr@npm:^0.15.0":
   version: 0.15.0
   resolution: "svelte-hmr@npm:0.15.0"
   peerDependencies:
     svelte: ">=3.19.0"
   checksum: e15581769aa5a6f8e1eeaf3f47a34b579c76f5a72d2ae1ba32cca6ab71b73d721defde472f1d4b924f8ade0d5bb6a7a04aa1817c3b4705c45dffa2732df07a83
-  languageName: node
-  linkType: hard
-
-"svelte-keyed@npm:^1.1.5":
-  version: 1.1.6
-  resolution: "svelte-keyed@npm:1.1.6"
-  peerDependencies:
-    svelte: ^3.49.0
-  checksum: 54af1130885e7f73100db38cfd6bcdcaccd9ddeee1a063fba64b3506fa14c0047e922f7eb659e82309bedbca8680b5e329eeedaed607596f60b1aea5ca791e5f
   languageName: node
   linkType: hard
 
@@ -3465,22 +3471,6 @@ __metadata:
     typescript:
       optional: true
   checksum: 51a0820c14bcc411ddf3b1cf4c772e73873626ed0b6c54dfca9e06bd6a6b22c9502436df3f1a4dab9eb3a404bba95002fd70cadea29a84fc36da3071309a8b91
-  languageName: node
-  linkType: hard
-
-"svelte-render@npm:^1.5.0":
-  version: 1.5.0
-  resolution: "svelte-render@npm:1.5.0"
-  dependencies:
-    svelte-subscribe: ^1.0.5
-  checksum: 92094d6dbc76186f2e2233907735d0fdd1a7482745638a07efffe65e795242bad75dbaabe67072ca1c41fd0f837fc22e1eb7d8b15887aafb3c8bd51aead6ea53
-  languageName: node
-  linkType: hard
-
-"svelte-subscribe@npm:^1.0.4, svelte-subscribe@npm:^1.0.5":
-  version: 1.0.5
-  resolution: "svelte-subscribe@npm:1.0.5"
-  checksum: b3d7974129ea86aa3c35889dde593e133ac5bb30d0ca59da09166d25d730325e7b89244bc715303c3a048cf9f166727eccfa79b07b0725d41d5e63326bfcf20d
   languageName: node
   linkType: hard
 
@@ -3779,13 +3769,14 @@ __metadata:
     eslint: ^8.26.0
     eslint-config-prettier: ^8.3.0
     eslint-plugin-svelte3: ^4.0.0
+    gridjs: ^5.1.0
+    gridjs-svelte: ^2.1.1
     pocketbase: ^0.7.4
     postcss: ^8.4.18
     prettier: ^2.7.1
     prettier-plugin-tailwindcss: ^0.1.13
     svelte: ^3.44.0
     svelte-check: ^2.7.1
-    svelte-headless-table: ^0.15.1
     svelte-preprocess: ^4.10.7
     tailwindcss: ^3.2.1
     theme-change: ^2.2.0

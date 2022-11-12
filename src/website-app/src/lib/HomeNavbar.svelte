@@ -25,9 +25,7 @@
           </svg>
         </button>
       </label>
-      <ul
-        class="menu menu-compact dropdown-content bg-primary rounded-box mt-3 w-52 rounded p-2 shadow"
-      >
+      <ul class="menu menu-compact dropdown-content bg-primary mt-3 w-52 rounded p-2 shadow">
         {#each navItems as nav}
           <li>
             <a
