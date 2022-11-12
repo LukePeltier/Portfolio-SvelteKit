@@ -1,5 +1,4 @@
 # PortfolioWebsite
-[![Latest Release](https://github.com/LukePeltier/PortfolioWebsite/actions/workflows/main.yml/badge.svg)](https://github.com/LukePeltier/PortfolioWebsite/actions/workflows/main.yml)
 [![CodeQL](https://github.com/LukePeltier/PortfolioWebsite/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/LukePeltier/PortfolioWebsite/actions/workflows/codeql-analysis.yml)
 
 A repository for my personal portfolio website, https://lukepeltier.com
