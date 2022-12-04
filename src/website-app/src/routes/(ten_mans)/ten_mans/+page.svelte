@@ -39,7 +39,7 @@
   const gamesPlayedData = data.gamesPlayed;
 
   const gameTablesClasses = {
-    table: "w-full"
+    table: 'w-full'
   };
   const gamesColumns = [
     {
@@ -82,7 +82,7 @@
   <title>10 Mans Statistics</title>
 </svelte:head>
 
-<div class="m-12 flex flex-row justify-items-stretch gap-4 ">
+<div class="m-12 flex flex-row justify-items-stretch gap-4">
   <div>
     <Grid data={gamesWonData} sort columns={gamesColumns} className={gameTablesClasses} />
   </div>

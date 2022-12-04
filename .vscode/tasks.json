@@ -22,6 +22,7 @@
             "label": "Run Node Docker Image",
             "type": "docker-run",
             "dependsOn": [
+                "Stop Docker Container",
                 "Build Node Docker Image"
             ],
             "dockerRun": {
@@ -44,6 +45,15 @@
             "group": {
                 "kind": "test",
                 "isDefault": true
+            }
+        },
+        {
+            "label": "Stop Docker Container",
+            "type": "shell",
+            "command": "docker container stop website || true",
+            "presentation": {
+                "reveal": "silent",
+                "close": true
             }
         }
     ]
