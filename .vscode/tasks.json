@@ -1,0 +1,50 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build Node Docker Image",
+            "type": "docker-build",
+            "dockerBuild": {
+                "dockerfile": "${workspaceFolder}/src/website-app/Dockerfile",
+                "context": "${workspaceFolder}/src/website-app",
+                "customOptions": "--add-host=host.docker.internal:host-gateway",
+                "tag": "lukepeltier/website-app"
+            },
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "Run Node Docker Image",
+            "type": "docker-run",
+            "dependsOn": [
+                "Build Node Docker Image"
+            ],
+            "dockerRun": {
+                "image": "lukepeltier/website-app",
+                "ports": [
+                    {
+                        "containerPort": 3000,
+                        "hostPort": 3000
+                    }
+                ],
+                "extraHosts": [
+                    {
+                        "hostname": "host.docker.internal",
+                        "ip": "host-gateway"
+                    }
+                ],
+                "containerName": "website",
+                "remove": true
+            },
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            }
+        }
+    ]
+}
