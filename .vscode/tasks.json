@@ -16,6 +16,9 @@
             "group": {
                 "kind": "build",
                 "isDefault": true
+            },
+            "presentation": {
+                "close": true
             }
         },
         {
@@ -40,11 +43,14 @@
                     }
                 ],
                 "containerName": "website",
-                "remove": true
+                "remove": true,
             },
             "group": {
                 "kind": "test",
                 "isDefault": true
+            },
+            "presentation": {
+                "close": true
             }
         },
         {

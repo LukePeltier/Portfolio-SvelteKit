@@ -2,6 +2,7 @@
   import Icon from '@iconify/svelte';
   import arrowLeft from '@iconify/icons-akar-icons/arrow-left';
   let navItems = [
+    { title: 'Standings', url: '/ten_mans/standings' },
     { title: 'Player Draft Stats', url: '/ten_mans/player-draft-stats' },
     { title: 'Leaderboards', url: '/ten_mans/leaderboards' },
     { title: 'Games', url: '/ten_mans/games' },
