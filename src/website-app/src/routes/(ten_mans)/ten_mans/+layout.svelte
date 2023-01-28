@@ -2,7 +2,7 @@
   import Navbar from '$lib/TenMansNavbar.svelte';
 </script>
 
-<div data-theme="dark" class="flex h-screen flex-col">
+<div data-theme="dark" class="bg-base-200 flex h-screen flex-col">
   <Navbar />
   <slot />
 </div>
