@@ -1,6 +1,27 @@
 import { Api } from '$lib/server/api';
 import { error } from '@sveltejs/kit';
+import { Record } from 'pocketbase';
 import type { PageServerLoad } from './$types';
+
+export type PlayerGamesPlayed = {
+  name: string;
+  top: number;
+  jungle: number;
+  mid: number;
+  bot: number;
+  support: number;
+  total: number;
+};
+
+export type PlayerGamesWon = {
+  name: string;
+  top: string;
+  jungle: string;
+  mid: string;
+  bot: string;
+  support: string;
+  total: string;
+};
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const load: PageServerLoad = async ({ params }) => {
@@ -12,35 +33,29 @@ export const load: PageServerLoad = async ({ params }) => {
 
   const players = await api.getPlayers();
 
-  const gamesPlayedRows: {
-    name: string;
-    top: number;
-    jungle: number;
-    mid: number;
-    bot: number;
-    support: number;
-  }[] = [];
+  const gamesPlayedRows: PlayerGamesPlayed[] = [];
 
-  const gamesWonRows: {
-    name: string;
-    top: string;
-    jungle: string;
-    mid: string;
-    bot: string;
-    support: string;
-  }[] = [];
+  const gamesWonRows: PlayerGamesWon[] = [];
 
-  for (const player of players.items) {
+  for (const player of players) {
     const name = player['name'];
 
     const gameLaners = await api.getGameLanesByPlayer(player['id']);
     const games: { [index: string]: number } = { Top: 0, Jungle: 0, Mid: 0, Bot: 0, Support: 0 };
     const gamesWon: { [index: string]: number } = { Top: 0, Jungle: 0, Mid: 0, Bot: 0, Support: 0 };
-    for (const gameLaner of gameLaners.items) {
+    let totalGamesWon: number = 0;
+    let totalGames: number = 0;
+    for (const gameLaner of gameLaners) {
+      const game = gameLaner.expand['game'];
+      if (!(game instanceof Record)) {
+        throw error(500, 'Unexpectedly expanded to list of records instead of single record');
+      }
       const lane: string = gameLaner['lane'];
       games[lane] += 1;
-      if (gameLaner['@expand']['game']['winner'] == gameLaner['team']) {
+      totalGames += 1;
+      if (game['winner'] == gameLaner['team']) {
         gamesWon[lane] += 1;
+        totalGamesWon += 1;
       }
     }
 
@@ -50,7 +65,8 @@ export const load: PageServerLoad = async ({ params }) => {
       jungle: games.Jungle,
       mid: games.Mid,
       bot: games.Bot,
-      support: games.Support
+      support: games.Support,
+      total: totalGames
     });
 
     gamesWonRows.push({
@@ -59,7 +75,8 @@ export const load: PageServerLoad = async ({ params }) => {
       jungle: winsToPercentString(games.Jungle, gamesWon.Jungle),
       mid: winsToPercentString(games.Mid, gamesWon.Mid),
       bot: winsToPercentString(games.Bot, gamesWon.Bot),
-      support: winsToPercentString(games.Support, gamesWon.Support)
+      support: winsToPercentString(games.Support, gamesWon.Support),
+      total: winsToPercentString(totalGames, totalGamesWon)
     });
   }
 

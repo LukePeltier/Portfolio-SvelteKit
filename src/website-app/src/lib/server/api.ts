@@ -10,7 +10,7 @@ export class Api {
 
   async authenticate() {
     try {
-      await this.client.admins.authViaEmail(API_USER, API_PASS);
+      await this.client.admins.authWithPassword(API_USER, API_PASS);
     } catch (err) {
       console.log(err);
       return false;
@@ -19,12 +19,12 @@ export class Api {
   }
 
   async getPlayers() {
-    const resultList = await this.client.records.getList('player', 1, Number.MAX_SAFE_INTEGER);
+    const resultList = await this.client.collection('player').getFullList();
     return resultList;
   }
 
   async getGameLanesByPlayer(player: string) {
-    const resultList = await this.client.records.getList('gameLaner', 1, Number.MAX_SAFE_INTEGER, {
+    const resultList = await this.client.collection('gameLaner').getFullList({
       filter: `player.id = "${player}"`,
       expand: `game`
     });

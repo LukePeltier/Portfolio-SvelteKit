@@ -1,6 +1,15 @@
 <script lang="ts">
   import type { PageData } from './$types';
-  import Grid from 'gridjs-svelte';
+  import type { PlayerGamesWon, PlayerGamesPlayed } from './proxy+page.server';
+  import type { ColumnDef, TableOptions, SortingState } from '@tanstack/svelte-table';
+  import {
+    createSvelteTable,
+    flexRender,
+    getCoreRowModel,
+    getSortedRowModel
+  } from '@tanstack/svelte-table';
+  import { writable } from 'svelte/store';
+  // import Grid from 'gridjs-svelte';
   export let data: PageData;
 
   function getStatSortValue(i: string): number {
@@ -28,54 +37,106 @@
     return 0;
   }
 
-  /**
-   * Games Won Table
-   */
-  const gamesWonData = data.gamesWon;
-
-  /**
-   * Games Played Table
-   */
-  const gamesPlayedData = data.gamesPlayed;
-
-  const gameTablesClasses = {
-    table: 'w-full'
-  };
-  const gamesColumns = [
+  const gamesWonColumns: ColumnDef<PlayerGamesWon>[] = [
     {
-      name: 'Name'
+      accessorKey: 'name',
+      header: 'Name'
     },
     {
-      name: 'Top',
-      sort: {
-        compare: compareStats
-      }
+      accessorKey: 'top',
+      header: 'Top'
     },
     {
-      name: 'Jungle',
-      sort: {
-        compare: compareStats
-      }
+      accessorKey: 'jungle',
+      header: 'Jungle'
     },
     {
-      name: 'Mid',
-      sort: {
-        compare: compareStats
-      }
+      accessorKey: 'mid',
+      header: 'Middle'
     },
     {
-      name: 'Bot',
-      sort: {
-        compare: compareStats
-      }
+      accessorKey: 'bot',
+      header: 'Bottom'
     },
     {
-      name: 'Support',
-      sort: {
-        compare: compareStats
-      }
+      accessorKey: 'support',
+      header: 'Support'
+    },
+    {
+      accessorKey: 'total',
+      header: 'Overall'
     }
   ];
+
+  let gamesWonSorting: SortingState = [];
+
+  const setGamesWonSorting = (updater: SortingState | ((arg0: SortingState) => SortingState)) => {
+    if (updater instanceof Function) {
+      gamesWonSorting = updater(gamesWonSorting);
+    } else {
+      gamesWonSorting = updater;
+    }
+
+    gamesWonOptions.update((old) => ({
+      ...old,
+      state: {
+        ...old.state,
+        gamesWonSorting
+      }
+    }));
+  };
+
+  const gamesWonOptions = writable<TableOptions<PlayerGamesWon>>({
+    data: data.gamesWon,
+    columns: gamesWonColumns,
+    state: {
+      gamesWonSorting
+    },
+    onSortingChange: setGamesWonSorting,
+    getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel()
+  });
+
+  const gamesWonTable = createSvelteTable(gamesWonOptions);
+
+  const gamesPlayedColumns: ColumnDef<PlayerGamesPlayed>[] = [
+    {
+      accessorKey: 'name',
+      header: 'Name'
+    },
+    {
+      accessorKey: 'top',
+      header: 'Top'
+    },
+    {
+      accessorKey: 'jungle',
+      header: 'Jungle'
+    },
+    {
+      accessorKey: 'mid',
+      header: 'Middle'
+    },
+    {
+      accessorKey: 'bot',
+      header: 'Bottom'
+    },
+    {
+      accessorKey: 'support',
+      header: 'Support'
+    },
+    {
+      accessorKey: 'total',
+      header: 'Overall'
+    }
+  ];
+
+  const gamesPlayedOptions = writable<TableOptions<PlayerGamesPlayed>>({
+    data: data.gamesPlayed,
+    columns: gamesPlayedColumns,
+    getCoreRowModel: getCoreRowModel()
+  });
+
+  const gamesPlayedTable = createSvelteTable(gamesPlayedOptions);
 </script>
 
 <svelte:head>
@@ -84,9 +145,69 @@
 
 <div class="m-12 flex flex-row justify-items-stretch gap-4">
   <div>
-    <Grid data={gamesWonData} sort columns={gamesColumns} className={gameTablesClasses} />
+    <table>
+      <thead>
+        {#each $gamesWonTable.getHeaderGroups() as headerGroup}
+          <tr>
+            {#each headerGroup.headers as header}
+              <th>
+                {#if !header.isPlaceholder}
+                  <svelte:component
+                    this={flexRender(header.column.columnDef.header, header.getContext())}
+                  />
+                {/if}
+              </th>
+            {/each}
+          </tr>
+        {/each}
+      </thead>
+      <tbody>
+        {#each $gamesWonTable.getRowModel().rows as row}
+          <tr>
+            {#each row.getVisibleCells() as cell}
+              <td>
+                <svelte:component
+                  this={flexRender(cell.column.columnDef.cell, cell.getContext())}
+                />
+              </td>
+            {/each}
+          </tr>
+        {/each}
+      </tbody>
+      <tfoot />
+    </table>
   </div>
   <div>
-    <Grid data={gamesPlayedData} sort columns={gamesColumns} className={gameTablesClasses} />
+    <table>
+      <thead>
+        {#each $gamesPlayedTable.getHeaderGroups() as headerGroup}
+          <tr>
+            {#each headerGroup.headers as header}
+              <th>
+                {#if !header.isPlaceholder}
+                  <svelte:component
+                    this={flexRender(header.column.columnDef.header, header.getContext())}
+                  />
+                {/if}
+              </th>
+            {/each}
+          </tr>
+        {/each}
+      </thead>
+      <tbody>
+        {#each $gamesPlayedTable.getRowModel().rows as row}
+          <tr>
+            {#each row.getVisibleCells() as cell}
+              <td>
+                <svelte:component
+                  this={flexRender(cell.column.columnDef.cell, cell.getContext())}
+                />
+              </td>
+            {/each}
+          </tr>
+        {/each}
+      </tbody>
+      <tfoot />
+    </table>
   </div>
 </div>
