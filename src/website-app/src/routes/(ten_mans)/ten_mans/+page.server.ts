@@ -1,10 +1,14 @@
 import { Api } from '$lib/server/api';
+import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const load: PageServerLoad = async ({ params }) => {
   const api = new Api();
-  await api.authenticate();
+  const authResult = await api.authenticate();
+  if (!authResult) {
+    throw error(500, 'Unable to authenticate with API');
+  }
 
   const players = await api.getPlayers();
 

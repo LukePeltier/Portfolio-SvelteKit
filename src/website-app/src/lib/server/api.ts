@@ -5,11 +5,17 @@ export class Api {
   client: PocketBase;
 
   constructor() {
-    this.client = new PocketBase(API_URL)
+    this.client = new PocketBase(API_URL);
   }
 
   async authenticate() {
-    await this.client.admins.authViaEmail(API_USER, API_PASS);
+    try {
+      await this.client.admins.authViaEmail(API_USER, API_PASS);
+    } catch (err) {
+      console.log(err);
+      return false;
+    }
+    return true;
   }
 
   async getPlayers() {
