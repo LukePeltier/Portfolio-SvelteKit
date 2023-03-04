@@ -2,6 +2,8 @@
   import Navbar from '$lib/HomeNavbar.svelte';
 </script>
 
-<Navbar />
+<div data-theme="black" class="h-screen">
+  <Navbar />
 
-<slot />
+  <slot />
+</div>
