@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { PageData } from './$types';
   import type { PlayerGamesWon, PlayerGamesPlayed } from './proxy+page.server';
-  import type { ColumnDef, TableOptions, SortingState } from '@tanstack/svelte-table';
+  import type { ColumnDef, TableOptions, SortingState, ColumnSort } from '@tanstack/svelte-table';
   import {
     createSvelteTable,
     flexRender,
@@ -12,30 +12,30 @@
   // import Grid from 'gridjs-svelte';
   export let data: PageData;
 
-  function getStatSortValue(i: string): number {
-    if (i === 'N/A') {
-      return -1;
-    }
+  // function getStatSortValue(i: string): number {
+  //   if (i === 'N/A') {
+  //     return -1;
+  //   }
 
-    if (i.includes('%')) {
-      const num_string = i.replaceAll('%', '');
-      return Number(num_string);
-    } else {
-      console.error('Error, received string which cannot be sorted', i);
-      return -2;
-    }
-  }
+  //   if (i.includes('%')) {
+  //     const num_string = i.replaceAll('%', '');
+  //     return Number(num_string);
+  //   } else {
+  //     console.error('Error, received string which cannot be sorted', i);
+  //     return -2;
+  //   }
+  // }
 
-  function compareStats(a: string, b: string): number {
-    let aSortValue = getStatSortValue(a);
-    let bSortValue = getStatSortValue(b);
-    if (aSortValue > bSortValue) {
-      return 1;
-    } else if (bSortValue > aSortValue) {
-      return -1;
-    }
-    return 0;
-  }
+  // function compareStats(a: string, b: string): number {
+  //   let aSortValue = getStatSortValue(a);
+  //   let bSortValue = getStatSortValue(b);
+  //   if (aSortValue > bSortValue) {
+  //     return 1;
+  //   } else if (bSortValue > aSortValue) {
+  //     return -1;
+  //   }
+  //   return 0;
+  // }
 
   const gamesWonColumns: ColumnDef<PlayerGamesWon>[] = [
     {
@@ -68,7 +68,12 @@
     }
   ];
 
-  let gamesWonSorting: SortingState = [];
+  let gamesWonSorting: SortingState = [
+    {
+      id: 'name',
+      desc: false
+    }
+  ];
 
   const setGamesWonSorting = (updater: SortingState | ((arg0: SortingState) => SortingState)) => {
     if (updater instanceof Function) {
@@ -81,7 +86,7 @@
       ...old,
       state: {
         ...old.state,
-        gamesWonSorting
+        sorting: gamesWonSorting
       }
     }));
   };
@@ -90,7 +95,7 @@
     data: data.gamesWon,
     columns: gamesWonColumns,
     state: {
-      gamesWonSorting
+      sorting: gamesWonSorting
     },
     onSortingChange: setGamesWonSorting,
     getCoreRowModel: getCoreRowModel(),
@@ -130,10 +135,40 @@
     }
   ];
 
+  let gamesPlayedSorting: SortingState = [
+    {
+      id: 'name',
+      desc: false
+    }
+  ];
+
+  const setgamesPlayedSorting = (
+    updater: SortingState | ((arg0: SortingState) => SortingState)
+  ) => {
+    if (updater instanceof Function) {
+      gamesPlayedSorting = updater(gamesPlayedSorting);
+    } else {
+      gamesPlayedSorting = updater;
+    }
+
+    gamesPlayedOptions.update((old) => ({
+      ...old,
+      state: {
+        ...old.state,
+        sorting: gamesPlayedSorting
+      }
+    }));
+  };
+
   const gamesPlayedOptions = writable<TableOptions<PlayerGamesPlayed>>({
     data: data.gamesPlayed,
     columns: gamesPlayedColumns,
-    getCoreRowModel: getCoreRowModel()
+    state: {
+      sorting: gamesPlayedSorting
+    },
+    onSortingChange: setgamesPlayedSorting,
+    getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel()
   });
 
   const gamesPlayedTable = createSvelteTable(gamesPlayedOptions);
@@ -152,9 +187,21 @@
             {#each headerGroup.headers as header}
               <th>
                 {#if !header.isPlaceholder}
-                  <svelte:component
-                    this={flexRender(header.column.columnDef.header, header.getContext())}
-                  />
+                  <!-- svelte-ignore a11y-click-events-have-key-events -->
+                  <div
+                    class:cursor-pointer={header.column.getCanSort()}
+                    class:select-none={header.column.getCanSort()}
+                    on:click={header.column.getToggleSortingHandler()}
+                  >
+                    <svelte:component
+                      this={flexRender(header.column.columnDef.header, header.getContext())}
+                    />
+                    {#if header.column.getIsSorted().toString() == 'asc'}
+                      🔼
+                    {:else if header.column.getIsSorted().toString() == 'desc'}
+                      🔽
+                    {/if}
+                  </div>
                 {/if}
               </th>
             {/each}
@@ -185,9 +232,21 @@
             {#each headerGroup.headers as header}
               <th>
                 {#if !header.isPlaceholder}
-                  <svelte:component
-                    this={flexRender(header.column.columnDef.header, header.getContext())}
-                  />
+                  <!-- svelte-ignore a11y-click-events-have-key-events -->
+                  <div
+                    class:cursor-pointer={header.column.getCanSort()}
+                    class:select-none={header.column.getCanSort()}
+                    on:click={header.column.getToggleSortingHandler()}
+                  >
+                    <svelte:component
+                      this={flexRender(header.column.columnDef.header, header.getContext())}
+                    />
+                    {#if header.column.getIsSorted().toString() == 'asc'}
+                      🔼
+                    {:else if header.column.getIsSorted().toString() == 'desc'}
+                      🔽
+                    {/if}
+                  </div>
                 {/if}
               </th>
             {/each}
