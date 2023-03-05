@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { PageData } from './$types';
   import type { PlayerGamesWon, PlayerGamesPlayed } from './proxy+page.server';
-  import type { ColumnDef, TableOptions, SortingState, ColumnSort } from '@tanstack/svelte-table';
+  import type { ColumnDef, TableOptions, SortingState } from '@tanstack/svelte-table';
   import {
     createSvelteTable,
     flexRender,
@@ -9,33 +9,9 @@
     getSortedRowModel
   } from '@tanstack/svelte-table';
   import { writable } from 'svelte/store';
-  // import Grid from 'gridjs-svelte';
+  import Fa from 'svelte-fa/src/fa.svelte';
+  import { faSort, faSortUp, faSortDown } from '@fortawesome/free-solid-svg-icons';
   export let data: PageData;
-
-  // function getStatSortValue(i: string): number {
-  //   if (i === 'N/A') {
-  //     return -1;
-  //   }
-
-  //   if (i.includes('%')) {
-  //     const num_string = i.replaceAll('%', '');
-  //     return Number(num_string);
-  //   } else {
-  //     console.error('Error, received string which cannot be sorted', i);
-  //     return -2;
-  //   }
-  // }
-
-  // function compareStats(a: string, b: string): number {
-  //   let aSortValue = getStatSortValue(a);
-  //   let bSortValue = getStatSortValue(b);
-  //   if (aSortValue > bSortValue) {
-  //     return 1;
-  //   } else if (bSortValue > aSortValue) {
-  //     return -1;
-  //   }
-  //   return 0;
-  // }
 
   const gamesWonColumns: ColumnDef<PlayerGamesWon>[] = [
     {
@@ -178,9 +154,9 @@
   <title>10 Mans Statistics Standings</title>
 </svelte:head>
 
-<div class="m-12 flex flex-row justify-items-stretch gap-4">
+<div class="m-12 grid grid-cols-2 justify-items-center gap-4">
   <div>
-    <table>
+    <table class="table">
       <thead>
         {#each $gamesWonTable.getHeaderGroups() as headerGroup}
           <tr>
@@ -197,9 +173,11 @@
                       this={flexRender(header.column.columnDef.header, header.getContext())}
                     />
                     {#if header.column.getIsSorted().toString() == 'asc'}
-                      🔼
+                      <Fa icon={faSortUp} class="inline" />
                     {:else if header.column.getIsSorted().toString() == 'desc'}
-                      🔽
+                      <Fa icon={faSortDown} class="inline" />
+                    {:else}
+                      <Fa icon={faSort} class="inline" />
                     {/if}
                   </div>
                 {/if}
@@ -225,7 +203,7 @@
     </table>
   </div>
   <div>
-    <table>
+    <table class="table">
       <thead>
         {#each $gamesPlayedTable.getHeaderGroups() as headerGroup}
           <tr>
@@ -242,9 +220,11 @@
                       this={flexRender(header.column.columnDef.header, header.getContext())}
                     />
                     {#if header.column.getIsSorted().toString() == 'asc'}
-                      🔼
+                      <Fa icon={faSortUp} class="inline" />
                     {:else if header.column.getIsSorted().toString() == 'desc'}
-                      🔽
+                      <Fa icon={faSortDown} class="inline" />
+                    {:else}
+                      <Fa icon={faSort} class="inline" />
                     {/if}
                   </div>
                 {/if}
