@@ -9,7 +9,7 @@
     getSortedRowModel
   } from '@tanstack/svelte-table';
   import { writable } from 'svelte/store';
-  import Fa from 'svelte-fa/src/fa.svelte';
+  import Fa from 'svelte-fa';
   import { faSort, faSortUp, faSortDown } from '@fortawesome/free-solid-svg-icons';
   export let data: PageData;
 
