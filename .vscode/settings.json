@@ -20,5 +20,5 @@
     },
     "[javascript]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode"
-    }, // required to format on save
+    }
 }
