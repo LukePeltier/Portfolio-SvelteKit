@@ -43,8 +43,8 @@ export const load: PageServerLoad = async ({ params }) => {
     const gameLaners = await api.getGameLanesByPlayer(player['id']);
     const games: { [index: string]: number } = { Top: 0, Jungle: 0, Mid: 0, Bot: 0, Support: 0 };
     const gamesWon: { [index: string]: number } = { Top: 0, Jungle: 0, Mid: 0, Bot: 0, Support: 0 };
-    let totalGamesWon: number = 0;
-    let totalGames: number = 0;
+    let totalGamesWon = 0;
+    let totalGames = 0;
     for (const gameLaner of gameLaners) {
       const game = gameLaner.expand['game'];
       if (!(game instanceof Record)) {
